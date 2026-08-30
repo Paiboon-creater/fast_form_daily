@@ -788,28 +788,19 @@
     document.getElementById('effDisplay').style.color = "var(--text-muted)";
   }
 
-  function openKeypad(inputId) {
-    activeInputId = inputId;
-    let labelText = document.querySelector(`label[for="${inputId}"]`);
-    let title = labelText ? labelText.innerText : "";
+ function closeKeypad() {
+    if (activeInputId && activeInputId !== 'manual_order_code') {
+      let input = document.getElementById(activeInputId);
+      input.value = calculateMath(input.value);
+    }
+    document.getElementById('numericKeypad').style.display = 'none';
+    activeInputId = null;
     
-    if (inputId === 'hour_work') title = 'ชั่วโมงทำงาน';
-    else if (inputId === 'produced_amount') title = 'จำนวนผลิต';
-    else if (inputId === 'manual_order_code') title = 'รหัสใบสั่งงาน';
-
-    document.getElementById('keypadTitle').innerText = "> พิมพ์ค่า: " + title;
-
-    let isCode = (inputId === 'manual_order_code');
-    document.querySelectorAll('.key-math').forEach(btn => {
-      btn.style.visibility = isCode ? 'hidden' : 'visible'; 
-    });
-
-    document.getElementById('numericKeypad').style.display = 'block';
-
-    // ดันหน้าจอ (Auto-scroll) หนีแป้นพิมพ์ ให้ช่องที่กรอกอยู่ตรงกลางจอ
-    setTimeout(() => {
-      document.getElementById(inputId).scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 150);
+    // -- ส่วนที่เพิ่มใหม่ --
+    // หดพื้นที่ด้านล่างกลับเป็นปกติเมื่อปิดแป้นพิมพ์
+    document.body.style.paddingBottom = "0px";
+    
+    calculateEfficiency();
   }
 
   function closeKeypad() {
