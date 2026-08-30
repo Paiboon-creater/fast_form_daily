@@ -111,32 +111,53 @@
       margin-right: 4px; box-shadow: 0 0 6px var(--neon-green);
     }
 
-    /* ปุ่มกลับหน้าหลัก */
-    .back-link-btn {
+    /* ==================================== */
+    /* ปุ่มเมนูด้านบน (Home & Daily Prod) */
+    /* ==================================== */
+    .top-buttons-wrapper {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .nav-btn {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 8px;
-      width: 100%;
-      background: transparent;
-      color: var(--neon-blue);
-      border: 2px solid var(--neon-blue);
-      padding: 14px;
-      font-size: 16px;
+      padding: 12px 10px;
+      font-size: 14px;
       border-radius: 8px;
       text-align: center;
       text-decoration: none;
       font-weight: bold;
       box-sizing: border-box;
       transition: all 0.3s;
-      margin-bottom: 20px;
       font-family: inherit;
+      flex: 1;
     }
-    .back-link-btn:active, .back-link-btn:hover {
+    
+    .home-btn {
+      background: transparent;
+      color: var(--neon-yellow);
+      border: 2px solid var(--neon-yellow);
+    }
+    .home-btn:active, .home-btn:hover {
+      background: var(--neon-yellow);
+      color: var(--bg-dark);
+      box-shadow: 0 0 15px rgba(245, 166, 35, 0.4);
+    }
+
+    .daily-btn {
+      background: transparent;
+      color: var(--neon-blue);
+      border: 2px solid var(--neon-blue);
+    }
+    .daily-btn:active, .daily-btn:hover {
       background: var(--neon-blue);
       color: var(--bg-dark);
       box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
     }
+    /* ==================================== */
 
     .form-group { margin-bottom: 14px; }
     .form-group label { 
@@ -312,10 +333,15 @@
   
   <form id="prodForm" onsubmit="handleSubmit(event)" style="display:none;">
     
-    <!-- ปุ่มกลับหน้าตารางหลัก (เพิ่มใหม่) -->
-    <a href="https://paiboon-creater.github.io/daily-production/" class="back-link-btn">
-      <i class="fa-solid fa-house"></i> กลับหน้าตารางหลัก (Daily Production)
-    </a>
+    <!-- ปุ่มกลับหน้าแรก & กลับตารางหลัก -->
+    <div class="top-buttons-wrapper">
+      <a href="https://paiboon-creater.github.io/Data_Information_Jaguar_productions/" class="nav-btn home-btn">
+        <i class="fa-solid fa-house"></i> Home App
+      </a>
+      <a href="https://paiboon-creater.github.io/daily-production/" class="nav-btn daily-btn">
+        <i class="fa-solid fa-table-list"></i> ตารางหลัก
+      </a>
+    </div>
 
     <!-- 1. วันที่ทำงาน -->
     <div class="form-group">
