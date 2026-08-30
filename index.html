@@ -13,7 +13,7 @@
   <style>
     :root {
       --bg-dark: #030806;
-      --panel-bg: rgba(7, 24, 16, 0.9);
+      --panel-bg: rgba(7, 24, 16, 0.95);
       --border-neon: #00ff88;
       --border-dim: #113a24;
       --text-main: #e2f0ea;
@@ -28,7 +28,7 @@
     }
 
     body {
-      font-family: 'Courier New', Courier, monospace, 'Sarabun', sans-serif;
+      font-family: 'Sarabun', Tahoma, sans-serif;
       background-color: var(--bg-dark);
       color: var(--text-main);
       margin: 0;
@@ -40,6 +40,8 @@
       position: relative;
       overflow-x: hidden;
       -webkit-text-size-adjust: 100%;
+      /* Transition สำหรับตอนเพิ่มพื้นที่หลบแป้นพิมพ์ */
+      transition: padding-bottom 0.3s ease; 
     }
 
     body::before {
@@ -55,141 +57,86 @@
 
     .terminal-container {
       width: 100%;
-      max-width: 950px;
+      max-width: 500px;
       background: var(--panel-bg);
-      padding: 20px;
-      border-radius: 16px;
+      padding: 15px;
+      border-radius: 12px;
       border: 2px solid var(--border-neon);
-      box-shadow: 0 0 35px var(--neon-glow), inset 0 0 20px rgba(0, 255, 136, 0.1);
+      box-shadow: 0 0 25px var(--neon-glow), inset 0 0 15px rgba(0, 255, 136, 0.1);
       backdrop-filter: blur(10px);
-      margin-top: 10px;
-      margin-bottom: 30px;
-    }
-
-    .app-header {
-      text-align: center;
-      border-bottom: 1px dashed var(--border-neon);
-      padding-bottom: 15px;
+      margin-top: 5px;
       margin-bottom: 20px;
     }
 
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border-bottom: 1px dashed var(--border-neon);
+      padding-bottom: 12px;
+      margin-bottom: 15px;
+    }
+
     .jaguar-emblem {
-      width: 65px;
-      height: 65px;
-      margin: 0 auto 10px auto;
+      width: 45px;
+      height: 45px;
       background: radial-gradient(circle, #113a24 0%, #030806 100%);
       border: 2px solid var(--neon-green);
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
-      box-shadow: 0 0 15px var(--neon-glow);
+      box-shadow: 0 0 10px var(--neon-glow);
     }
 
     .jaguar-emblem i {
-      font-size: 30px;
+      font-size: 20px;
       color: var(--neon-green);
-      text-shadow: 0 0 10px var(--neon-green);
     }
 
     .app-title {
-      font-size: 1.25rem;
+      font-size: 1.1rem;
       font-weight: bold;
       color: var(--neon-green);
-      letter-spacing: 2px;
       margin: 0;
       text-transform: uppercase;
-      text-shadow: 0 0 8px var(--neon-glow);
+      text-shadow: 0 0 5px var(--neon-glow);
     }
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      border-bottom: 1px solid var(--border-dim);
-      padding-bottom: 10px;
-      margin-bottom: 15px;
-    }
-
-    h2 {
-      color: var(--neon-green);
-      margin: 0;
-      font-size: 18px;
-      letter-spacing: 1px;
-    }
-
-    .status { font-size: 12px; color: var(--text-muted); }
+    .status { font-size: 12px; color: var(--text-muted); text-align: center; margin-bottom: 15px;}
     .status-dot {
       display: inline-block; width: 8px; height: 8px;
       background-color: var(--neon-green); border-radius: 50%;
       margin-right: 4px; box-shadow: 0 0 6px var(--neon-green);
     }
 
-    /* ========================================= */
-    /* CSS ปุ่มด้านบน (เมนูหลัก & ป้อนข้อมูลเร็ว) */
-    /* ========================================= */
-    .top-buttons-wrapper {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
+    .form-group { margin-bottom: 14px; }
+    .form-group label { 
+      display: block; 
+      margin-bottom: 6px; 
+      font-size: 16px; 
+      font-weight: bold; 
+      color: #ffffff;
     }
-    
-    .nav-btn {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 10px;
-      font-size: 14px;
-      border-radius: 8px;
-      text-align: center;
-      text-decoration: none;
-      font-weight: bold;
-      box-sizing: border-box;
-      transition: all 0.3s;
-      font-family: inherit;
-      flex: 1;
-    }
-
-    .back-link-btn {
-      background: transparent;
-      color: var(--neon-blue);
-      border: 1px solid var(--neon-blue);
-    }
-    .back-link-btn:hover, .back-link-btn:active {
-      background: var(--neon-blue);
-      color: var(--bg-dark);
-      box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
-    }
-
-    .fast-link-btn {
-      background: linear-gradient(145deg, #1a1608, #0d0b04);
-      color: var(--neon-yellow);
-      border: 2px solid var(--neon-yellow);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    }
-    .fast-link-btn:hover, .fast-link-btn:active {
-      background: var(--neon-yellow);
-      color: var(--bg-dark);
-      box-shadow: 0 0 15px rgba(245, 166, 35, 0.4);
-    }
-    /* ========================================= */
-
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: bold; color: var(--text-muted); }
 
     input, select {
       width: 100%; 
-      padding: 12px 14px; 
+      padding: 14px; 
       background-color: #0b2218; 
-      border: 1.5px solid #1b4d36; 
+      border: 2px solid var(--border-dim); 
       color: #00ffaa; 
       font-weight: bold;
       border-radius: 8px; 
       box-sizing: border-box; 
       font-family: inherit;
-      font-size: 17px; 
+      font-size: 18px; 
       transition: all 0.2s;
+    }
+
+    input::placeholder {
+      color: rgba(140, 168, 154, 0.6);
+      font-size: 16px;
     }
 
     input:focus, select:focus { 
@@ -203,54 +150,36 @@
       background-color: #071710; 
       cursor: pointer; 
       color: #00ffaa; 
+      border-style: dashed;
     }
     
+    input[type="date"] {
+      text-align: center;
+    }
+
     input[type="date"]::-webkit-calendar-picker-indicator { 
       filter: invert(0.8) sepia(1) saturate(5) hue-rotate(90deg); 
       cursor: pointer; 
+      width: 25px;
+      height: 25px;
     }
 
-    .order-input-wrapper {
-      display: flex;
-      gap: 8px;
-    }
-    .order-manual-input {
-      width: 130px;
-      text-align: center;
-      letter-spacing: 2px;
-      color: var(--neon-yellow);
-      border-color: #3d3312;
-      background-color: #1a1608;
-    }
-    
-    .order-manual-input[readonly] {
-      cursor: pointer;
-      background-color: #1a1608;
-      color: var(--neon-yellow);
-    }
-    
-    .order-manual-input:focus {
-      border-color: var(--neon-yellow);
-      box-shadow: 0 0 8px rgba(245, 166, 35, 0.4);
-      background-color: #241e0b;
-    }
-    .scan-btn {
-      background: transparent;
-      border: 1px solid var(--neon-blue);
+    .scan-btn-subtle {
+      background: rgba(0, 229, 255, 0.1);
+      border: 2px solid rgba(0, 229, 255, 0.3);
       color: var(--neon-blue);
-      padding: 0 16px;
-      font-size: 14px;
       border-radius: 8px;
+      width: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       cursor: pointer;
-      font-weight: bold;
-      font-family: inherit;
-      white-space: nowrap;
+      font-size: 22px;
       transition: all 0.2s;
     }
-    .scan-btn:hover {
+    .scan-btn-subtle:active {
       background: var(--neon-blue);
       color: var(--bg-dark);
-      box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
     }
 
     .scanner-modal {
@@ -265,83 +194,63 @@
     }
     .scanner-close {
       background: transparent; border: 1px solid var(--neon-red); color: var(--neon-red);
-      padding: 10px; width: 100%; margin-top: 15px; border-radius: 8px; cursor: pointer;
-      font-family: inherit; font-weight: bold;
+      padding: 12px; width: 100%; margin-top: 15px; border-radius: 8px; cursor: pointer;
+      font-family: inherit; font-weight: bold; font-size: 16px;
     }
 
     .eff-box {
       background: #071710;
-      border: 1px solid var(--border-dim);
-      padding: 12px 14px;
+      border: 2px solid var(--border-dim);
+      padding: 14px;
       border-radius: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
-      font-size: 15px;
+      font-size: 16px;
+      font-weight: bold;
     }
-    .eff-value { font-weight: bold; font-size: 18px; }
+    .eff-value { font-size: 22px; }
 
     .submit-btn {
       width: 100%; background: linear-gradient(145deg, #071910, #040e09); color: var(--neon-green);
-      border: 2px solid var(--neon-green); padding: 14px; font-size: 16px;
-      border-radius: 8px; cursor: pointer; font-weight: bold;
+      border: 2px solid var(--neon-green); padding: 18px; font-size: 20px;
+      border-radius: 10px; cursor: pointer; font-weight: bold;
       margin-top: 10px;
       font-family: inherit; transition: all 0.3s; letter-spacing: 1px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
-    .submit-btn:hover { background: var(--neon-green); color: var(--bg-dark); box-shadow: 0 0 20px var(--neon-glow); transform: translateY(-2px); }
-    
-    /* ปุ่มพิมพ์แบบแยกประเภท */
-    .print-blank-btn {
-      width: 100%; background: linear-gradient(145deg, #07151a, #030b0e); color: var(--neon-blue);
-      border: 2px solid var(--neon-blue); padding: 12px; font-size: 14px;
-      border-radius: 8px; cursor: pointer; font-weight: bold;
-      font-family: inherit; transition: all 0.3s;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5); flex: 1;
-    }
-    .print-blank-btn:hover { background: var(--neon-blue); color: var(--bg-dark); box-shadow: 0 0 20px rgba(0, 229, 255, 0.4); transform: translateY(-2px); }
-
-    .print-data-btn {
-      width: 100%; background: linear-gradient(145deg, #071910, #040e09); color: var(--neon-green);
-      border: 2px solid var(--neon-green); padding: 12px; font-size: 14px;
-      border-radius: 8px; cursor: pointer; font-weight: bold;
-      font-family: inherit; transition: all 0.3s;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5); flex: 1.2;
-    }
-    .print-data-btn:hover { background: var(--neon-green); color: var(--bg-dark); box-shadow: 0 0 20px var(--neon-glow); transform: translateY(-2px); }
+    .submit-btn:active { background: var(--neon-green); color: var(--bg-dark); transform: translateY(2px); }
 
     .cancel-edit-btn {
       width: 100%; background-color: transparent; color: var(--neon-red);
-      border: 1px solid var(--neon-red); padding: 10px; font-size: 14px;
+      border: 1px solid var(--neon-red); padding: 12px; font-size: 16px;
       border-radius: 8px; cursor: pointer; margin-top: 12px; display: none;
-      font-family: inherit;
+      font-family: inherit; font-weight: bold;
     }
 
     .keypad-modal {
       display: none; position: fixed; bottom: 0; left: 0; width: 100%;
-      background: rgba(7, 24, 16, 0.95); border-top: 2px solid var(--neon-green);
-      padding: 15px 10px; box-sizing: border-box; box-shadow: 0 -10px 30px rgba(0,0,0,0.9); z-index: 1000;
-      backdrop-filter: blur(10px);
+      background: rgba(4, 15, 10, 0.98); border-top: 2px solid var(--neon-green);
+      padding: 15px; box-sizing: border-box; box-shadow: 0 -10px 30px rgba(0,0,0,0.9); z-index: 1000;
     }
-    .keypad-header { display: flex; justify-content: space-between; color: var(--neon-green); margin-bottom: 10px; font-size: 14px; }
-    .keypad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 500px; margin: 0 auto; }
+    .keypad-header { display: flex; justify-content: space-between; color: var(--neon-green); margin-bottom: 12px; font-size: 16px; font-weight: bold; }
+    .keypad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 500px; margin: 0 auto; }
     
     .key-btn {
       background: var(--input-bg); color: #00ffaa; border: 1px solid var(--border-dim);
-      padding: 16px 0; font-size: 20px; border-radius: 8px; cursor: pointer;
-      font-family: inherit; transition: background 0.1s;
+      padding: 18px 0; font-size: 24px; border-radius: 10px; cursor: pointer;
+      font-family: inherit; font-weight: bold;
     }
     .key-btn:active { background: #113a24; }
     .key-action { color: var(--neon-red); border-color: var(--neon-red); font-size: 18px; }
     .key-special { color: var(--neon-green); border-color: var(--border-dim); background: #0c1a12; }
-    .key-close { background: var(--border-dim); grid-column: span 4; margin-top: 3px; font-size: 16px; color: var(--neon-green); font-weight: bold; }
+    .key-close { background: var(--border-dim); grid-column: span 4; margin-top: 5px; font-size: 18px; color: var(--neon-green); font-weight: bold; border-color: var(--neon-green); }
     
     .key-equals {
       background-color: var(--neon-green);
       color: var(--bg-dark);
-      font-weight: bold;
-      font-size: 24px;
+      font-size: 28px;
       border: none;
       box-shadow: 0 0 10px rgba(0,255,136,0.3);
     }
@@ -351,239 +260,9 @@
     .loading { color: var(--neon-yellow); }
     .error { color: var(--neon-red); }
 
-    .report-section {
-      margin-top: 35px;
-      border-top: 1px dashed var(--border-dim);
-      padding-top: 20px;
-    }
-    .report-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-    .report-title {
-      color: var(--text-muted);
-      font-size: 14px;
-      letter-spacing: 1px;
-      margin: 0;
-    }
-    .filter-box {
-      background: #071710;
-      border: 1px solid var(--border-dim);
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 12px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    @media (max-width: 600px) {
-      .filter-box { grid-template-columns: 1fr; }
-    }
-    .filter-group label { font-size: 12px; margin-bottom: 4px; color: var(--text-muted); }
-    .filter-group select, .filter-group input { padding: 8px; font-size: 14px; background-color: #0b2218; color: #00ffaa; font-weight: bold; border-radius: 6px; }
-
-    .action-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      gap: 10px;
-    }
-    .clear-filter-btn {
-      background: transparent;
-      border: 1px solid var(--neon-yellow);
-      color: var(--neon-yellow);
-      padding: 8px 14px;
-      font-size: 13px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.2s;
-    }
-    .clear-filter-btn:hover { background: var(--neon-yellow); color: var(--bg-dark); }
-    
-    .export-btn {
-      background: transparent;
-      border: 1px solid var(--neon-blue);
-      color: var(--neon-blue);
-      padding: 8px 14px;
-      font-size: 13px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.2s;
-    }
-    .export-btn:hover { background: var(--neon-blue); color: var(--bg-dark); }
-
-    .summary-panel {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-    @media (min-width: 768px) {
-      .summary-panel { grid-template-columns: repeat(4, 1fr); }
-    }
-    .summary-card {
-      background: #071710;
-      border: 1px solid var(--border-dim);
-      padding: 10px;
-      border-radius: 8px;
-      text-align: center;
-    }
-    .summary-card label {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-      display: block;
-    }
-    .summary-card span {
-      font-size: 16px;
-      font-weight: bold;
-      color: var(--neon-green);
-    }
-
-    .table-container { width: 100%; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; white-space: nowrap; }
-    th, td { padding: 10px 6px; text-align: left; border-bottom: 1px solid var(--border-dim); }
-    th { color: var(--neon-green); font-weight: normal; opacity: 0.9; }
-    td { color: var(--text-main); }
-    tr:hover td { background-color: rgba(0, 255, 136, 0.05); }
-    .text-right { text-align: right; }
-    .text-center { text-align: center; }
-    .action-cell button {
-      background: none; border: 1px solid var(--border-dim); padding: 5px 8px;
-      font-family: inherit; font-size: 11px; cursor: pointer; border-radius: 6px;
-    }
-    .btn-edit { color: var(--neon-yellow); border-color: var(--neon-yellow); margin-right: 4px; }
-    .btn-del { color: var(--neon-red); border-color: var(--neon-red); }
-
-    /* ========================================================= */
-    /* CSS พิมพ์เอกสาร A4 แนวนอน */
-    /* ========================================================= */
+    /* ซ่อนรายงานแบบ 100% ไม่ให้รบกวนหน้าจอ */
+    #reportSection { display: none !important; }
     #printArea { display: none; }
-
-    @media print {
-      body * { visibility: hidden; }
-      #printArea, #printArea * { visibility: visible; color: #000 !important; }
-      #printArea {
-        display: flex !important;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-      }
-      @page { size: A4 landscape; margin: 0; }
-    }
-
-    .print-sheet-container {
-      width: 297mm;
-      height: 202mm; 
-      padding: 2mm 3mm;
-      box-sizing: border-box;
-      background: white;
-      display: flex;
-      justify-content: space-between;
-      page-break-after: avoid;
-      page-break-inside: avoid;
-      color: #000;
-      font-family: 'Sarabun', sans-serif;
-      overflow: hidden;
-    }
-
-    .print-card {
-      width: 48.6%;
-      height: 100%;
-      border: 1.5px solid #000;
-      padding: 2mm 2.5mm;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background: #fff;
-    }
-
-    .print-header-wrapper {
-      margin-top: 10mm;
-    }
-
-    .print-header-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      border-bottom: 2px solid #000;
-      padding-bottom: 3px;
-      margin-bottom: 3px;
-    }
-
-    .print-title-area h3 {
-      margin: 0 0 2px 0;
-      font-size: 15px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    .print-meta-row {
-      font-size: 12px;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: flex-end;
-      gap: 4px;
-      font-weight: bold;
-    }
-
-    .print-label {
-      white-space: nowrap;
-      margin-bottom: -1px;
-    }
-
-    .print-value {
-      border-bottom: 1.5px dotted #000;
-      padding-left: 5px;
-      min-height: 15px;
-      white-space: nowrap; 
-    }
-
-    .print-qr-box { text-align: center; }
-    .print-qr-box canvas, .print-qr-box img { width: 58px !important; height: 58px !important; }
-    .print-qr-box span { display: block; font-size: 8px; margin-top: 1px; font-weight: bold; }
-    .print-code-text { font-size: 14px; font-weight: bold; letter-spacing: 2px; margin-top: 1px; background: #eee; border: 1px solid #000; padding: 2px 4px; cursor: pointer; }
-
-    .print-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 11px;
-      margin-top: 3px;
-      table-layout: fixed; 
-    }
-
-    .print-table th, .print-table td {
-      border: 1px solid #000;
-      padding: 2px 3px; 
-      text-align: center;
-      height: 18px;
-      word-wrap: break-word; 
-    }
-
-    .print-table th {
-      background-color: #e0e0e0 !important;
-      font-size: 11px;
-      font-weight: bold;
-      -webkit-print-color-adjust: exact;
-    }
-
-    .print-footer {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      margin-top: 2px;
-      border-top: 1px solid #000;
-      padding-top: 2px;
-      font-weight: bold;
-    }
   </style>
 </head>
 <body>
@@ -593,190 +272,115 @@
     <div class="jaguar-emblem">
       <i class="fa-solid fa-cat"></i>
     </div>
-    <h1 class="app-title">JAGUAR_PRODUCTION_SUPABASE</h1>
-    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; letter-spacing: 1px;">ระบบบันทึกการผลิตรายวัน v7.10</div>
+    <div>
+      <h1 class="app-title">บันทึกยอดผลิตรายวัน</h1>
+    </div>
   </div>
 
-  <div class="header">
-    <h2>> บันทึกยอดการผลิตรายวัน</h2>
-    <div class="status"><span class="status-dot" id="statusDot"></span><span id="statusText">กำลังเชื่อมต่อ...</span></div>
+  <div class="status">
+    <span class="status-dot" id="statusDot"></span><span id="statusText">กำลังเชื่อมต่อฐานข้อมูล...</span>
   </div>
 
   <div id="statusMessage" class="system-msg loading">> กำลังเตรียมข้อมูลระบบ...</div>
   
   <form id="prodForm" onsubmit="handleSubmit(event)" style="display:none;">
-
-    <!-- ส่วนปุ่มกด 2 ปุ่ม (หน้าหลัก & ฟอร์มเร็ว) -->
-    <div class="top-buttons-wrapper">
-      <a href="ใส่ลิงก์หน้าหลักที่นี่" class="nav-btn back-link-btn">
-        <i class="fa-solid fa-house"></i> กลับหน้าหลัก
-      </a>
-      <a href="https://paiboon-creater.github.io/fast_form_daily/" class="nav-btn fast-link-btn">
-        <i class="fa-solid fa-bolt"></i> ป้อนข้อมูลเร็ว
-      </a>
-    </div>
-
+    
+    <!-- 1. วันที่ทำงาน -->
     <div class="form-group">
-      <label>1. วันที่บันทึก (RECORD DATE)</label>
+      <label>1. วันที่ทำงาน</label>
       <input type="date" id="record_date" required>
     </div>
 
+    <!-- 2. รหัสใบสั่งงาน -->
     <div class="form-group">
-      <label>2. รหัสใบสั่งงาน & ขั้นตอน [คีย์รหัส 4 หลัก หรือเลือกเมนู]</label>
-      <div class="order-input-wrapper">
-        <input type="text" id="manual_order_code" class="order-manual-input" placeholder="0000" readonly onclick="openKeypad('manual_order_code')">
-        
-        <select id="id_order" onchange="handleOrderChange()" required style="flex-grow: 1;">
-          <option value="">-- เลือกใบสั่งงาน --</option>
-        </select>
-        <button type="button" class="scan-btn" onclick="openScanner()">[ 📷 สแกน ]</button>
+      <label>2. รหัสใบสั่งงาน</label>
+      <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+        <input type="text" id="manual_order_code" style="flex: 1; text-align: center; color: var(--neon-yellow);" placeholder="👉 แตะคีย์รหัส 4 หลัก" readonly onclick="openKeypad('manual_order_code')">
+        <button type="button" class="scan-btn-subtle" onclick="openScanner()">
+          <i class="fa-solid fa-qrcode"></i>
+        </button>
       </div>
+      <select id="id_order" onchange="handleOrderChange()" required>
+        <option value="">👉 หรือแตะเลือกจากรายการ</option>
+      </select>
     </div>
 
+    <!-- 3. ขั้นตอน -->
     <div class="form-group">
-      <label>3. ชิ้นงาน / ขั้นตอนการทำงาน (TARGET / STEP)</label>
+      <label>3. ชิ้นงาน / ขั้นตอน</label>
       <select id="id_target" onchange="calculateEfficiency()" required>
-        <option value="">-- รอการเลือกใบสั่งงาน --</option>
+        <option value="">👉 รอเลือกรหัสใบสั่งงานก่อน</option>
       </select>
       <input type="hidden" id="id_work" value="">
     </div>
 
+    <!-- 4. พนักงาน -->
     <div class="form-group">
-      <label>4. พนักงาน (EMPLOYEE) [พิมพ์เพื่อค้นหา]</label>
-      <input type="text" id="employee_search" list="employee_datalist" placeholder="-- พิมพ์ชื่อพนักงานเพื่อค้นหา --" autocomplete="off" onfocus="this.select()" onclick="this.select()" required>
+      <label>4. ชื่อพนักงาน</label>
+      <input type="text" id="employee_search" list="employee_datalist" placeholder="⌨️ พิมพ์ชื่อค้นหา..." autocomplete="off" onfocus="this.select()" onclick="this.select()" required>
       <datalist id="employee_datalist"></datalist>
     </div>
 
+    <!-- 5. ชั่วโมงทำงาน -->
     <div class="form-group">
-      <label>5. ชั่วโมงทำงาน (WORK HOURS)</label>
-      <input type="text" id="hour_work" readonly placeholder="0.00 (แตะเพื่อพิมพ์ข้อมูล)" onclick="openKeypad('hour_work')" required>
+      <label>5. ชั่วโมงทำงาน</label>
+      <input type="text" id="hour_work" readonly placeholder="⌨️ แตะพิมพ์ตัวเลข" onclick="openKeypad('hour_work')" required>
     </div>
 
+    <!-- 6. ยอดผลิต -->
     <div class="form-group">
-      <label>6. จำนวนที่ผลิตได้ (PRODUCED QTY)</label>
-      <input type="text" id="produced_amount" readonly placeholder="0 (แตะเพื่อพิมพ์ข้อมูล)" onclick="openKeypad('produced_amount')" required>
+      <label>6. จำนวนที่ผลิตได้</label>
+      <input type="text" id="produced_amount" readonly placeholder="⌨️ แตะพิมพ์ตัวเลข" onclick="openKeypad('produced_amount')" required>
     </div>
 
+    <!-- ประสิทธิภาพ (อัตโนมัติ) -->
     <div class="eff-box">
-      <span>> ประสิทธิภาพ (EFFICIENCY):</span>
+      <span>> ประสิทธิภาพ:</span>
       <span id="effDisplay" class="eff-value" style="color: var(--text-muted);">0.00%</span>
     </div>
 
+    <!-- 7. สาเหตุ -->
     <div class="form-group" id="reasonGroup" style="display: none;">
-      <label style="color: var(--neon-red);">7. สาเหตุ (บังคับเลือก หากประสิทธิภาพ &lt; 100%)</label>
+      <label style="color: var(--neon-red);">7. สาเหตุที่ยอดตก (บังคับเลือก)</label>
       <select id="id_reason">
-        <option value="">-- เลือกสาเหตุ --</option>
+        <option value="">👉 แตะเลือกสาเหตุ</option>
       </select>
     </div>
 
-    <button type="submit" class="submit-btn" id="submitBtn">> บันทึกข้อมูล</button>
+    <button type="submit" class="submit-btn" id="submitBtn">บันทึกข้อมูล</button>
     <button type="button" class="cancel-edit-btn" id="cancelEditBtn" onclick="cancelEditMode()">[X] ยกเลิกการแก้ไข</button>
   </form>
 
-  <div class="report-section" id="reportSection" style="display:none;">
-    <div class="report-header">
-      <h3 class="report-title">> ตารางตรวจสอบความก้าวหน้า</h3>
-    </div>
-    
-    <!-- ปุ่มพิมพ์ย้ายมาไว้ตรงนี้ (ด้านบนตาราง) -->
-    <div style="display: flex; gap: 8px; margin-bottom: 15px;">
-      <button type="button" class="print-blank-btn" id="printBlankBtn" onclick="printProgressSheet(false)">🖨️ พิมพ์ฟอร์มเปล่า</button>
-      <button type="button" class="print-data-btn" id="printDataBtn" onclick="printProgressSheet(true)">🖨️ พิมพ์พร้อมประวัติ</button>
-    </div>
-
-    <div class="filter-box">
-      <div class="filter-group">
-        <label>ใบสั่งงาน (ORDER NO)</label>
-        <select id="filter_order" onchange="onFilterOrderChange()">
-          <option value="">-- ใบสั่งงานทั้งหมด --</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>รหัสชิ้นงาน (WORK CODE)</label>
-        <select id="filter_work" onchange="fetchReport()">
-          <option value="">-- ชิ้นงานทั้งหมด --</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>ขั้นตอน (STEP)</label>
-        <select id="filter_target" onchange="fetchReport()">
-          <option value="">-- ขั้นตอนทั้งหมด --</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>จากวันที่</label>
-        <input type="date" id="filter_date_from" onchange="fetchReport()">
-      </div>
-      <div class="filter-group">
-        <label>ถึงวันที่</label>
-        <input type="date" id="filter_date_to" onchange="fetchReport()">
-      </div>
-    </div>
-
-    <div class="action-bar">
-      <button type="button" class="clear-filter-btn" onclick="clearFilters()">[ล้างตัวกรอง]</button>
-      <button type="button" class="export-btn" onclick="exportToExcel()">[ส่งออกเป็น EXCEL]</button>
-    </div>
-
-    <div class="summary-panel">
-      <div class="summary-card">
-        <label>ผลิตได้รวม</label>
-        <span id="sumProduced">0</span>
-      </div>
-      <div class="summary-card">
-        <label>ยอดสั่งผลิตรวม</label>
-        <span id="sumTarget" style="color: var(--neon-blue);">0</span>
-      </div>
-      <div class="summary-card">
-        <label>ยอดคงเหลือ</label>
-        <span id="sumRemaining" style="color: var(--neon-yellow);">0</span>
-      </div>
-      <div class="summary-card">
-        <label>กำหนดส่ง</label>
-        <span id="sumDaysLeft" style="color: var(--text-main);">-</span>
-      </div>
-    </div>
-
-    <div class="table-container">
-      <table id="reportTable">
-        <thead>
-          <tr>
-            <th>วันที่</th>
-            <th>ใบสั่งงาน</th>
-            <th>พนักงาน</th>
-            <th>ชิ้นงาน</th>
-            <th>ขั้นตอน</th>
-            <th class="text-right">ยอดผลิต</th>
-            <th class="text-right">ชั่วโมง</th>
-            <th class="text-right">EFF%</th>
-            <th>สาเหตุ</th>
-            <th class="text-center no-export">จัดการ</th>
-          </tr>
-        </thead>
-        <tbody id="reportTbody">
-          <tr><td colspan="10" class="text-center loading">> กำลังโหลดข้อมูล...</td></tr>
-        </tbody>
-      </table>
-    </div>
+  <!-- ซ่อนส่วน Report ตารางด้านล่างทิ้งทั้งหมด -->
+  <div class="report-section" id="reportSection">
+    <select id="filter_order" style="display:none;"></select>
+    <select id="filter_work" style="display:none;"></select>
+    <select id="filter_target" style="display:none;"></select>
+    <input type="date" id="filter_date_from" style="display:none;">
+    <input type="date" id="filter_date_to" style="display:none;">
+    <span id="sumProduced"></span><span id="sumTarget"></span>
+    <span id="sumRemaining"></span><span id="sumDaysLeft"></span>
+    <tbody id="reportTbody"></tbody>
+    <table id="reportTable"></table>
   </div>
 </div>
 
 <!-- QR SCANNER MODAL -->
 <div id="scannerModal" class="scanner-modal" style="display:none;">
   <div class="scanner-box">
-    <h3 style="color:var(--neon-blue); margin-top:0;">> สแกนคิวอาร์โค้ด</h3>
+    <h3 style="color:var(--neon-blue); margin-top:0;">สแกนคิวอาร์โค้ด</h3>
     <div id="reader" style="width:100%;"></div>
-    <button type="button" class="scanner-close" onclick="closeScanner()">[X] ปิดกล้อง</button>
+    <button type="button" class="scanner-close" onclick="closeScanner()">ปิดกล้อง</button>
   </div>
 </div>
 
 <div id="printArea"></div>
 
-<!-- แป้นพิมพ์ตัวเลขพร้อมฟังก์ชันเครื่องคิดเลข -->
+<!-- แป้นพิมพ์ตัวเลข -->
 <div id="numericKeypad" class="keypad-modal">
   <div class="keypad-header">
     <span id="keypadTitle">> ระบุค่า: </span>
-    <span onclick="closeKeypad()" style="cursor:pointer;">[X] ปิด</span>
+    <span onclick="closeKeypad()" style="cursor:pointer; color: var(--neon-red);">[X] ปิด</span>
   </div>
   <div class="keypad-grid">
     <button type="button" class="key-btn" onclick="pressKey('7')">7</button>
@@ -803,7 +407,7 @@
     <button type="button" class="key-btn key-action" onclick="pressKey('CLEAR')">ล้าง</button>
     <button type="button" class="key-btn key-equals key-math" style="grid-column: span 2;" onclick="pressKey('=')">=</button>
     
-    <button type="button" class="key-btn key-close" style="grid-column: span 4; margin-top: 5px;" onclick="closeKeypad()">ตกลง / ยืนยัน</button>
+    <button type="button" class="key-btn key-close" style="grid-column: span 4;" onclick="closeKeypad()">ตกลง / ยืนยัน</button>
   </div>
 </div>
 
@@ -825,7 +429,12 @@
   let html5QrCode = null;
 
   window.onload = async function() {
-    document.getElementById('record_date').valueAsDate = new Date();
+    // ---------------------------------------------------------
+    // ตั้งค่า วันที่เริ่มต้น ให้เป็น "เมื่อวาน" อัตโนมัติ 
+    // ---------------------------------------------------------
+    let yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    document.getElementById('record_date').value = yesterday.toISOString().split('T')[0];
     
     const urlParams = new URLSearchParams(window.location.search);
     const scannedOrderId = urlParams.get('order_id');
@@ -878,6 +487,8 @@
 
       populateDropdown('id_order', globalData.orders, 'id_order', 'order_no'); 
       populateDropdown('id_reason', globalData.reasons, 'id_reason', 'reason_detail');
+      
+      // Select Box ซ่อนสำหรับกัน JS error
       populateDropdown('filter_order', globalData.orders, 'id_order', 'order_no');
       populateDropdown('filter_work', globalData.workItems, 'id_work', 'work_code');
 
@@ -890,8 +501,7 @@
 
       document.getElementById('statusMessage').style.display = 'none';
       document.getElementById('prodForm').style.display = 'block';
-      document.getElementById('reportSection').style.display = 'block';
-      document.getElementById('statusText').innerText = "ออนไลน์";
+      document.getElementById('statusText').innerText = "ระบบพร้อมใช้งาน";
 
       if (scannedOrderId) {
         const foundOrd = globalData.orders.find(o => String(o.id_order) === String(scannedOrderId));
@@ -906,7 +516,6 @@
             }, 200);
           }
         }
-        
         const lastEmployeeId = localStorage.getItem('last_employee_id');
         if (lastEmployeeId) {
           const emp = globalData.employees.find(e => String(e.id_name) === String(lastEmployeeId));
@@ -916,7 +525,6 @@
       } else {
         loadLastSessionData();
       }
-      loadLastSessionData();
 
     } catch (error) {
       console.error(error);
@@ -931,7 +539,6 @@
   function generateShortcutMap() {
     globalData.shortcutMap = [];
     let counter = 1;
-    
     let sortedOrders = [...globalData.orders].sort((a,b) => parseInt(a.id_order) - parseInt(b.id_order));
     
     sortedOrders.forEach(order => {
@@ -953,14 +560,11 @@
 
   function handleManualOrderInput(inputEl) {
     let val = inputEl.value.trim();
-    
     if (val.length === 4) {
       const foundShortcut = globalData.shortcutMap.find(s => s.code === val);
-      
       if (foundShortcut) {
         document.getElementById('id_order').value = foundShortcut.id_order;
         handleOrderChange();
-        
         setTimeout(() => {
           document.getElementById('id_target').value = foundShortcut.id_target;
           calculateEfficiency();
@@ -976,12 +580,6 @@
       document.getElementById('id_order').value = "";
       handleOrderChange();
     }
-  }
-
-  function selectOrderByCode(shortCode) {
-    document.getElementById('manual_order_code').value = shortCode;
-    handleManualOrderInput(document.getElementById('manual_order_code'));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function openScanner() {
@@ -1028,7 +626,6 @@
           if (foundOrd) {
             document.getElementById('id_order').value = foundOrd.id_order;
             handleOrderChange();
-            
             if (targetId) {
               setTimeout(() => {
                 document.getElementById('id_target').value = targetId;
@@ -1048,7 +645,7 @@
 
   function populateDropdown(elementId, dataArray, valueKey, textKey) {
     const select = document.getElementById(elementId);
-    if (!Array.isArray(dataArray)) return;
+    if (!Array.isArray(dataArray) || !select) return;
     dataArray.forEach(item => {
       let opt = document.createElement('option');
       opt.value = item[valueKey];
@@ -1063,10 +660,7 @@
     const workHidden = document.getElementById('id_work');
     const manualInput = document.getElementById('manual_order_code');
 
-    document.getElementById('filter_order').value = selectedOrderId || "";
-    onFilterOrderChange();
-
-    targetSelect.innerHTML = '<option value="">-- กรุณาเลือกขั้นตอนทำงาน --</option>';
+    targetSelect.innerHTML = '<option value="">👉 กรุณาเลือกขั้นตอนทำงาน</option>';
     workHidden.value = '';
     
     if (document.activeElement.id === 'id_order') {
@@ -1083,7 +677,7 @@
 
     const selectedOrder = globalData.orders.find(o => String(o.id_order) === String(selectedOrderId));
     if (!selectedOrder || !selectedOrder.id_work) {
-        targetSelect.innerHTML = '<option value="">-- ไม่พบการตั้งค่าชิ้นงานในใบสั่งนี้ --</option>';
+        targetSelect.innerHTML = '<option value="">-- ไม่พบการตั้งค่าชิ้นงาน --</option>';
         return;
     }
 
@@ -1109,29 +703,18 @@
           if (foundStep) stepDisplay = foundStep.step_name;
         }
 
-        let tgtDisplay = t.target_amount ? `${t.target_amount} ชิ้น/ชม.` : '';
+        let tgtDisplay = t.target_amount ? `${t.target_amount}/ชม.` : '';
         opt.textContent = `${workDisplay} | ${stepDisplay} ${tgtDisplay ? '| เป้า: ' + tgtDisplay : ''}`.trim();
         targetSelect.appendChild(opt);
       });
     } else {
-      targetSelect.innerHTML = '<option value="">-- ไม่พบเป้าหมายสำหรับชิ้นงานนี้ --</option>';
+      targetSelect.innerHTML = '<option value="">-- ไม่พบเป้าหมาย --</option>';
     }
   }
 
   function calculateEfficiency() {
     const ordId = document.getElementById('id_order').value;
     const targetId = document.getElementById('id_target').value;
-    
-    if (targetId) {
-      const filterTarget = document.getElementById('filter_target');
-      if (filterTarget.querySelector(`option[value="${targetId}"]`)) {
-        filterTarget.value = targetId;
-        fetchReport();
-      }
-    } else if (ordId) {
-      document.getElementById('filter_target').value = "";
-      fetchReport();
-    }
 
     if (ordId && targetId) {
       const shortcutObj = globalData.shortcutMap.find(s => String(s.id_order) === String(ordId) && String(s.id_target) === String(targetId));
@@ -1178,283 +761,6 @@
     }
   }
 
-  async function printProgressSheet(withData) {
-    const selectedOrderId = document.getElementById('id_order').value;
-    const selectedTargetId = document.getElementById('id_target').value;
-
-    if (!selectedOrderId) {
-      alert("กรุณาเลือกใบสั่งงานก่อนครับ");
-      return;
-    }
-    if (!selectedTargetId) {
-      alert("กรุณาเลือกขั้นตอนการทำงานให้เรียบร้อยก่อนครับ");
-      return;
-    }
-
-    const orderObj = globalData.orders.find(o => String(o.id_order) === String(selectedOrderId));
-    if (!orderObj) {
-      alert("ไม่พบข้อมูลใบสั่งงานนี้ในระบบ");
-      return;
-    }
-
-    const printBlankBtn = document.getElementById('printBlankBtn');
-    const printDataBtn = document.getElementById('printDataBtn');
-    const originalBtnText = withData ? printDataBtn.innerText : printBlankBtn.innerText;
-    
-    if (withData) {
-      printDataBtn.innerText = "⏳ กำลังดึงข้อมูล...";
-    } else {
-      printBlankBtn.innerText = "⏳ กำลังเตรียมพิมพ์...";
-    }
-    printBlankBtn.disabled = true;
-    printDataBtn.disabled = true;
-
-    let logs = [];
-    if (withData) {
-      try {
-        const res = await fetch(`${SUPABASE_URL}/daily_production?id_order=eq.${selectedOrderId}&id_target=eq.${selectedTargetId}&order=record_date.asc`, { headers });
-        if(res.ok) {
-           logs = await res.json();
-        }
-      } catch (e) {
-        console.error("ดึงข้อมูลไม่สำเร็จ", e);
-      }
-    }
-
-    if (withData) {
-      printDataBtn.innerText = originalBtnText;
-    } else {
-      printBlankBtn.innerText = originalBtnText;
-    }
-    printBlankBtn.disabled = false;
-    printDataBtn.disabled = false;
-
-    const shortcutObj = globalData.shortcutMap.find(s => String(s.id_order) === String(selectedOrderId) && String(s.id_target) === String(selectedTargetId));
-    const printCode = shortcutObj ? shortcutObj.code : "N/A";
-
-    let workCodeText = "-";
-    if (orderObj.id_work && globalData.workItems.length > 0) {
-      const foundW = globalData.workItems.find(w => String(w.id_work) === String(orderObj.id_work));
-      if (foundW) workCodeText = foundW.work_code;
-    }
-
-    let stepNameText = "-";
-    let stepStartDateStr = "-";
-    let stepEndDateStr = "-";
-    
-    const selectedTargetObj = globalData.targets.find(t => String(t.id_target) === String(selectedTargetId));
-    
-    if (selectedTargetObj && selectedTargetObj.id_step) {
-      if (globalData.steps.length > 0) {
-        const foundStp = globalData.steps.find(s => String(s.id_step) === String(selectedTargetObj.id_step));
-        if (foundStp) stepNameText = foundStp.step_name;
-      }
-      
-      const orderStepObj = globalData.orderSteps.find(os => String(os.id_order) === String(selectedOrderId) && String(os.id_step) === String(selectedTargetObj.id_step));
-      if (orderStepObj) {
-        stepStartDateStr = formatDateStr(orderStepObj.start_date);
-        stepEndDateStr = formatDateStr(orderStepObj.end_date);
-      }
-    }
-
-    const orderNo = orderObj.order_no || '-';
-    const quantity = orderObj.quantity ? parseInt(orderObj.quantity).toLocaleString() + ' ชิ้น' : '-';
-    
-    function formatDateStr(dateInput) {
-      if (!dateInput) return '-';
-      let d = new Date(dateInput);
-      return !isNaN(d) ? `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}` : dateInput;
-    }
-    
-    const baseUrl = window.location.href.split('?')[0];
-    const currentUrl = `${baseUrl}?order_id=${encodeURIComponent(orderObj.id_order)}&target_id=${encodeURIComponent(selectedTargetId)}`;
-
-    let tableRowsHtml = '';
-    let runningTotal = 0;
-    
-    const maxRows = Math.max(22, logs.length + 2); 
-
-    for(let i = 0; i < maxRows; i++) {
-      if (i < logs.length) {
-        const log = logs[i];
-        let d = new Date(log.record_date);
-        let dateFormatted = !isNaN(d) ? `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear().toString().slice(-2)}` : '__/__/__';
-
-        const emp = globalData.employees.find(e => String(e.id_name) === String(log.id_name));
-        const empText = emp ? emp.name : '';
-        
-        const produced = log.produced_amount || 0;
-        runningTotal += produced;
-
-        tableRowsHtml += `<tr>
-          <td>${dateFormatted}</td>
-          <td></td>
-          <td>${produced.toLocaleString()}</td>
-          <td style="font-weight: bold;">${runningTotal.toLocaleString()}</td>
-          <td></td>
-          <td style="font-size: 9px;">__:__-__:__</td>
-          <td style="text-align: left; padding-left: 4px; font-size: 10px;">${empText}</td>
-          <td></td>
-        </tr>`;
-      } else {
-        tableRowsHtml += `<tr>
-          <td>__/__/__</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td style="font-size: 9px;">__:__-__:__</td>
-          <td></td>
-          <td></td>
-        </tr>`;
-      }
-    }
-
-    const singleCardHtml = `
-      <div class="print-card">
-        <div class="print-header-wrapper">
-          <div class="print-header-top">
-            <div style="flex-grow: 1; overflow: hidden;">
-              <div class="print-title-area"><h3>ใบความก้าวหน้าของการผลิต</h3></div>
-              <div class="print-meta-row">
-                <span class="print-label">ใบสั่งงานเลขที่:</span> 
-                <span class="print-value" style="flex: 1.4; white-space: nowrap;">${orderNo}</span>
-                <span class="print-label" style="margin-left: 12px;">ขั้นตอนงาน:</span> 
-                <span class="print-value" style="flex: 1.2; white-space: nowrap;">${stepNameText}</span>
-              </div>
-              <div class="print-meta-row">
-                <span class="print-label">ชนิดงาน:</span> <span class="print-value" style="white-space: nowrap;">${workCodeText}</span>
-              </div>
-              <div class="print-meta-row">
-                <span class="print-label">จำนวนชิ้นงานสั่งผลิต:</span> <span class="print-value">${quantity}</span>
-              </div>
-              <div class="print-meta-row">
-                <span class="print-label">วันที่เริ่ม:</span> <span class="print-value" style="flex: 1;">${stepStartDateStr}</span>
-                <span class="print-label" style="margin-left: 10px;">วันที่เสร็จ:</span> <span class="print-value" style="flex: 1;">${stepEndDateStr}</span>
-              </div>
-            </div>
-            <div class="print-qr-box">
-              <div class="qrcode-target" data-url="${currentUrl}"></div>
-              <span>สแกน / คีย์รหัส</span>
-              <div class="print-code-text" onclick="selectOrderByCode('${printCode}')">[ ${printCode} ]</div>
-            </div>
-          </div>
-
-          <table class="print-table">
-            <thead>
-              <tr>
-                <th width="10%">วันที่</th>
-                <th width="14%" style="font-size: 9px;">ตัวเลขตอนเลิกงาน</th>
-                <th width="14%">ผลิตได้/วัน</th>
-                <th width="14%">สะสม</th>
-                <th width="8%">เสีย</th>
-                <th width="10%">เวลา</th>
-                <th width="16%">ชื่อคนทำ</th>
-                <th width="14%">หมายเหตุ</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${tableRowsHtml}
-            </tbody>
-          </table>
-        </div>
-        <div class="print-footer">
-          <span>F-PR-005-00</span>
-          <span>DAILY PRODUCTION TRACKER</span>
-        </div>
-      </div>
-    `;
-
-    document.getElementById('printArea').innerHTML = `
-      <div class="print-sheet-container">
-        ${singleCardHtml}
-        ${singleCardHtml}
-      </div>
-    `;
-
-    document.querySelectorAll('.qrcode-target').forEach(el => {
-      new QRCode(el, {
-        text: el.getAttribute('data-url'),
-        width: 58,
-        height: 58,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.M
-      });
-    });
-
-    setTimeout(() => {
-      window.print();
-    }, 300);
-  }
-
-  function onFilterOrderChange() {
-    const orderId = document.getElementById('filter_order').value;
-    const filterWorkSelect = document.getElementById('filter_work');
-    const filterTargetSelect = document.getElementById('filter_target');
-    
-    filterWorkSelect.innerHTML = '<option value="">-- ชิ้นงานทั้งหมด --</option>';
-    filterTargetSelect.innerHTML = '<option value="">-- ขั้นตอนทั้งหมด --</option>';
-    filterWorkSelect.value = '';
-    filterTargetSelect.value = '';
-
-    if (!orderId) {
-      populateDropdown('filter_work', globalData.workItems, 'id_work', 'work_code');
-      fetchReport();
-      return;
-    }
-
-    const selectedOrder = globalData.orders.find(o => String(o.id_order) === String(orderId));
-    if (selectedOrder && selectedOrder.id_work) {
-      const foundWork = globalData.workItems.find(w => String(w.id_work) === String(selectedOrder.id_work));
-      if (foundWork) {
-        let opt = document.createElement('option');
-        opt.value = foundWork.id_work;
-        opt.textContent = foundWork.work_code;
-        filterWorkSelect.appendChild(opt);
-        filterWorkSelect.value = foundWork.id_work;
-      }
-
-      const filteredTargets = globalData.targets.filter(t => String(t.id_work) === String(selectedOrder.id_work));
-      filteredTargets.forEach(t => {
-        let opt = document.createElement('option');
-        opt.value = t.id_target;
-        
-        let stepDisplay = `ขั้นตอน:${t.id_step}`;
-        if (t.id_step && globalData.steps.length > 0) {
-          const foundStep = globalData.steps.find(s => String(s.id_step) === String(t.id_step));
-          if (foundStep) stepDisplay = foundStep.step_name;
-        }
-        opt.textContent = stepDisplay;
-        filterTargetSelect.appendChild(opt);
-      });
-    }
-
-    fetchReport();
-  }
-
-  function clearFilters() {
-    document.getElementById('filter_order').value = '';
-    document.getElementById('filter_work').value = '';
-    document.getElementById('filter_target').value = '';
-    document.getElementById('filter_date_from').value = '';
-    document.getElementById('filter_date_to').value = '';
-
-    const filterWorkSelect = document.getElementById('filter_work');
-    filterWorkSelect.innerHTML = '<option value="">-- ชิ้นงานทั้งหมด --</option>';
-    globalData.workItems.forEach(item => {
-      let opt = document.createElement('option');
-      opt.value = item.id_work;
-      opt.textContent = item.work_code;
-      filterWorkSelect.appendChild(opt);
-    });
-
-    const filterTargetSelect = document.getElementById('filter_target');
-    filterTargetSelect.innerHTML = '<option value="">-- ขั้นตอนทั้งหมด --</option>';
-
-    fetchReport();
-  }
-
   function loadLastSessionData() {
     const lastOrderId = localStorage.getItem('last_order_id');
     const lastTargetId = localStorage.getItem('last_target_id');
@@ -1475,276 +781,30 @@
         document.getElementById('employee_search').value = emp.name;
       }
     }
-
-    if (lastOrderId) {
-      document.getElementById('filter_order').value = lastOrderId;
-      onFilterOrderChange();
-      if (lastTargetId) {
-        document.getElementById('filter_target').value = lastTargetId;
-      }
-    }
-    
-    fetchReport();
-  }
-
-  async function fetchReport() {
-    const orderId = document.getElementById('filter_order').value;
-    const workId = document.getElementById('filter_work').value;
-    const targetId = document.getElementById('filter_target').value;
-    const dateFrom = document.getElementById('filter_date_from').value;
-    const dateTo = document.getElementById('filter_date_to').value;
-    const tbody = document.getElementById('reportTbody');
-
-    tbody.innerHTML = '<tr><td colspan="10" class="text-center loading">> กำลังดึงข้อมูล...</td></tr>';
-    updateSummaryMetrics(orderId);
-
-    try {
-      let query = `${SUPABASE_URL}/daily_production?select=*`;
-      if (orderId) query += `&id_order=eq.${orderId}`;
-      if (targetId) query += `&id_target=eq.${targetId}`;
-      if (dateFrom) query += `&record_date=gte.${dateFrom}`;
-      if (dateTo) query += `&record_date=lte.${dateTo}`;
-
-      if (!orderId && !workId && !targetId && !dateFrom && !dateTo) {
-        query += `&order=record_date.asc&limit=10`;
-      } else {
-        query += `&order=record_date.asc&limit=50`;
-      }
-
-      const res = await fetch(query, { headers });
-      if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
-      let logs = await res.json();
-
-      if (workId) {
-        logs = logs.filter(log => {
-          const tgt = globalData.targets.find(t => String(t.id_target) === String(log.id_target));
-          return tgt && String(tgt.id_work) === String(workId);
-        });
-      }
-
-      if (logs.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="10" class="text-center text-muted">> ไม่พบข้อมูลสำหรับตัวกรองนี้</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = '';
-      logs.forEach(log => {
-        let dateObj = new Date(log.record_date);
-        let dateFormatted = !isNaN(dateObj) ? `${dateObj.getDate().toString().padStart(2, '0')}/${(dateObj.getMonth()+1).toString().padStart(2, '0')}/${dateObj.getFullYear()}` : log.record_date;
-
-        const order = globalData.orders.find(o => String(o.id_order) === String(log.id_order));
-        const orderText = order ? order.order_no : `ID:${log.id_order}`;
-
-        const emp = globalData.employees.find(e => String(e.id_name) === String(log.id_name));
-        const empText = emp ? emp.name : `ID:${log.id_name}`;
-
-        let workText = "-";
-        let stepText = "-";
-        let targetAmountVal = 0;
-        if (log.id_target) {
-          const target = globalData.targets.find(t => String(t.id_target) === String(log.id_target));
-          if (target) {
-            targetAmountVal = target.target_amount || 0;
-            if (target.id_work && globalData.workItems.length > 0) {
-              const work = globalData.workItems.find(w => String(w.id_work) === String(target.id_work));
-              if (work) workText = work.work_code;
-            }
-            if (target.id_step && globalData.steps.length > 0) {
-              const step = globalData.steps.find(s => String(s.id_step) === String(target.id_step));
-              if (step) stepText = step.step_name;
-            }
-          }
-        }
-
-        const producedAmt = log.produced_amount || 0;
-        const hourWork = log.hour_work || 0;
-
-        const totalTarget = targetAmountVal * hourWork;
-        const effPct = totalTarget > 0 ? (producedAmt / totalTarget) * 100 : 0;
-        const effColor = effPct >= 100 ? "var(--neon-green)" : "var(--neon-red)";
-
-        let reasonText = "-";
-        if (log.id_reason && globalData.reasons.length > 0) {
-          const reason = globalData.reasons.find(r => String(r.id_reason) === String(log.id_reason));
-          if (reason) reasonText = reason.reason_detail;
-        }
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${dateFormatted}</td>
-          <td>${orderText}</td>
-          <td>${empText}</td>
-          <td>${workText}</td>
-          <td>${stepText}</td>
-          <td class="text-right" style="color:var(--neon-green)">${producedAmt}</td>
-          <td class="text-right">${hourWork.toFixed(2)}</td>
-          <td class="text-right" style="color:${effColor}">${effPct.toFixed(1)}%</td>
-          <td>${reasonText}</td>
-          <td class="text-center action-cell">
-            <button class="btn-edit" onclick='promptEdit(${JSON.stringify(log)})'>แก้ไข</button>
-            <button class="btn-del" onclick='promptDelete(${JSON.stringify(log)})'>ลบ</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-    } catch (error) {
-      console.error(error);
-      tbody.innerHTML = `<tr><td colspan="10" class="text-center error">> ขัดข้อง: ${error.message}</td></tr>`;
-    }
-  }
-
-  function exportToExcel() {
-    let table = document.getElementById("reportTable");
-    let html = table.outerHTML;
-    let blob = new Blob(['\ufeff' + html], { type: 'application/vnd.ms-excel' });
-    let url = URL.createObjectURL(blob);
-    let a = document.createElement('a');
-    a.href = url;
-    a.download = `Daily_Production_Report_${new Date().toISOString().slice(0,10)}.xls`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
-
-  async function updateSummaryMetrics(orderId) {
-    const sumProducedEl = document.getElementById('sumProduced');
-    const sumTargetEl = document.getElementById('sumTarget');
-    const sumRemainingEl = document.getElementById('sumRemaining');
-    const sumDaysLeftEl = document.getElementById('sumDaysLeft');
-
-    if (!orderId) {
-      sumProducedEl.innerText = "0";
-      sumTargetEl.innerText = "0";
-      sumRemainingEl.innerText = "0";
-      sumDaysLeftEl.innerText = "-";
-      return;
-    }
-
-    const orderObj = globalData.orders.find(o => String(o.id_order) === String(orderId));
-    const totalRequiredQty = orderObj && orderObj.quantity ? parseInt(orderObj.quantity) : 0;
-    sumTargetEl.innerText = totalRequiredQty.toLocaleString();
-
-    if (orderObj && orderObj.end_date) {
-      const endDate = new Date(orderObj.end_date);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      
-      const diffTime = endDate - today;
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      
-      if (diffDays > 0) {
-        sumDaysLeftEl.innerText = `เหลือ ${diffDays} วัน`;
-        sumDaysLeftEl.style.color = "var(--neon-green)";
-      } else if (diffDays === 0) {
-        sumDaysLeftEl.innerText = `ครบกำหนดวันนี้`;
-        sumDaysLeftEl.style.color = "var(--neon-yellow)";
-      } else {
-        sumDaysLeftEl.innerText = `เลยกำหนด ${Math.abs(diffDays)} วัน`;
-        sumDaysLeftEl.style.color = "var(--neon-red)";
-      }
-    } else {
-      sumDaysLeftEl.innerText = "-";
-      sumDaysLeftEl.style.color = "var(--text-muted)";
-    }
-
-    try {
-      const res = await fetch(`${SUPABASE_URL}/daily_production?select=produced_amount&id_order=eq.${orderId}`, { headers });
-      if (res.ok) {
-        const data = await res.json();
-        const totalProduced = data.reduce((acc, curr) => acc + (curr.produced_amount || 0), 0);
-        sumProducedEl.innerText = totalProduced.toLocaleString();
-
-        const remaining = totalRequiredQty - totalProduced;
-        sumRemainingEl.innerText = remaining > 0 ? remaining.toLocaleString() : "0";
-        if (remaining <= 0) {
-          sumRemainingEl.style.color = "var(--neon-green)";
-        } else {
-          sumRemainingEl.style.color = "var(--neon-yellow)";
-        }
-      }
-    } catch (err) {
-      console.error("Error calculating summary metrics:", err);
-    }
-  }
-
-  function promptDelete(logData) {
-    const pwd = prompt("ตรวจสอบความปลอดภัย: ใส่รหัสผ่านเพื่อลบข้อมูล (112233)");
-    if (pwd === "112233") {
-      deleteRecord(logData);
-    } else if (pwd !== null) {
-      alert("ไม่อนุญาต: รหัสผ่านไม่ถูกต้อง");
-    }
-  }
-
-  async function deleteRecord(logData) {
-    try {
-      const queryStr = `record_date=eq.${logData.record_date}&id_order=eq.${logData.id_order}&id_target=eq.${logData.id_target}&id_name=eq.${logData.id_name}`;
-      const res = await fetch(`${SUPABASE_URL}/daily_production?${queryStr}`, {
-        method: "DELETE",
-        headers: headers
-      });
-      if (res.ok) {
-        alert("สำเร็จ: ลบข้อมูลเรียบร้อย");
-        fetchReport();
-      } else {
-        alert("ลบข้อมูลล้มเหลว");
-      }
-    } catch (err) {
-      alert("ข้อผิดพลาด: " + err.message);
-    }
-  }
-
-  function promptEdit(logData) {
-    const pwd = prompt("ตรวจสอบความปลอดภัย: ใส่รหัสผ่านเพื่อแก้ไขข้อมูล (112233)");
-    if (pwd === "112233") {
-      enterEditMode(logData);
-    } else if (pwd !== null) {
-      alert("ไม่อนุญาต: รหัสผ่านไม่ถูกต้อง");
-    }
-  }
-
-  function enterEditMode(logData) {
-    isEditMode = true;
-    originalRecordKey = logData;
-
-    document.getElementById('record_date').value = logData.record_date;
-    document.getElementById('id_order').value = logData.id_order || '';
-    handleOrderChange();
-    
-    document.getElementById('id_target').value = logData.id_target || '';
-    
-    const empEdit = globalData.employees.find(e => String(e.id_name) === String(logData.id_name));
-    document.getElementById('employee_search').value = empEdit ? empEdit.name : '';
-    
-    document.getElementById('hour_work').value = logData.hour_work || '';
-    document.getElementById('produced_amount').value = logData.produced_amount || '';
-    document.getElementById('id_reason').value = logData.id_reason || '';
-
-    calculateEfficiency();
-
-    document.getElementById('submitBtn').innerText = "> อัปเดตข้อมูล";
-    document.getElementById('cancelEditBtn').style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function cancelEditMode() {
     isEditMode = false;
     originalRecordKey = null;
     document.getElementById('prodForm').reset();
-    document.getElementById('record_date').valueAsDate = new Date();
-    document.getElementById('id_target').innerHTML = '<option value="">-- รอการเลือกใบสั่งงาน --</option>';
+    
+    let yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    document.getElementById('record_date').value = yesterday.toISOString().split('T')[0];
+    
+    document.getElementById('id_target').innerHTML = '<option value="">👉 รอเลือกรหัสใบสั่งงานก่อน</option>';
     document.getElementById('id_work').value = '';
-    
     document.getElementById('employee_search').value = ''; 
-    
-    document.getElementById('submitBtn').innerText = "> บันทึกข้อมูล";
+    document.getElementById('submitBtn').innerText = "บันทึกข้อมูล";
     document.getElementById('cancelEditBtn').style.display = 'none';
     document.getElementById('reasonGroup').style.display = 'none';
     document.getElementById('effDisplay').innerText = "0.00%";
     document.getElementById('effDisplay').style.color = "var(--text-muted)";
   }
 
+  // -------------------------------------------------------------
+  // โค้ดปรับแก้ส่วนที่แป้นพิมพ์เด้งบังหน้าจอ
+  // -------------------------------------------------------------
   function openKeypad(inputId) {
     activeInputId = inputId;
     let labelText = document.querySelector(`label[for="${inputId}"]`);
@@ -1752,9 +812,9 @@
     
     if (inputId === 'hour_work') title = 'ชั่วโมงทำงาน';
     else if (inputId === 'produced_amount') title = 'จำนวนผลิต';
-    else if (inputId === 'manual_order_code') title = 'รหัสใบสั่งงาน (4 หลัก)';
+    else if (inputId === 'manual_order_code') title = 'รหัสใบสั่งงาน';
 
-    document.getElementById('keypadTitle').innerText = "> ระบุค่า: " + title;
+    document.getElementById('keypadTitle').innerText = "> พิมพ์ค่า: " + title;
 
     let isCode = (inputId === 'manual_order_code');
     document.querySelectorAll('.key-math').forEach(btn => {
@@ -1762,6 +822,14 @@
     });
 
     document.getElementById('numericKeypad').style.display = 'block';
+
+    // เพิ่มพื้นที่ด้านล่างหลอกๆ 450px เพื่อให้หน้าจอมีระยะเลื่อนลงไปได้อีก
+    document.body.style.paddingBottom = "450px";
+
+    // สั่งดันช่องที่กำลังกรอก ขึ้นไปอยู่ "บนสุด" ของหน้าจอ
+    setTimeout(() => {
+      document.getElementById(inputId).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
   }
 
   function closeKeypad() {
@@ -1771,16 +839,19 @@
     }
     document.getElementById('numericKeypad').style.display = 'none';
     activeInputId = null;
+    
+    // หดพื้นที่ด้านล่างกลับเป็นปกติเมื่อปิดแป้นพิมพ์
+    document.body.style.paddingBottom = "10px";
+    
     calculateEfficiency();
   }
+  // -------------------------------------------------------------
 
   function calculateMath(expression) {
     try {
       if(!expression) return '';
       let result = Function('"use strict";return (' + expression + ')')();
-      
       if(isNaN(result) || !isFinite(result)) return expression;
-      
       return Number.isInteger(result) ? result : parseFloat(result.toFixed(4));
     } catch(e) {
       return expression; 
@@ -1820,11 +891,10 @@
     
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.disabled = true;
-    submitBtn.innerText = isEditMode ? "> กำลังอัปเดต..." : "> กำลังบันทึก...";
+    submitBtn.innerText = isEditMode ? "กำลังอัปเดต..." : "กำลังบันทึก...";
 
     const orderVal = document.getElementById('id_order').value;
     const targetVal = document.getElementById('id_target').value;
-    
     const empSearchVal = document.getElementById('employee_search').value;
     const empObj = globalData.employees.find(e => e.name === empSearchVal);
     const employeeVal = empObj ? empObj.id_name : null;
@@ -1832,7 +902,7 @@
     if (!employeeVal) {
       alert("⚠️ กรุณาระบุชื่อพนักงานให้ถูกต้อง (เลือกจากรายการที่ค้นหา)");
       submitBtn.disabled = false;
-      submitBtn.innerText = isEditMode ? "> อัปเดตข้อมูล" : "> บันทึกข้อมูล";
+      submitBtn.innerText = isEditMode ? "อัปเดตข้อมูล" : "บันทึกข้อมูล";
       return;
     }
 
@@ -1865,15 +935,11 @@
       }
 
       if (response.ok) {
-        alert(isEditMode ? "สำเร็จ: อัปเดตข้อมูลเรียบร้อย" : "สำเร็จ: บันทึกข้อมูลเรียบร้อย");
+        alert("✅ บันทึกข้อมูลเรียบร้อยแล้ว!");
 
         localStorage.setItem('last_order_id', orderVal);
         localStorage.setItem('last_target_id', targetVal);
         localStorage.setItem('last_employee_id', employeeVal);
-
-        document.getElementById('filter_order').value = orderVal;
-        onFilterOrderChange();
-        document.getElementById('filter_target').value = targetVal;
 
         if (isEditMode) {
           cancelEditMode();
@@ -1883,19 +949,19 @@
           document.getElementById('reasonGroup').style.display = 'none';
           document.getElementById('effDisplay').innerText = "0.00%";
           document.getElementById('effDisplay').style.color = "var(--text-muted)";
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        fetchReport();
       } else {
         const errData = await response.json();
-        alert("บันทึกข้อมูลล้มเหลว: " + (errData.message || JSON.stringify(errData)));
+        alert("❌ บันทึกข้อมูลล้มเหลว: " + (errData.message || JSON.stringify(errData)));
       }
     } catch (error) {
       console.error(error);
-      alert("ข้อผิดพลาดในการเชื่อมต่อ: " + error.message);
+      alert("⚠️ ข้อผิดพลาดในการเชื่อมต่อ: " + error.message);
     } finally {
       submitBtn.disabled = false;
-      submitBtn.innerText = isEditMode ? "> อัปเดตข้อมูล" : "> บันทึกข้อมูล";
+      submitBtn.innerText = "บันทึกข้อมูล";
     }
   }
 </script>
