@@ -111,6 +111,33 @@
       margin-right: 4px; box-shadow: 0 0 6px var(--neon-green);
     }
 
+    /* ปุ่มกลับหน้าหลัก */
+    .back-link-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      background: transparent;
+      color: var(--neon-blue);
+      border: 2px solid var(--neon-blue);
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 8px;
+      text-align: center;
+      text-decoration: none;
+      font-weight: bold;
+      box-sizing: border-box;
+      transition: all 0.3s;
+      margin-bottom: 20px;
+      font-family: inherit;
+    }
+    .back-link-btn:active, .back-link-btn:hover {
+      background: var(--neon-blue);
+      color: var(--bg-dark);
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+    }
+
     .form-group { margin-bottom: 14px; }
     .form-group label { 
       display: block; 
@@ -285,6 +312,11 @@
   
   <form id="prodForm" onsubmit="handleSubmit(event)" style="display:none;">
     
+    <!-- ปุ่มกลับหน้าตารางหลัก (เพิ่มใหม่) -->
+    <a href="https://paiboon-creater.github.io/daily-production/" class="back-link-btn">
+      <i class="fa-solid fa-house"></i> กลับหน้าตารางหลัก (Daily Production)
+    </a>
+
     <!-- 1. วันที่ทำงาน -->
     <div class="form-group">
       <label>1. วันที่ทำงาน</label>
