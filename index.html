@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>JAGUAR_PRODUCTION_SUPABASE // DAILY PROD TERMINAL</title>
+  <!-- โหลดไลบรารีสำหรับสร้าง QR Code และสแกน QR Code -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <!-- FontAwesome สำหรับไอคอน -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
@@ -38,6 +40,8 @@
       position: relative;
       overflow-x: hidden;
       -webkit-text-size-adjust: 100%;
+      /* Transition สำหรับตอนเพิ่มพื้นที่หลบแป้นพิมพ์ */
+      transition: padding-bottom 0.3s ease; 
     }
 
     body::before {
@@ -53,7 +57,7 @@
 
     .terminal-container {
       width: 100%;
-      max-width: 500px; /* ลดความกว้างลงเพื่อให้พอดีมือถือมากที่สุด */
+      max-width: 500px;
       background: var(--panel-bg);
       padding: 15px;
       border-radius: 12px;
@@ -113,7 +117,7 @@
       margin-bottom: 6px; 
       font-size: 16px; 
       font-weight: bold; 
-      color: #ffffff; /* ขาวสว่างเด่นๆ */
+      color: #ffffff;
     }
 
     input, select {
@@ -126,7 +130,7 @@
       border-radius: 8px; 
       box-sizing: border-box; 
       font-family: inherit;
-      font-size: 18px; /* ตัวหนังสือช่องกรอกใหญ่ขึ้น */
+      font-size: 18px; 
       transition: all 0.2s;
     }
 
@@ -281,11 +285,13 @@
   
   <form id="prodForm" onsubmit="handleSubmit(event)" style="display:none;">
     
+    <!-- 1. วันที่ทำงาน -->
     <div class="form-group">
       <label>1. วันที่ทำงาน</label>
       <input type="date" id="record_date" required>
     </div>
 
+    <!-- 2. รหัสใบสั่งงาน -->
     <div class="form-group">
       <label>2. รหัสใบสั่งงาน</label>
       <div style="display: flex; gap: 8px; margin-bottom: 8px;">
@@ -299,6 +305,7 @@
       </select>
     </div>
 
+    <!-- 3. ขั้นตอน -->
     <div class="form-group">
       <label>3. ชิ้นงาน / ขั้นตอน</label>
       <select id="id_target" onchange="calculateEfficiency()" required>
@@ -307,27 +314,32 @@
       <input type="hidden" id="id_work" value="">
     </div>
 
+    <!-- 4. พนักงาน -->
     <div class="form-group">
       <label>4. ชื่อพนักงาน</label>
       <input type="text" id="employee_search" list="employee_datalist" placeholder="⌨️ พิมพ์ชื่อค้นหา..." autocomplete="off" onfocus="this.select()" onclick="this.select()" required>
       <datalist id="employee_datalist"></datalist>
     </div>
 
+    <!-- 5. ชั่วโมงทำงาน -->
     <div class="form-group">
       <label>5. ชั่วโมงทำงาน</label>
       <input type="text" id="hour_work" readonly placeholder="⌨️ แตะพิมพ์ตัวเลข" onclick="openKeypad('hour_work')" required>
     </div>
 
+    <!-- 6. ยอดผลิต -->
     <div class="form-group">
       <label>6. จำนวนที่ผลิตได้</label>
       <input type="text" id="produced_amount" readonly placeholder="⌨️ แตะพิมพ์ตัวเลข" onclick="openKeypad('produced_amount')" required>
     </div>
 
+    <!-- ประสิทธิภาพ (อัตโนมัติ) -->
     <div class="eff-box">
       <span>> ประสิทธิภาพ:</span>
       <span id="effDisplay" class="eff-value" style="color: var(--text-muted);">0.00%</span>
     </div>
 
+    <!-- 7. สาเหตุ -->
     <div class="form-group" id="reasonGroup" style="display: none;">
       <label style="color: var(--neon-red);">7. สาเหตุที่ยอดตก (บังคับเลือก)</label>
       <select id="id_reason">
@@ -339,6 +351,7 @@
     <button type="button" class="cancel-edit-btn" id="cancelEditBtn" onclick="cancelEditMode()">[X] ยกเลิกการแก้ไข</button>
   </form>
 
+  <!-- ซ่อนส่วน Report ตารางด้านล่างทิ้งทั้งหมด -->
   <div class="report-section" id="reportSection">
     <select id="filter_order" style="display:none;"></select>
     <select id="filter_work" style="display:none;"></select>
@@ -352,6 +365,7 @@
   </div>
 </div>
 
+<!-- QR SCANNER MODAL -->
 <div id="scannerModal" class="scanner-modal" style="display:none;">
   <div class="scanner-box">
     <h3 style="color:var(--neon-blue); margin-top:0;">สแกนคิวอาร์โค้ด</h3>
@@ -362,6 +376,7 @@
 
 <div id="printArea"></div>
 
+<!-- แป้นพิมพ์ตัวเลข -->
 <div id="numericKeypad" class="keypad-modal">
   <div class="keypad-header">
     <span id="keypadTitle">> ระบุค่า: </span>
@@ -773,7 +788,6 @@
     originalRecordKey = null;
     document.getElementById('prodForm').reset();
     
-    // Reset date to yesterday on cancel
     let yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     document.getElementById('record_date').value = yesterday.toISOString().split('T')[0];
@@ -788,19 +802,34 @@
     document.getElementById('effDisplay').style.color = "var(--text-muted)";
   }
 
- function closeKeypad() {
-    if (activeInputId && activeInputId !== 'manual_order_code') {
-      let input = document.getElementById(activeInputId);
-      input.value = calculateMath(input.value);
-    }
-    document.getElementById('numericKeypad').style.display = 'none';
-    activeInputId = null;
+  // -------------------------------------------------------------
+  // โค้ดปรับแก้ส่วนที่แป้นพิมพ์เด้งบังหน้าจอ
+  // -------------------------------------------------------------
+  function openKeypad(inputId) {
+    activeInputId = inputId;
+    let labelText = document.querySelector(`label[for="${inputId}"]`);
+    let title = labelText ? labelText.innerText : "";
     
-    // -- ส่วนที่เพิ่มใหม่ --
-    // หดพื้นที่ด้านล่างกลับเป็นปกติเมื่อปิดแป้นพิมพ์
-    document.body.style.paddingBottom = "0px";
-    
-    calculateEfficiency();
+    if (inputId === 'hour_work') title = 'ชั่วโมงทำงาน';
+    else if (inputId === 'produced_amount') title = 'จำนวนผลิต';
+    else if (inputId === 'manual_order_code') title = 'รหัสใบสั่งงาน';
+
+    document.getElementById('keypadTitle').innerText = "> พิมพ์ค่า: " + title;
+
+    let isCode = (inputId === 'manual_order_code');
+    document.querySelectorAll('.key-math').forEach(btn => {
+      btn.style.visibility = isCode ? 'hidden' : 'visible'; 
+    });
+
+    document.getElementById('numericKeypad').style.display = 'block';
+
+    // เพิ่มพื้นที่ด้านล่างหลอกๆ 450px เพื่อให้หน้าจอมีระยะเลื่อนลงไปได้อีก
+    document.body.style.paddingBottom = "450px";
+
+    // สั่งดันช่องที่กำลังกรอก ขึ้นไปอยู่ "บนสุด" ของหน้าจอ
+    setTimeout(() => {
+      document.getElementById(inputId).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
   }
 
   function closeKeypad() {
@@ -810,8 +839,13 @@
     }
     document.getElementById('numericKeypad').style.display = 'none';
     activeInputId = null;
+    
+    // หดพื้นที่ด้านล่างกลับเป็นปกติเมื่อปิดแป้นพิมพ์
+    document.body.style.paddingBottom = "10px";
+    
     calculateEfficiency();
   }
+  // -------------------------------------------------------------
 
   function calculateMath(expression) {
     try {
