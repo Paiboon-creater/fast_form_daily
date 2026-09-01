@@ -353,7 +353,7 @@
     <div class="form-group">
       <label>2. รหัสใบสั่งงาน</label>
       <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-        <input type="text" id="manual_order_code" style="flex: 1; text-align: center; color: var(--neon-yellow);" placeholder="👉 แตะคีย์รหัส 4 หลัก" readonly onclick="openKeypad('manual_order_code')">
+        <input type="text" id="manual_order_code" style="flex: 1; text-align: center; color: var(--neon-yellow);" placeholder="👉 แตะคีย์รหัส 5 หลัก" readonly onclick="openKeypad('manual_order_code')">
         <button type="button" class="scan-btn-subtle" onclick="openScanner()">
           <i class="fa-solid fa-qrcode"></i>
         </button>
@@ -596,7 +596,7 @@
 
   function generateShortcutMap() {
     globalData.shortcutMap = [];
-    let counter = 1;
+    
     let sortedOrders = [...globalData.orders].sort((a,b) => parseInt(a.id_order) - parseInt(b.id_order));
     
     sortedOrders.forEach(order => {
@@ -604,13 +604,15 @@
         let orderTargets = globalData.targets.filter(t => String(t.id_work) === String(order.id_work));
         orderTargets.sort((a,b) => parseInt(a.id_target) - parseInt(b.id_target));
         
-        orderTargets.forEach(target => {
+        orderTargets.forEach((target, index) => {
+          let orderPart = String(order.id_order).padStart(3, '0');
+          let stepPart = String(index + 1).padStart(2, '0');
+          
           globalData.shortcutMap.push({
-            code: String(counter).padStart(4, '0'), 
+            code: orderPart + stepPart, // สร้างรหัส 5 หลัก
             id_order: order.id_order,
             id_target: target.id_target
           });
-          counter++;
         });
       }
     });
@@ -618,7 +620,7 @@
 
   function handleManualOrderInput(inputEl) {
     let val = inputEl.value.trim();
-    if (val.length === 4) {
+    if (val.length === 5) {
       const foundShortcut = globalData.shortcutMap.find(s => s.code === val);
       if (foundShortcut) {
         document.getElementById('id_order').value = foundShortcut.id_order;
@@ -870,7 +872,7 @@
     
     if (inputId === 'hour_work') title = 'ชั่วโมงทำงาน';
     else if (inputId === 'produced_amount') title = 'จำนวนผลิต';
-    else if (inputId === 'manual_order_code') title = 'รหัสใบสั่งงาน';
+    else if (inputId === 'manual_order_code') title = 'รหัสใบสั่งงาน (5 หลัก)';
 
     document.getElementById('keypadTitle').innerText = "> พิมพ์ค่า: " + title;
 
@@ -930,8 +932,8 @@
     } else {
       if (activeInputId === 'manual_order_code') {
         if (['+', '-', '*', '/', '=', '.'].includes(val)) return;
-        if (currentVal.length + val.length > 4) {
-          val = val.slice(0, 4 - currentVal.length);
+        if (currentVal.length + val.length > 5) {
+          val = val.slice(0, 5 - currentVal.length);
         }
       }
       input.value = currentVal + val;
