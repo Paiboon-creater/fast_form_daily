@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>🎀 DAILY PROD // KITTY THEME 🐱</title>
+  <!-- โหลดไลบรารีสำหรับสร้าง QR Code และสแกน QR Code -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <!-- FontAwesome สำหรับไอคอน -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
@@ -32,4 +34,798 @@
     body {
       font-family: 'Kanit', 'Sarabun', Tahoma, sans-serif;
       background-color: var(--bg-kitty);
-      background-image: radial-gradient(#ffb6
+      background-image: radial-gradient(#ffb6c1 1.5px, transparent 1.5px);
+      background-size: 25px 25px;
+      color: var(--text-main);
+      margin: 0;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+      transition: padding-bottom 0.3s ease; 
+    }
+
+    .terminal-container {
+      width: 100%;
+      max-width: 550px;
+      background: var(--panel-bg);
+      padding: 20px 15px;
+      border-radius: 20px;
+      border: 3px solid var(--kitty-pink);
+      box-shadow: 0 10px 30px rgba(255, 105, 180, 0.2);
+      margin-top: 5px;
+      margin-bottom: 15px;
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border-bottom: 2px dashed var(--kitty-pink);
+      padding-bottom: 12px;
+      margin-bottom: 15px;
+    }
+
+    .jaguar-emblem {
+      width: 50px; height: 50px;
+      background: var(--kitty-light-pink); border: 2px solid var(--kitty-pink);
+      border-radius: 50%; display: flex; justify-content: center; align-items: center;
+      box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
+    }
+    .jaguar-emblem i { font-size: 26px; color: var(--kitty-dark-pink); }
+
+    .app-title { font-size: 1.25rem; font-weight: 600; color: var(--kitty-dark-pink); margin: 0; text-shadow: 1px 1px 2px rgba(255, 105, 180, 0.2); }
+    .status { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 15px;}
+    .status-dot { display: inline-block; width: 10px; height: 10px; background-color: #10b981; border-radius: 50%; margin-right: 5px; }
+
+    .top-buttons-wrapper { display: flex; gap: 10px; margin-bottom: 20px; }
+    .nav-btn {
+      display: flex; justify-content: center; align-items: center; gap: 8px;
+      padding: 10px 10px; font-size: 14px; border-radius: 12px; text-align: center;
+      text-decoration: none; font-weight: 600; box-sizing: border-box; transition: all 0.2s; font-family: inherit; flex: 1;
+    }
+    .home-btn { background: #fff; color: #14b8a6; border: 2px solid #14b8a6; }
+    .home-btn:active, .home-btn:hover { background: #14b8a6; color: #fff; box-shadow: 0 4px 10px rgba(20, 184, 166, 0.3); }
+    .daily-btn { background: #fff; color: var(--kitty-dark-pink); border: 2px solid var(--kitty-dark-pink); }
+    .daily-btn:active, .daily-btn:hover { background: var(--kitty-dark-pink); color: #fff; box-shadow: 0 4px 10px rgba(216, 27, 96, 0.3); }
+
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--kitty-dark-pink); }
+
+    input, select {
+      width: 100%; padding: 14px; background-color: var(--input-bg); border: 2px solid var(--border-dim); 
+      color: var(--text-main); font-weight: 500; border-radius: 12px; box-sizing: border-box; 
+      font-family: inherit; font-size: 17px; transition: all 0.2s;
+    }
+    input::placeholder { color: #f472b6; font-size: 15px; opacity: 0.7; }
+    input:focus, select:focus { border-color: var(--kitty-pink); outline: none; box-shadow: 0 0 0 4px rgba(255, 105, 180, 0.15); background-color: #ffffff; }
+    input[type="date"] { text-align: center; }
+    input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; width: 25px; height: 25px; }
+
+    .input-row { display: flex; gap: 8px; margin-bottom: 8px; }
+    .input-row input { flex: 1; }
+    
+    .keypad-trigger-btn {
+      background: var(--kitty-light-pink); border: 2px solid var(--kitty-pink); color: var(--kitty-dark-pink);
+      border-radius: 12px; width: 60px; display: flex; justify-content: center; align-items: center;
+      cursor: pointer; font-size: 20px; transition: all 0.2s;
+    }
+    .keypad-trigger-btn:active { background: var(--kitty-pink); color: #fff; }
+
+    .scan-btn-subtle {
+      background: #f0fdfa; border: 2px solid #2dd4bf; color: #0d9488;
+      border-radius: 12px; width: 60px; display: flex; justify-content: center; align-items: center;
+      cursor: pointer; font-size: 22px; transition: all 0.2s;
+    }
+    .scan-btn-subtle:active { background: #2dd4bf; color: #fff; }
+
+    .scanner-modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.9); z-index: 2000;
+      justify-content: center; align-items: center; flex-direction: column; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px);
+    }
+    .scanner-box {
+      width: 100%; max-width: 400px; background: #fff;
+      border: 3px solid var(--kitty-pink); border-radius: 20px; padding: 15px; text-align: center;
+      box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+    }
+    .scanner-close { background: #fff; border: 2px solid var(--neon-red); color: var(--neon-red); padding: 12px; width: 100%; margin-top: 15px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 16px; }
+
+    .eff-box {
+      background: var(--kitty-light-pink); border: 2px dashed var(--kitty-pink); padding: 14px; border-radius: 12px;
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 16px; font-weight: bold; color: var(--kitty-dark-pink);
+    }
+    .eff-value { font-size: 24px; color: var(--kitty-dark-pink); }
+
+    .submit-btn {
+      width: 100%; background: #ff69b4; color: #ffffff; border: none; padding: 18px; font-size: 22px;
+      border-radius: 16px; cursor: pointer; font-weight: 600; margin-top: 20px; font-family: inherit; transition: all 0.2s; box-shadow: 0 6px 15px rgba(255, 105, 180, 0.4);
+    }
+    .submit-btn:hover { background: #ff1493; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 105, 180, 0.5); }
+    .submit-btn:active { transform: translateY(2px); box-shadow: 0 2px 8px rgba(255, 105, 180, 0.4); }
+    .cancel-edit-btn { width: 100%; background-color: transparent; color: #ef4444; border: 2px solid #ef4444; padding: 12px; font-size: 16px; border-radius: 12px; cursor: pointer; margin-top: 12px; display: none; font-weight: bold; }
+
+    /* ======================================= */
+    /* ส่วนตารางประวัติ 🎀 */
+    /* ======================================= */
+    .history-table-wrapper {
+      width: 100%; overflow-x: auto; border-radius: 12px; border: 2px solid var(--kitty-pink); margin-top: 10px;
+    }
+    .kitty-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: center; white-space: nowrap; }
+    .kitty-table th { background-color: var(--kitty-pink); color: white; padding: 10px 5px; font-weight: 600; }
+    .kitty-table td { padding: 8px 5px; border-bottom: 1px dashed var(--kitty-pink); }
+    .kitty-table tr:nth-child(even) { background-color: #fff0f5; }
+    .kitty-table tr:hover { background-color: #fce4ec; }
+
+    .btn-print-history {
+      width: 100%; background: #14b8a6; color: white; border: none; padding: 14px; font-size: 16px;
+      border-radius: 12px; cursor: pointer; font-weight: 600; margin-top: 15px; transition: 0.2s;
+      box-shadow: 0 4px 10px rgba(20, 184, 166, 0.3);
+    }
+    .btn-print-history:active { transform: translateY(2px); box-shadow: none; }
+
+    /* Keypad */
+    .keypad-modal {
+      display: none; position: fixed; bottom: 0; left: 0; width: 100%;
+      background: #ffffff; border-top: 4px solid var(--kitty-pink);
+      padding: 20px 15px 30px 15px; box-sizing: border-box; box-shadow: 0 -10px 30px rgba(0,0,0,0.1); z-index: 1000; border-radius: 25px 25px 0 0;
+    }
+    .keypad-header { display: flex; justify-content: space-between; color: var(--kitty-dark-pink); margin-bottom: 15px; font-size: 17px; font-weight: 600; }
+    .keypad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 500px; margin: 0 auto; }
+    .key-btn { background: var(--input-bg); color: var(--kitty-dark-pink); border: 2px solid var(--border-dim); padding: 16px 0; font-size: 24px; border-radius: 14px; cursor: pointer; font-family: inherit; font-weight: 600; transition: 0.1s; }
+    .key-btn:active { background: var(--kitty-pink); color: white; }
+    .key-action { color: #ef4444; border-color: #fca5a5; font-size: 18px; background: #fef2f2;}
+    .key-special { color: #ec4899; border-color: #fbcfe8; background: #fdf2f8; }
+    .key-close { background: var(--kitty-pink); grid-column: span 4; margin-top: 5px; font-size: 18px; color: white; font-weight: 600; border: none; padding: 14px 0;}
+    .key-equals { background-color: var(--kitty-dark-pink); color: white; font-size: 28px; border: none; box-shadow: 0 4px 10px rgba(216, 27, 96, 0.3); }
+    .key-equals:active { background-color: #be185d; }
+
+    /* ========================================================= */
+    /* CSS พิมพ์เอกสาร A4 แนวนอน (ใบความก้าวหน้า) */
+    /* ========================================================= */
+    #printArea { display: none; }
+    @media print {
+      body * { visibility: hidden; }
+      #printArea, #printArea * { visibility: visible; color: #000 !important; }
+      #printArea { display: flex !important; position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+      @page { size: A4 landscape; margin: 0; }
+      
+      .print-sheet-container { width: 297mm; height: 202mm; padding: 2mm 3mm; box-sizing: border-box; background: white; display: flex; justify-content: space-between; page-break-after: avoid; page-break-inside: avoid; color: #000; font-family: 'Sarabun', sans-serif; overflow: hidden; }
+      .print-card { width: 48.6%; height: 100%; border: 1.5px solid #000; padding: 2mm 2.5mm; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; background: #fff; }
+      .print-header-wrapper { margin-top: 10mm; }
+      .print-header-top { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #000; padding-bottom: 3px; margin-bottom: 3px; }
+      .print-title-area h3 { margin: 0 0 2px 0; font-size: 15px; text-align: center; font-weight: bold; }
+      .print-meta-row { font-size: 12px; margin-bottom: 4px; display: flex; align-items: flex-end; gap: 4px; font-weight: bold; }
+      .print-label { white-space: nowrap; margin-bottom: -1px; }
+      .print-value { border-bottom: 1.5px dotted #000; padding-left: 5px; min-height: 15px; white-space: nowrap; }
+      .print-qr-box { text-align: center; }
+      .print-qr-box canvas, .print-qr-box img { width: 58px !important; height: 58px !important; }
+      .print-qr-box span { display: block; font-size: 8px; margin-top: 1px; font-weight: bold; }
+      .print-code-text { font-size: 14px; font-weight: bold; letter-spacing: 2px; margin-top: 1px; background: #eee; border: 1px solid #000; padding: 2px 4px; }
+      .print-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 3px; table-layout: fixed; }
+      .print-table th, .print-table td { border: 1px solid #000; padding: 2px 3px; text-align: center; height: 18px; word-wrap: break-word; }
+      .print-table th { background-color: #e0e0e0 !important; font-size: 11px; font-weight: bold; -webkit-print-color-adjust: exact; }
+      .print-footer { display: flex; justify-content: space-between; font-size: 11px; margin-top: 2px; border-top: 1px solid #000; padding-top: 2px; font-weight: bold; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="terminal-container">
+  <div class="app-header">
+    <div class="jaguar-emblem"><i class="fa-solid fa-cat"></i></div>
+    <div><h1 class="app-title">🎀 บันทึกยอดผลิตรายวัน</h1></div>
+  </div>
+  <div class="status">
+    <span class="status-dot" id="statusDot"></span><span id="statusText">กำลังเชื่อมต่อระบบน่ารักๆ...</span>
+  </div>
+  <div id="statusMessage" class="system-msg loading" style="color:var(--neon-yellow);">> กำลังเตรียมข้อมูล...</div>
+  
+  <form id="prodForm" onsubmit="handleSubmit(event)" style="display:none;">
+    <div class="top-buttons-wrapper">
+      <a href="https://paiboon-creater.github.io/Data_Information_Jaguar_productions/" class="nav-btn home-btn"><i class="fa-solid fa-house"></i> Home App</a>
+      <a href="https://paiboon-creater.github.io/daily-production/" class="nav-btn daily-btn"><i class="fa-solid fa-table-list"></i> ตารางหลัก</a>
+    </div>
+
+    <div class="form-group">
+      <label>🌸 1. รหัสค้นหาใบสั่ง (5 หลัก)</label>
+      <div class="input-row">
+        <input type="text" id="manual_order_code" style="text-align: center; color: var(--kitty-dark-pink); font-size: 22px;" placeholder="พิมพ์รหัสที่นี่..." autocomplete="off" onfocus="this.select()" oninput="handleManualOrderInput(this)" onkeydown="handleEnter(event, 'record_date')">
+        <button type="button" class="keypad-trigger-btn" onclick="openKeypad('manual_order_code')" tabindex="-1"><i class="fa-solid fa-calculator"></i></button>
+        <button type="button" class="scan-btn-subtle" onclick="openScanner()" tabindex="-1"><i class="fa-solid fa-qrcode"></i></button>
+      </div>
+      <select id="id_order" onchange="handleOrderChange()" required tabindex="-1" style="display: none;"><option value="">👉 หรือแตะเลือกจากรายการ</option></select>
+      <select id="id_target" onchange="onTargetSelected()" required style="margin-top: 8px; background-color: #fff;" tabindex="-1"><option value="">👉 ขั้นตอนทำงานจะขึ้นที่นี่อัตโนมัติ</option></select>
+      <input type="hidden" id="id_work" value="">
+    </div>
+
+    <div class="form-group">
+      <label>📅 2. วันที่ทำงาน</label>
+      <input type="date" id="record_date" required onkeydown="handleEnter(event, 'produced_amount')">
+    </div>
+
+    <div class="form-group">
+      <label>✨ 3. จำนวนที่ผลิตได้</label>
+      <div class="input-row">
+        <input type="text" id="produced_amount" placeholder="พิมพ์ยอดผลิตดี..." autocomplete="off" onfocus="this.select()" onkeydown="handleEnter(event, 'nogoods_amount')" oninput="calculateEfficiency()" style="color: #059669;">
+        <button type="button" class="keypad-trigger-btn" onclick="openKeypad('produced_amount')" tabindex="-1"><i class="fa-solid fa-calculator"></i></button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>🗑️ 4. จำนวนของเสีย (NG)</label>
+      <div class="input-row">
+        <input type="text" id="nogoods_amount" placeholder="พิมพ์ยอดของเสีย (ถ้ามี)..." autocomplete="off" onfocus="this.select()" onkeydown="handleEnter(event, 'hour_work')" style="color: #ef4444;">
+        <button type="button" class="keypad-trigger-btn" onclick="openKeypad('nogoods_amount')" tabindex="-1"><i class="fa-solid fa-calculator"></i></button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>⏱️ 5. ชั่วโมงทำงาน</label>
+      <div class="input-row">
+        <input type="text" id="hour_work" placeholder="พิมพ์ชั่วโมงทำงาน..." autocomplete="off" required onfocus="this.select()" onkeydown="handleEnter(event, 'work_period')" oninput="calculateEfficiency()">
+        <button type="button" class="keypad-trigger-btn" onclick="openKeypad('hour_work')" tabindex="-1"><i class="fa-solid fa-calculator"></i></button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>🌙 6. ช่วงเวลาทำงาน</label>
+      <select id="work_period" required onkeydown="handleEnter(event, 'employee_search')">
+        <option value="ปกติ" selected>ปกติ (Normal)</option>
+        <option value="OT">ล่วงเวลา (OT)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>👩‍🔧 7. ชื่อพนักงาน</label>
+      <input type="text" id="employee_search" list="employee_datalist" placeholder="พิมพ์ชื่อพนักงาน..." autocomplete="off" required onfocus="this.select()" onkeydown="handleEnterToReason(event)">
+      <datalist id="employee_datalist"></datalist>
+    </div>
+
+    <div class="eff-box">
+      <span>> ประสิทธิภาพการทำงาน:</span><span id="effDisplay" class="eff-value" style="color: var(--text-muted);">0.00%</span>
+    </div>
+
+    <div class="form-group" id="reasonGroup" style="display: none;">
+      <label style="color: #ef4444;">⚠️ 8. สาเหตุที่ยอดตก (บังคับเลือก)</label>
+      <select id="id_reason" onkeydown="handleEnter(event, 'remark')"><option value="">👉 แตะเลือกสาเหตุ</option></select>
+    </div>
+
+    <div class="form-group">
+      <label>📝 9. หมายเหตุ</label>
+      <input type="text" id="remark" list="remark_datalist" placeholder="พิมพ์หรือเลือกหมายเหตุเพิ่มเติม..." autocomplete="off" onfocus="this.select()" onkeydown="handleEnter(event, 'submitBtn')">
+      <datalist id="remark_datalist"></datalist>
+    </div>
+
+    <!-- เปลี่ยนไอคอนปุ่มบันทึกเป็น Save Disk แล้วครับ -->
+    <button type="submit" class="submit-btn" id="submitBtn"><i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลเลย!</button>
+    <button type="button" class="cancel-edit-btn" id="cancelEditBtn" onclick="cancelEditMode()">[X] ยกเลิกการแก้ไข</button>
+  </form>
+</div>
+
+<!-- ส่วนแสดงประวัติข้อมูลด้านล่าง -->
+<div class="terminal-container" id="historyContainer" style="display: none;">
+  <h3 style="color: var(--kitty-dark-pink); font-size: 1.1rem; text-align: center; margin: 0 0 10px 0;">📝 ประวัติการบันทึกล่าสุด</h3>
+  <div class="history-table-wrapper">
+    <table class="kitty-table">
+      <thead>
+        <tr>
+          <th width="15%">วันที่</th>
+          <th width="35%">ชื่อ</th>
+          <th width="10%">ชม.</th>
+          <th width="15%">ยอดดี</th>
+          <th width="10%">เสีย</th>
+          <th width="15%">EFF%</th>
+        </tr>
+      </thead>
+      <tbody id="historyTbody">
+        <tr><td colspan="6">กำลังโหลดประวัติ...</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <button type="button" class="btn-print-history" onclick="printProgressSheet(true)">
+    <i class="fa-solid fa-print"></i> พิมพ์ใบความก้าวหน้าพร้อมประวัติ
+  </button>
+</div>
+
+<!-- QR SCANNER MODAL -->
+<div id="scannerModal" class="scanner-modal" style="display:none;">
+  <div class="scanner-box"><h3 style="color:var(--kitty-dark-pink); margin-top:0;">📷 สแกนคิวอาร์โค้ด</h3><div id="reader" style="width:100%;"></div><button type="button" class="scanner-close" onclick="closeScanner()">ปิดกล้อง</button></div>
+</div>
+
+<!-- แป้นพิมพ์ตัวเลข -->
+<div id="numericKeypad" class="keypad-modal">
+  <div class="keypad-header"><span id="keypadTitle">🎀 พิมพ์ค่า: </span><span onclick="closeKeypad()" style="cursor:pointer; color: #ef4444;">[X] ปิด</span></div>
+  <div class="keypad-grid">
+    <button type="button" class="key-btn" onclick="pressKey('7')">7</button><button type="button" class="key-btn" onclick="pressKey('8')">8</button><button type="button" class="key-btn" onclick="pressKey('9')">9</button><button type="button" class="key-btn key-special key-math" onclick="pressKey('+')">+</button>
+    <button type="button" class="key-btn" onclick="pressKey('4')">4</button><button type="button" class="key-btn" onclick="pressKey('5')">5</button><button type="button" class="key-btn" onclick="pressKey('6')">6</button><button type="button" class="key-btn key-special key-math" onclick="pressKey('-')">-</button>
+    <button type="button" class="key-btn" onclick="pressKey('1')">1</button><button type="button" class="key-btn" onclick="pressKey('2')">2</button><button type="button" class="key-btn" onclick="pressKey('3')">3</button><button type="button" class="key-btn key-special key-math" onclick="pressKey('*')">*</button>
+    <button type="button" class="key-btn" onclick="pressKey('0')">0</button><button type="button" class="key-btn" onclick="pressKey('00')">00</button><button type="button" class="key-btn key-math" onclick="pressKey('.')">.</button><button type="button" class="key-btn key-special key-math" onclick="pressKey('/')">/</button>
+    <button type="button" class="key-btn key-action" onclick="pressKey('BACKSPACE')">ลบ</button><button type="button" class="key-btn key-action" onclick="pressKey('CLEAR')">ล้าง</button><button type="button" class="key-btn key-equals key-math" style="grid-column: span 2;" onclick="pressKey('=')">=</button>
+    <button type="button" class="key-btn key-close" style="grid-column: span 4;" onclick="closeKeypad()">ตกลง / ยืนยัน</button>
+  </div>
+</div>
+
+<div id="printArea"></div>
+
+<script>
+  const SUPABASE_URL = "https://siiiifesdjuunwmwozfb.supabase.co/rest/v1";
+  const SUPABASE_KEY = "sb_publishable_ohToE8Z_Fzo87uBtzdPDIg_cqHCi3HT";
+  const headers = { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY, "Content-Type": "application/json", "Prefer": "return=representation" };
+
+  let globalData = { orders: [], employees: [], targets: [], reasons: [], workItems: [], steps: [], orderSteps: [], shortcutMap: [], remarks: [] };
+  let activeInputId = null, isEditMode = false, originalRecordKey = null, html5QrCode = null;
+
+  function handleEnter(e, nextId) {
+    if (e.key === 'Enter') { e.preventDefault(); let nextEl = document.getElementById(nextId); if (nextEl) { nextEl.focus(); if(typeof nextEl.select === 'function') nextEl.select(); } }
+  }
+  function handleEnterToReason(e) {
+    if (e.key === 'Enter') { e.preventDefault(); const effGroup = document.getElementById('reasonGroup'); let nextId = (effGroup.style.display === 'block') ? 'id_reason' : 'remark'; let nextEl = document.getElementById(nextId); if (nextEl) { nextEl.focus(); if(typeof nextEl.select === 'function') nextEl.select(); } }
+  }
+
+  window.onload = async function() {
+    try {
+      const [ordersRes, empsRes, targetsRes, reasonsRes, workItemsRes, stepsRes, orderStepsRes, remarksRes] = await Promise.all([
+        fetch(SUPABASE_URL + "/orders?select=*", { headers }), fetch(SUPABASE_URL + "/employees?select=*", { headers }), fetch(SUPABASE_URL + "/targets?select=*", { headers }), 
+        fetch(SUPABASE_URL + "/reasons?select=*", { headers }), fetch(SUPABASE_URL + "/work_items?select=*", { headers }), fetch(SUPABASE_URL + "/production_steps?select=*", { headers }),
+        fetch(SUPABASE_URL + "/order_steps?select=*", { headers }), fetch(SUPABASE_URL + "/daily_production?select=remark", { headers })
+      ]);
+
+      if (!ordersRes.ok || !targetsRes.ok) throw new Error("Database Fetch Error");
+      let ords = await ordersRes.json(); ords.sort((a, b) => String(a.order_no || '').localeCompare(String(b.order_no || ''), 'th', { numeric: true })); globalData.orders = ords;
+      let emps = await empsRes.json(); emps.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'th')); globalData.employees = emps;
+      let tgts = await targetsRes.json(); tgts.sort((a, b) => (a.id_target || 0) - (b.id_target || 0)); globalData.targets = tgts;
+      let rens = await reasonsRes.json(); rens.sort((a, b) => (a.id_reason || 0) - (b.id_reason || 0)); globalData.reasons = rens;
+      if (workItemsRes.ok) { let works = await workItemsRes.json(); works.sort((a, b) => String(a.work_code || '').localeCompare(String(b.work_code || ''), 'th', { numeric: true })); globalData.workItems = works; }
+      if (stepsRes.ok) { let stps = await stepsRes.json(); stps.sort((a, b) => (a.id_step || 0) - (b.id_step || 0)); globalData.steps = stps; }
+      if (orderStepsRes.ok) { globalData.orderSteps = await orderStepsRes.json(); }
+      if (remarksRes.ok) { let rmks = await remarksRes.json(); globalData.remarks = [...new Set(rmks.map(r => r.remark).filter(Boolean))]; }
+
+      generateShortcutMap();
+      populateDropdown('id_order', globalData.orders, 'id_order', 'order_no'); 
+      populateDropdown('id_reason', globalData.reasons, 'id_reason', 'reason_detail');
+      
+      const empDatalist = document.getElementById('employee_datalist'); globalData.employees.forEach(emp => { let opt = document.createElement('option'); opt.value = emp.name; empDatalist.appendChild(opt); });
+      const rmkDatalist = document.getElementById('remark_datalist'); globalData.remarks.forEach(r => { let opt = document.createElement('option'); opt.value = r; rmkDatalist.appendChild(opt); });
+
+      document.getElementById('statusMessage').style.display = 'none';
+      document.getElementById('prodForm').style.display = 'block';
+      document.getElementById('statusText').innerText = "ระบบพร้อมใช้งานแล้วค่ะ 🌸";
+
+      loadLastSessionData();
+
+      setTimeout(() => { let codeInput = document.getElementById('manual_order_code'); codeInput.focus(); codeInput.select(); }, 300);
+    } catch (error) {
+      console.error(error); document.getElementById('statusMessage').innerText = "> ระบบขัดข้อง: " + error.message; document.getElementById('statusMessage').className = "system-msg error"; document.getElementById('statusText').innerText = "ออฟไลน์";
+    }
+  };
+
+  function generateShortcutMap() {
+    globalData.shortcutMap = [];
+    let sortedOrders = [...globalData.orders].sort((a,b) => parseInt(a.id_order) - parseInt(b.id_order));
+    sortedOrders.forEach(order => {
+      if (order.id_work) {
+        let orderTargets = globalData.targets.filter(t => String(t.id_work) === String(order.id_work)); orderTargets.sort((a,b) => parseInt(a.id_target) - parseInt(b.id_target));
+        orderTargets.forEach((target, index) => {
+          let orderPart = String(order.id_order).padStart(3, '0'); let stepPart = String(index + 1).padStart(2, '0');
+          globalData.shortcutMap.push({ code: orderPart + stepPart, id_order: order.id_order, id_target: target.id_target });
+        });
+      }
+    });
+  }
+
+  function handleManualOrderInput(inputEl) {
+    let val = inputEl.value.trim();
+    if (val.length === 5) {
+      const foundShortcut = globalData.shortcutMap.find(s => s.code === val);
+      if (foundShortcut) {
+        document.getElementById('id_order').value = foundShortcut.id_order; handleOrderChange();
+        setTimeout(() => { 
+          document.getElementById('id_target').value = foundShortcut.id_target; 
+          onTargetSelected(); // ดึงประวัติตอนค้นหาเจอ
+        }, 150);
+      } else {
+        const foundOrd = globalData.orders.find(o => String(o.order_no || '').endsWith(val));
+        if (foundOrd) { document.getElementById('id_order').value = foundOrd.id_order; handleOrderChange(); }
+      }
+    } else if (val === "") { document.getElementById('id_order').value = ""; handleOrderChange(); }
+  }
+
+  function openScanner() {
+    document.getElementById('scannerModal').style.display = 'flex';
+    if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
+    html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } },
+      (decodedText) => { handleScannedResult(decodedText); closeScanner(); }, (errorMessage) => {}
+    ).catch(err => { alert("ไม่สามารถเปิดกล้องได้ค่ะ: " + err); closeScanner(); });
+  }
+
+  function closeScanner() {
+    if (html5QrCode && html5QrCode.isScanning) { html5QrCode.stop().then(() => { document.getElementById('scannerModal').style.display = 'none'; }).catch(err => { document.getElementById('scannerModal').style.display = 'none'; });
+    } else { document.getElementById('scannerModal').style.display = 'none'; }
+  }
+
+  function handleScannedResult(scannedText) {
+    try {
+      if (scannedText.includes('http://') || scannedText.includes('https://')) {
+        let url = new URL(scannedText); let orderId = url.searchParams.get('order_id'); let targetId = url.searchParams.get('target_id');
+        if (orderId) {
+          const foundOrd = globalData.orders.find(o => String(o.id_order) === String(orderId));
+          if (foundOrd) {
+            document.getElementById('id_order').value = foundOrd.id_order; handleOrderChange();
+            if (targetId) { setTimeout(() => { document.getElementById('id_target').value = targetId; onTargetSelected(); }, 200); }
+            alert("✅ สแกนสำเร็จแล้วค่ะ!"); return;
+          }
+        }
+      }
+      alert("⚠️ รูปแบบคิวอาร์โค้ดไม่ถูกต้องนะคะ");
+    } catch (e) { alert("⚠️ เกิดข้อผิดพลาดในการอ่านข้อมูลคิวอาร์โค้ด"); }
+  }
+
+  function populateDropdown(elementId, dataArray, valueKey, textKey) {
+    const select = document.getElementById(elementId); if (!Array.isArray(dataArray) || !select) return;
+    dataArray.forEach(item => { let opt = document.createElement('option'); opt.value = item[valueKey]; opt.textContent = item[textKey] || `ID: ${item[valueKey]}`; select.appendChild(opt); });
+  }
+
+  function handleOrderChange() {
+    const selectedOrderId = document.getElementById('id_order').value;
+    const targetSelect = document.getElementById('id_target');
+    const workHidden = document.getElementById('id_work');
+    const manualInput = document.getElementById('manual_order_code');
+
+    targetSelect.innerHTML = '<option value="">👉 กรุณาเลือกขั้นตอนทำงาน</option>'; workHidden.value = '';
+    if (document.activeElement.id === 'id_order') { manualInput.value = ''; }
+    
+    document.getElementById('effDisplay').innerText = "0.00%"; document.getElementById('effDisplay').style.color = "var(--text-muted)";
+    document.getElementById('reasonGroup').style.display = 'none'; document.getElementById('id_reason').value = ''; document.getElementById('id_reason').removeAttribute('required');
+    document.getElementById('historyContainer').style.display = 'none';
+
+    if (!selectedOrderId) { return; }
+
+    const selectedOrder = globalData.orders.find(o => String(o.id_order) === String(selectedOrderId));
+    if (!selectedOrder || !selectedOrder.id_work) { targetSelect.innerHTML = '<option value="">-- ไม่พบการตั้งค่าชิ้นงาน --</option>'; return; }
+    workHidden.value = selectedOrder.id_work; 
+
+    const filteredTargets = globalData.targets.filter(t => String(t.id_work) === String(selectedOrder.id_work));
+    if (filteredTargets.length > 0) {
+      filteredTargets.forEach(t => {
+        let opt = document.createElement('option'); opt.value = t.id_target; 
+        let workDisplay = `ชิ้นงาน:${t.id_work}`; if (globalData.workItems.length > 0) { const foundWork = globalData.workItems.find(w => String(w.id_work) === String(t.id_work)); if (foundWork) workDisplay = foundWork.work_code; }
+        let stepDisplay = `ขั้นตอน:${t.id_step}`; if (t.id_step && globalData.steps.length > 0) { const foundStep = globalData.steps.find(s => String(s.id_step) === String(t.id_step)); if (foundStep) stepDisplay = foundStep.step_name; }
+        let tgtDisplay = t.target_amount ? `${t.target_amount}/ชม.` : '';
+        opt.textContent = `${workDisplay} | ${stepDisplay} ${tgtDisplay ? '| เป้า: ' + tgtDisplay : ''}`.trim();
+        targetSelect.appendChild(opt);
+      });
+    } else { targetSelect.innerHTML = '<option value="">-- ไม่พบเป้าหมาย --</option>'; }
+  }
+
+  // ฟังก์ชันนี้จะถูกเรียกเมื่อผู้ใช้เลือก ขั้นตอนการทำงาน ด้วยตัวเอง หรือ ค้นหาเจอ
+  function onTargetSelected() {
+    calculateEfficiency();
+    fetchRecentHistory(); // ดึงประวัติเฉพาะเมื่อเลือก Order + Target สมบูรณ์
+  }
+
+  function calculateEfficiency() {
+    const ordId = document.getElementById('id_order').value;
+    const targetId = document.getElementById('id_target').value;
+
+    if (ordId && targetId) {
+      const shortcutObj = globalData.shortcutMap.find(s => String(s.id_order) === String(ordId) && String(s.id_target) === String(targetId));
+      if (shortcutObj) { document.getElementById('manual_order_code').value = shortcutObj.code; }
+    }
+
+    const hourWork = parseFloat(document.getElementById('hour_work').value) || 0;
+    const producedAmt = parseFloat(document.getElementById('produced_amount').value) || 0;
+    const effDisplayEl = document.getElementById('effDisplay');
+    const reasonGroup = document.getElementById('reasonGroup');
+    const reasonSelect = document.getElementById('id_reason');
+
+    if (!targetId || hourWork <= 0) {
+      effDisplayEl.innerText = "0.00%"; effDisplayEl.style.color = "var(--text-muted)";
+      reasonGroup.style.display = 'none'; reasonSelect.removeAttribute('required'); return;
+    }
+
+    const targetObj = globalData.targets.find(t => String(t.id_target) === String(targetId));
+    if (!targetObj || !targetObj.target_amount) { effDisplayEl.innerText = "N/A"; return; }
+
+    const totalTarget = targetObj.target_amount * hourWork;
+    const efficiency = totalTarget > 0 ? (producedAmt / totalTarget) * 100 : 0;
+    effDisplayEl.innerText = efficiency.toFixed(2) + "%";
+
+    if (efficiency >= 85) {
+      effDisplayEl.style.color = "#10b981"; reasonGroup.style.display = 'none'; reasonSelect.value = ''; reasonSelect.removeAttribute('required');
+    } else {
+      effDisplayEl.style.color = "#ef4444"; reasonGroup.style.display = 'block'; reasonSelect.setAttribute('required', 'true');
+    }
+  }
+
+  // ====== โหลดข้อมูลประวัติล่าสุด ==================
+  async function fetchRecentHistory() {
+    const orderId = document.getElementById('id_order').value;
+    const targetId = document.getElementById('id_target').value;
+    const historyContainer = document.getElementById('historyContainer');
+    const tbody = document.getElementById('historyTbody');
+
+    if (!orderId || !targetId) { historyContainer.style.display = 'none'; return; }
+
+    historyContainer.style.display = 'block';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">กำลังโหลดประวัติ...</td></tr>';
+
+    try {
+      // เอา order=created_at.desc ออกเพื่อป้องกันข้อผิดพลาดกรณีไม่มีคอลัมน์นี้
+      const res = await fetch(`${SUPABASE_URL}/daily_production?id_order=eq.${orderId}&id_target=eq.${targetId}&order=record_date.desc&limit=10`, { headers });
+      if(!res.ok) throw new Error();
+      const logs = await res.json();
+
+      if(logs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#9ca3af;">ยังไม่มีประวัติการบันทึก</td></tr>';
+        return;
+      }
+
+      let html = '';
+      logs.forEach(log => {
+        let d = new Date(log.record_date);
+        let dStr = `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}`;
+        let emp = globalData.employees.find(e => String(e.id_name) === String(log.id_name));
+        let empName = emp ? emp.name : 'ไม่ระบุ';
+        let effPct = 0;
+        const targetObj = globalData.targets.find(t => String(t.id_target) === String(targetId));
+        if(targetObj && targetObj.target_amount && log.hour_work) { effPct = ((log.produced_amount||0) / (targetObj.target_amount * log.hour_work)) * 100; }
+        
+        html += `<tr>
+          <td>${dStr}</td>
+          <td style="text-align:left; padding-left:5px; max-width:80px; overflow:hidden; text-overflow:ellipsis;">${empName}</td>
+          <td>${log.hour_work}</td>
+          <td style="color:#059669; font-weight:bold;">${Number(log.produced_amount||0).toLocaleString()}</td>
+          <td style="color:#ef4444;">${log.nogoods_amount > 0 ? Number(log.nogoods_amount).toLocaleString() : '-'}</td>
+          <td>${effPct.toFixed(1)}%</td>
+        </tr>`;
+      });
+      tbody.innerHTML = html;
+    } catch(e) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#ef4444;">ดึงข้อมูลล้มเหลว</td></tr>';
+    }
+  }
+  // ===============================================
+
+  function loadLastSessionData() {
+    const lastDate = localStorage.getItem('last_record_date');
+    if (lastDate) { document.getElementById('record_date').value = lastDate; } 
+    else { let today = new Date(); document.getElementById('record_date').value = today.toISOString().split('T')[0]; }
+
+    const lastOrderId = localStorage.getItem('last_order_id');
+    const lastTargetId = localStorage.getItem('last_target_id');
+    const lastEmployeeId = localStorage.getItem('last_employee_id');
+    const lastWorkPeriod = localStorage.getItem('last_work_period');
+    const lastHourWork = localStorage.getItem('last_hour_work');
+
+    if (lastOrderId) {
+      document.getElementById('id_order').value = lastOrderId; handleOrderChange();
+      if (lastTargetId) { 
+        document.getElementById('id_target').value = lastTargetId; 
+        onTargetSelected(); // ดึงประวัติของเซสชันล่าสุด
+      }
+    }
+    if (lastEmployeeId) { const emp = globalData.employees.find(e => String(e.id_name) === String(lastEmployeeId)); if (emp) { document.getElementById('employee_search').value = emp.name; } }
+    if (lastWorkPeriod) { document.getElementById('work_period').value = lastWorkPeriod; }
+    if (lastHourWork) { document.getElementById('hour_work').value = lastHourWork; }
+  }
+
+  function cancelEditMode() {
+    isEditMode = false; originalRecordKey = null; document.getElementById('prodForm').reset();
+    let today = new Date(); document.getElementById('record_date').value = today.toISOString().split('T')[0];
+    document.getElementById('id_target').innerHTML = '<option value="">👉 รอเลือกรหัสใบสั่งงานก่อน</option>'; document.getElementById('id_work').value = ''; document.getElementById('employee_search').value = ''; 
+    document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลเลย!'; document.getElementById('cancelEditBtn').style.display = 'none';
+    document.getElementById('reasonGroup').style.display = 'none'; document.getElementById('effDisplay').innerText = "0.00%"; document.getElementById('effDisplay').style.color = "var(--text-muted)";
+    document.getElementById('historyContainer').style.display = 'none';
+  }
+
+  function openKeypad(inputId) {
+    activeInputId = inputId; let labelText = document.querySelector(`label[for="${inputId}"]`); let title = labelText ? labelText.innerText : "";
+    if (inputId === 'hour_work') title = 'ชั่วโมงทำงาน'; else if (inputId === 'produced_amount') title = 'จำนวนผลิต'; else if (inputId === 'nogoods_amount') title = 'จำนวนของเสีย'; else if (inputId === 'manual_order_code') title = 'รหัสใบสั่งงาน (5 หลัก)';
+    document.getElementById('keypadTitle').innerText = "🎀 พิมพ์ค่า: " + title;
+    let isCode = (inputId === 'manual_order_code'); document.querySelectorAll('.key-math').forEach(btn => { btn.style.visibility = isCode ? 'hidden' : 'visible'; });
+    document.getElementById('numericKeypad').style.display = 'block'; document.body.style.paddingBottom = "450px";
+    setTimeout(() => { document.getElementById(inputId).scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 150);
+  }
+
+  function closeKeypad() {
+    if (activeInputId && activeInputId !== 'manual_order_code') { let input = document.getElementById(activeInputId); input.value = calculateMath(input.value); }
+    document.getElementById('numericKeypad').style.display = 'none'; activeInputId = null; document.body.style.paddingBottom = "10px"; calculateEfficiency();
+  }
+
+  function calculateMath(expression) { try { if(!expression) return ''; let result = Function('"use strict";return (' + expression + ')')(); if(isNaN(result) || !isFinite(result)) return expression; return Number.isInteger(result) ? result : parseFloat(result.toFixed(4)); } catch(e) { return expression; } }
+
+  function pressKey(val) {
+    if (!activeInputId) return; let input = document.getElementById(activeInputId); let currentVal = input.value;
+    if (val === 'CLEAR') { input.value = ''; } else if (val === 'BACKSPACE') { input.value = currentVal.slice(0, -1); } else if (val === '=') { input.value = calculateMath(currentVal); } else {
+      if (activeInputId === 'manual_order_code') { if (['+', '-', '*', '/', '=', '.'].includes(val)) return; if (currentVal.length + val.length > 5) { val = val.slice(0, 5 - currentVal.length); } }
+      input.value = currentVal + val;
+    }
+    if (activeInputId === 'manual_order_code') { handleManualOrderInput(input); } else { calculateEfficiency(); }
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const producedValStr = document.getElementById('produced_amount').value.trim();
+    if (producedValStr === '') { alert("🎀 กรุณาระบุ 'จำนวนที่ผลิตได้' ก่อนกดบันทึกนะคะ!"); return; }
+
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true; submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...';
+
+    const orderVal = document.getElementById('id_order').value;
+    const targetVal = document.getElementById('id_target').value;
+    const empSearchVal = document.getElementById('employee_search').value;
+    const empObj = globalData.employees.find(e => e.name === empSearchVal);
+    const employeeVal = empObj ? empObj.id_name : null;
+
+    if (!employeeVal) {
+      alert("⚠️ กรุณาระบุชื่อพนักงานให้ถูกต้องด้วยนะคะ");
+      submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลเลย!'; return;
+    }
+
+    const payload = {
+      record_date: document.getElementById('record_date').value, id_order: parseInt(orderVal) || null,
+      id_work: parseInt(document.getElementById('id_work').value) || null, id_name: parseInt(employeeVal) || null, id_target: parseInt(targetVal) || null,
+      hour_work: parseFloat(document.getElementById('hour_work').value) || 0, work_period: document.getElementById('work_period').value,
+      produced_amount: parseInt(producedValStr) || 0, nogoods_amount: parseInt(document.getElementById('nogoods_amount').value) || 0,
+      id_reason: parseInt(document.getElementById('id_reason').value) || null, remark: document.getElementById('remark').value.trim() || null
+    };
+
+    try {
+      if (!isEditMode) {
+        const dupCheck = await fetch(`${SUPABASE_URL}/daily_production?record_date=eq.${payload.record_date}&id_order=eq.${payload.id_order}&id_target=eq.${payload.id_target}&id_name=eq.${payload.id_name}`, { headers });
+        const dupData = await dupCheck.json();
+        if (dupData && dupData.length > 0) {
+          if (!confirm("⚠️ พบการบันทึกข้อมูลของพนักงานคนนี้ในวันนี้แล้ว\nต้องการ 'บันทึกทับ' ข้อมูลเดิมหรือไม่คะ?")) {
+            submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลเลย!'; return;
+          }
+          isEditMode = true; originalRecordKey = dupData[0];
+        }
+      }
+
+      let response;
+      if (isEditMode) {
+        const queryStr = `record_date=eq.${originalRecordKey.record_date}&id_order=eq.${originalRecordKey.id_order}&id_target=eq.${originalRecordKey.id_target}&id_name=eq.${originalRecordKey.id_name}`;
+        response = await fetch(`${SUPABASE_URL}/daily_production?${queryStr}`, { method: "PATCH", headers: headers, body: JSON.stringify(payload) });
+      } else {
+        response = await fetch(`${SUPABASE_URL}/daily_production`, { method: "POST", headers: headers, body: JSON.stringify(payload) });
+      }
+
+      if (response.ok) {
+        localStorage.setItem('last_record_date', payload.record_date); localStorage.setItem('last_order_id', orderVal); localStorage.setItem('last_target_id', targetVal);
+        localStorage.setItem('last_employee_id', employeeVal); localStorage.setItem('last_work_period', payload.work_period); localStorage.setItem('last_hour_work', payload.hour_work);
+
+        document.getElementById('produced_amount').value = ''; document.getElementById('nogoods_amount').value = '';
+        document.getElementById('id_reason').value = ''; document.getElementById('remark').value = '';
+        document.getElementById('reasonGroup').style.display = 'none'; document.getElementById('effDisplay').innerText = "0.00%";
+        
+        isEditMode = false; originalRecordKey = null;
+
+        // อัปเดตตารางประวัติทันที
+        fetchRecentHistory();
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(() => { let codeInput = document.getElementById('manual_order_code'); codeInput.focus(); codeInput.select(); }, 300);
+      } else {
+        const errData = await response.json(); alert("❌ บันทึกข้อมูลล้มเหลว: " + (errData.message || JSON.stringify(errData)));
+      }
+    } catch (error) {
+      alert("⚠️ ข้อผิดพลาดในการเชื่อมต่อ: " + error.message);
+    } finally {
+      submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลเลย!';
+    }
+  }
+
+  // ========================================================
+  // ฟังก์ชันสำหรับพิมพ์ใบมิเตอร์ (F-PR-005-00) พร้อมประวัติ
+  // ========================================================
+  async function printProgressSheet(withData) {
+    const selectedOrderId = document.getElementById('id_order').value;
+    const selectedTargetId = document.getElementById('id_target').value;
+
+    if (!selectedOrderId) { alert("กรุณาเลือกใบสั่งงานก่อนค่ะ"); return; }
+    if (!selectedTargetId) { alert("กรุณาเลือกขั้นตอนการทำงานให้เรียบร้อยก่อนค่ะ"); return; }
+
+    const orderObj = globalData.orders.find(o => String(o.id_order) === String(selectedOrderId));
+    if (!orderObj) { alert("ไม่พบข้อมูลใบสั่งงานนี้ในระบบ"); return; }
+
+    let logs = [];
+    if (withData) {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/daily_production?id_order=eq.${selectedOrderId}&id_target=eq.${selectedTargetId}&order=record_date.asc`, { headers });
+        if(res.ok) { logs = await res.json(); }
+      } catch (e) { console.error("ดึงข้อมูลไม่สำเร็จ", e); }
+    }
+
+    const shortcutObj = globalData.shortcutMap.find(s => String(s.id_order) === String(selectedOrderId) && String(s.id_target) === String(selectedTargetId));
+    const printCode = shortcutObj ? shortcutObj.code : "N/A";
+
+    let workCodeText = "-";
+    if (orderObj.id_work && globalData.workItems.length > 0) {
+      const foundW = globalData.workItems.find(w => String(w.id_work) === String(orderObj.id_work));
+      if (foundW) workCodeText = foundW.work_code;
+    }
+
+    let stepNameText = "-"; let stepStartDateStr = "-"; let stepEndDateStr = "-";
+    const selectedTargetObj = globalData.targets.find(t => String(t.id_target) === String(selectedTargetId));
+    
+    if (selectedTargetObj && selectedTargetObj.id_step) {
+      if (globalData.steps.length > 0) { const foundStp = globalData.steps.find(s => String(s.id_step) === String(selectedTargetObj.id_step)); if (foundStp) stepNameText = foundStp.step_name; }
+      const orderStepObj = globalData.orderSteps.find(os => String(os.id_order) === String(selectedOrderId) && String(os.id_step) === String(selectedTargetObj.id_step));
+      if (orderStepObj) { stepStartDateStr = formatDateStr(orderStepObj.start_date); stepEndDateStr = formatDateStr(orderStepObj.end_date); }
+    }
+
+    const orderNo = orderObj.order_no || '-';
+    const quantity = orderObj.quantity ? parseInt(orderObj.quantity).toLocaleString() + ' ชิ้น' : '-';
+    
+    function formatDateStr(dateInput) {
+      if (!dateInput) return '-'; let d = new Date(dateInput);
+      return !isNaN(d) ? `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}` : dateInput;
+    }
+    
+    const baseUrl = window.location.href.split('?')[0];
+    const currentUrl = `${baseUrl}?order_id=${encodeURIComponent(orderObj.id_order)}&target_id=${encodeURIComponent(selectedTargetId)}`;
+
+    let tableRowsHtml = ''; let runningTotal = 0; const maxRows = 22;
+
+    for(let i = 0; i < maxRows; i++) {
+      if (i < logs.length) {
+        const log = logs[i];
+        let d = new Date(log.record_date);
+        let dateFormatted = !isNaN(d) ? `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear().toString().slice(-2)}` : '';
+        const emp = globalData.employees.find(e => String(e.id_name) === String(log.id_name)); const empText = emp ? emp.name : '';
+        const produced = log.produced_amount || 0; const ngAmt = log.nogoods_amount || 0; const hWork = log.hour_work ? log.hour_work.toFixed(2) : ''; 
+        runningTotal += produced;
+
+        tableRowsHtml += `<tr>
+          <td>${dateFormatted}</td><td></td><td>${produced.toLocaleString()}</td>
+          <td style="font-weight: bold;">${runningTotal.toLocaleString()}</td>
+          <td>${ngAmt > 0 ? ngAmt.toLocaleString() : ''}</td><td style="font-size: 10px;">${hWork}</td>
+          <td style="text-align: left; padding-left: 4px; font-size: 10px;">${empText}</td>
+          <td>${log.remark ? log.remark : ''}</td>
+        </tr>`;
+      } else { tableRowsHtml += `<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`; }
+    }
+
+    const singleCardHtml = `
+      <div class="print-card">
+        <div class="print-header-wrapper">
+          <div class="print-header-top">
+            <div style="flex-grow: 1; overflow: hidden;">
+              <div class="print-title-area"><h3>ใบความก้าวหน้าของการผลิต</h3></div>
+              <div class="print-meta-row"><span class="print-label">ใบสั่งงานเลขที่:</span><span class="print-value" style="flex: 1.4; white-space: nowrap;">${orderNo}</span><span class="print-label" style="margin-left: 12px;">ขั้นตอนงาน:</span><span class="print-value" style="flex: 1.2; white-space: nowrap;">${stepNameText}</span></div>
+              <div class="print-meta-row"><span class="print-label">ชนิดงาน:</span> <span class="print-value" style="white-space: nowrap; flex: 1;">${workCodeText}</span></div>
+              <div class="print-meta-row"><span class="print-label">จำนวนชิ้นงานสั่งผลิต:</span> <span class="print-value" style="flex: 1;">${quantity}</span></div>
+              <div class="print-meta-row"><span class="print-label">วันที่เริ่ม:</span> <span class="print-value" style="flex: 1;">${stepStartDateStr}</span><span class="print-label" style="margin-left: 10px;">วันที่เสร็จ:</span> <span class="print-value" style="flex: 1;">${stepEndDateStr}</span></div>
+            </div>
+            <div class="print-qr-box">
+              <div class="qrcode-target" data-url="${currentUrl}"></div><span>สแกน / คีย์รหัส</span>
+              <div class="print-code-text">[ ${printCode} ]</div>
+            </div>
+          </div>
+          <table class="print-table">
+            <thead>
+              <tr><th width="10%">วันที่</th><th width="14%" style="font-size: 9px;">ตัวเลขตอนเลิกงาน</th><th width="14%">ผลิตได้/วัน</th><th width="14%">สะสม</th><th width="8%">เสีย</th><th width="10%">ชั่วโมง</th><th width="16%">ชื่อคนทำ</th><th width="14%">หมายเหตุ</th></tr>
+            </thead>
+            <tbody>${tableRowsHtml}</tbody>
+          </table>
+        </div>
+        <div class="print-footer"><span>F-PR-005-00</span><span>DAILY PRODUCTION TRACKER</span></div>
+      </div>
+    `;
+
+    document.getElementById('printArea').innerHTML = `<div class="print-sheet-container">${singleCardHtml}${singleCardHtml}</div>`;
+    document.querySelectorAll('.qrcode-target').forEach(el => {
+      new QRCode(el, { text: el.getAttribute('data-url'), width: 58, height: 58, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
+    });
+
+    setTimeout(() => { window.print(); }, 300);
+  }
+</script>
+</body>
+</html>
