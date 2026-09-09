@@ -158,6 +158,12 @@
     .submit-btn:hover { background: linear-gradient(90deg, var(--flash-red), var(--flash-gold)); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245, 158, 11, 0.5); }
     .submit-btn:active { transform: translateY(2px); box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4); }
 
+    .cancel-edit-btn {
+      width: 100%; background: transparent; color: var(--flash-red); border: 2px solid var(--flash-red); padding: 12px; font-size: 16px;
+      border-radius: 8px; cursor: pointer; font-weight: 700; margin-top: 10px; display: none; text-transform: uppercase; transition: all 0.2s;
+    }
+    .cancel-edit-btn:active { background: var(--flash-red); color: white; }
+
     /* ======================================= */
     /* ส่วนตารางประวัติ ⚡ */
     /* ======================================= */
@@ -167,10 +173,18 @@
       overflow-y: auto;
     }
     .flash-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: center; white-space: nowrap; }
-    .flash-table th { background-color: var(--flash-red); color: white; padding: 10px 5px; font-weight: 700; text-transform: uppercase; position: sticky; top: 0; z-index: 1;}
-    .flash-table td { padding: 8px 5px; border-bottom: 1px solid var(--border-dim); }
+    .flash-table th { background-color: var(--flash-red); color: white; padding: 10px 3px; font-weight: 700; text-transform: uppercase; position: sticky; top: 0; z-index: 1;}
+    .flash-table td { padding: 8px 3px; border-bottom: 1px solid var(--border-dim); vertical-align: middle; }
     .flash-table tr:nth-child(even) { background-color: #f9fafb; }
     .flash-table tr:hover { background-color: var(--flash-light-red); }
+
+    /* ปุ่มจัดการ E/D */
+    .action-cell { display: flex; gap: 4px; justify-content: center; align-items: center; }
+    .action-btn { width: 22px; height: 22px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; color: white; display: flex; justify-content: center; align-items: center; font-size: 11px; font-family: 'Kanit'; }
+    .edit-btn { background-color: var(--flash-gold); }
+    .edit-btn:active { background-color: #d97706; }
+    .del-btn { background-color: var(--flash-red); }
+    .del-btn:active { background-color: #b91c1c; }
 
     .btn-print-history {
       width: 100%; background: #1f2937; color: var(--flash-gold); border: 2px solid var(--flash-gold); padding: 14px; font-size: 16px;
@@ -334,6 +348,7 @@
     </div>
 
     <button type="submit" class="submit-btn" id="submitBtn"><i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!</button>
+    <button type="button" class="cancel-edit-btn" id="cancelEditBtn" onclick="cancelEditMode()">ยกเลิกการแก้ไข</button>
   </form>
 </div>
 
@@ -361,16 +376,17 @@
     <table class="flash-table">
       <thead>
         <tr>
-          <th width="15%">วันที่</th>
-          <th width="35%">ชื่อ</th>
-          <th width="10%">ชม.</th>
-          <th width="15%">ยอดดี</th>
+          <th width="14%">วันที่</th>
+          <th width="26%">ชื่อ</th>
+          <th width="9%">ชม.</th>
+          <th width="14%">ยอดดี</th>
           <th width="10%">เสีย</th>
-          <th width="15%">EFF%</th>
+          <th width="13%">EFF%</th>
+          <th width="14%">จัดการ</th>
         </tr>
       </thead>
       <tbody id="historyTbody">
-        <tr><td colspan="6">กำลังโหลดประวัติ...</td></tr>
+        <tr><td colspan="7">กำลังโหลดประวัติ...</td></tr>
       </tbody>
     </table>
   </div>
@@ -410,6 +426,8 @@
 
   let globalData = { orders: [], employees: [], targets: [], reasons: [], workItems: [], steps: [], orderSteps: [], shortcutMap: [], remarks: [] };
   let activeInputId = null, html5QrCode = null;
+  let isEditMode = false;
+  let originalRecordKey = null;
 
   function handleEnter(e, nextId) {
     if (e.key === 'Enter') { e.preventDefault(); let nextEl = document.getElementById(nextId); if (nextEl) { nextEl.focus(); if(typeof nextEl.select === 'function') nextEl.select(); } }
@@ -602,23 +620,21 @@
     if (!orderId || !targetId) { historyContainer.style.display = 'none'; return; }
 
     historyContainer.style.display = 'block';
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">กำลังโหลดประวัติ...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">กำลังโหลดประวัติ...</td></tr>';
 
     try {
-      // ดึงประวัติแบบไม่จำกัดจำนวน และเรียงจากวันที่น้อย (เก่า) ไปมาก (ใหม่)
       const res = await fetch(`${SUPABASE_URL}/daily_production?id_order=eq.${orderId}&id_target=eq.${targetId}&order=record_date.asc`, { headers });
       if(!res.ok) throw new Error();
       const logs = await res.json();
 
       if(logs.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#9ca3af;">ยังไม่มีประวัติการบันทึก</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#9ca3af;">ยังไม่มีประวัติการบันทึก</td></tr>';
         document.getElementById('sumProduced').innerText = "0";
         document.getElementById('sumRemaining').innerText = "0";
         document.getElementById('dueDateStatus').innerText = "-";
         return;
       }
 
-      // ดึงข้อมูลจำนวนเต็มของ Order และคำนวณยอดรวม/ยอดคงเหลือ
       const orderObj = globalData.orders.find(o => String(o.id_order) === String(orderId));
       let orderQty = (orderObj && orderObj.quantity) ? parseInt(orderObj.quantity) : 0;
       let totalProduced = 0;
@@ -635,6 +651,9 @@
         const targetObj = globalData.targets.find(t => String(t.id_target) === String(targetId));
         if(targetObj && targetObj.target_amount && log.hour_work) { effPct = ((log.produced_amount||0) / (targetObj.target_amount * log.hour_work)) * 100; }
         
+        // ส่งข้อมูลทั้ง Object เป็นพารามิเตอร์เพื่อให้ใช้ลบหรือแก้ไขได้ถูกต้อง
+        let logJsonStr = JSON.stringify(log).replace(/'/g, "\\'");
+
         html += `<tr>
           <td>${dStr}</td>
           <td style="text-align:left; padding-left:5px; max-width:80px; overflow:hidden; text-overflow:ellipsis;">${empName}</td>
@@ -642,16 +661,20 @@
           <td style="color:#059669; font-weight:bold;">${Number(log.produced_amount||0).toLocaleString()}</td>
           <td style="color:#ef4444;">${log.nogoods_amount > 0 ? Number(log.nogoods_amount).toLocaleString() : '-'}</td>
           <td>${effPct.toFixed(1)}%</td>
+          <td>
+            <div class="action-cell">
+              <button type="button" class="action-btn edit-btn" onclick='promptEdit(${logJsonStr})'>E</button>
+              <button type="button" class="action-btn del-btn" onclick='promptDelete(${logJsonStr})'>D</button>
+            </div>
+          </td>
         </tr>`;
       });
       tbody.innerHTML = html;
 
-      // อัปเดต Summary Box
       let remaining = orderQty - totalProduced;
       document.getElementById('sumProduced').innerText = totalProduced.toLocaleString();
       document.getElementById('sumRemaining').innerText = remaining.toLocaleString();
 
-      // ตรวจสอบวันกำหนดส่ง
       let endDateStr = null;
       const targetObj = globalData.targets.find(t => String(t.id_target) === String(targetId));
       if (targetObj && targetObj.id_step) {
@@ -684,8 +707,95 @@
       }
 
     } catch(e) {
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#ef4444;">ดึงข้อมูลล้มเหลว</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#ef4444;">ดึงข้อมูลล้มเหลว</td></tr>';
     }
+  }
+
+  // ============================================
+  // ฟังก์ชันสำหรับการแก้ไข (E) และลบ (D)
+  // ============================================
+  function promptDelete(logData) {
+    const pwd = prompt("ตรวจสอบความปลอดภัย: ใส่รหัสผ่านเพื่อลบข้อมูล");
+    if (pwd === "ๅ") {
+      deleteRecord(logData);
+    } else if (pwd !== null) {
+      alert("⚠️ ไม่อนุญาต: รหัสผ่านไม่ถูกต้อง");
+    }
+  }
+
+  async function deleteRecord(logData) {
+    try {
+      const queryStr = `record_date=eq.${logData.record_date}&id_order=eq.${logData.id_order}&id_target=eq.${logData.id_target}&id_name=eq.${logData.id_name}`;
+      const res = await fetch(`${SUPABASE_URL}/daily_production?${queryStr}`, {
+        method: "DELETE",
+        headers: headers
+      });
+      if (res.ok) {
+        alert("⚡ ลบข้อมูลเรียบร้อยแล้ว!");
+        fetchRecentHistory();
+      } else {
+        alert("❌ ลบข้อมูลล้มเหลว");
+      }
+    } catch (err) {
+      alert("⚠️ ข้อผิดพลาด: " + err.message);
+    }
+  }
+
+  function promptEdit(logData) {
+    const pwd = prompt("ตรวจสอบความปลอดภัย: ใส่รหัสผ่านเพื่อแก้ไขข้อมูล");
+    if (pwd === "ๅ") {
+      enterEditMode(logData);
+    } else if (pwd !== null) {
+      alert("⚠️ ไม่อนุญาต: รหัสผ่านไม่ถูกต้อง");
+    }
+  }
+
+  function enterEditMode(logData) {
+    isEditMode = true;
+    originalRecordKey = logData;
+
+    document.getElementById('record_date').value = logData.record_date;
+    document.getElementById('id_order').value = logData.id_order || '';
+    handleOrderChange();
+    
+    // ตั้งค่า Time out นิดนึงเพื่อรอให้รายการขั้นตอนถูกสร้าง
+    setTimeout(() => {
+      document.getElementById('id_target').value = logData.id_target || '';
+      const empEdit = globalData.employees.find(e => String(e.id_name) === String(logData.id_name));
+      document.getElementById('employee_search').value = empEdit ? empEdit.name : '';
+      
+      document.getElementById('work_period').value = logData.work_period || 'ปกติ';
+      document.getElementById('hour_work').value = logData.hour_work || '';
+      document.getElementById('produced_amount').value = logData.produced_amount || '';
+      document.getElementById('nogoods_amount').value = logData.nogoods_amount || '';
+      
+      calculateEfficiency();
+
+      setTimeout(() => {
+        document.getElementById('id_reason').value = logData.id_reason || '';
+      }, 50);
+
+      document.getElementById('remark').value = logData.remark || '';
+      
+      document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-bolt"></i> อัปเดตข้อมูล';
+      document.getElementById('cancelEditBtn').style.display = 'block';
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 150);
+  }
+
+  function cancelEditMode() {
+    isEditMode = false;
+    originalRecordKey = null;
+    document.getElementById('prodForm').reset();
+    
+    loadLastSessionData();
+    
+    document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!';
+    document.getElementById('cancelEditBtn').style.display = 'none';
+    document.getElementById('reasonGroup').style.display = 'none';
+    document.getElementById('effDisplay').innerText = "0.00%";
+    document.getElementById('effDisplay').style.color = "var(--text-muted)";
   }
 
   function loadLastSessionData() {
@@ -742,7 +852,8 @@
     if (producedValStr === '') { alert("⚡ กรุณาระบุ 'จำนวนที่ผลิตได้' ก่อนกดบันทึกนะครับ!"); return; }
 
     const submitBtn = document.getElementById('submitBtn');
-    submitBtn.disabled = true; submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...';
+    submitBtn.disabled = true; 
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ' + (isEditMode ? 'กำลังอัปเดต...' : 'กำลังบันทึก...');
 
     const orderVal = document.getElementById('id_order').value;
     const targetVal = document.getElementById('id_target').value;
@@ -753,7 +864,7 @@
 
     if (!employeeVal) {
       alert("⚠️ กรุณาระบุชื่อพนักงานให้ถูกต้องด้วยนะครับ");
-      submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!'; return;
+      submitBtn.disabled = false; submitBtn.innerHTML = isEditMode ? '<i class="fa-solid fa-bolt"></i> อัปเดตข้อมูล' : '<i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!'; return;
     }
 
     const payload = {
@@ -765,27 +876,37 @@
     };
 
     try {
-      const response = await fetch(`${SUPABASE_URL}/daily_production`, { method: "POST", headers: headers, body: JSON.stringify(payload) });
+      let response;
+      if (isEditMode) {
+        const queryStr = `record_date=eq.${originalRecordKey.record_date}&id_order=eq.${originalRecordKey.id_order}&id_target=eq.${originalRecordKey.id_target}&id_name=eq.${originalRecordKey.id_name}`;
+        response = await fetch(`${SUPABASE_URL}/daily_production?${queryStr}`, { method: "PATCH", headers: headers, body: JSON.stringify(payload) });
+      } else {
+        response = await fetch(`${SUPABASE_URL}/daily_production`, { method: "POST", headers: headers, body: JSON.stringify(payload) });
+      }
 
       if (response.ok) {
         localStorage.setItem('last_record_date', payload.record_date); localStorage.setItem('last_order_id', orderVal); localStorage.setItem('last_target_id', targetVal);
         localStorage.setItem('last_employee_id', employeeVal); localStorage.setItem('last_work_period', payload.work_period); localStorage.setItem('last_hour_work', payload.hour_work);
 
-        document.getElementById('produced_amount').value = ''; document.getElementById('nogoods_amount').value = '';
-        document.getElementById('id_reason').value = ''; document.getElementById('remark').value = '';
-        document.getElementById('reasonGroup').style.display = 'none'; document.getElementById('effDisplay').innerText = "0.00%";
-        
-        fetchRecentHistory();
+        if (isEditMode) {
+          cancelEditMode();
+          fetchRecentHistory(); // โหลดประวัติใหม่หลังอัปเดต
+        } else {
+          document.getElementById('produced_amount').value = ''; document.getElementById('nogoods_amount').value = '';
+          document.getElementById('id_reason').value = ''; document.getElementById('remark').value = '';
+          document.getElementById('reasonGroup').style.display = 'none'; document.getElementById('effDisplay').innerText = "0.00%";
+          fetchRecentHistory();
+        }
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(() => { let codeInput = document.getElementById('manual_order_code'); codeInput.focus(); codeInput.select(); }, 300);
       } else {
-        const errData = await response.json(); alert("❌ บันทึกข้อมูลล้มเหลว: " + (errData.message || JSON.stringify(errData)));
+        const errData = await response.json(); alert("❌ บันทึกล้มเหลว: " + (errData.message || JSON.stringify(errData)));
       }
     } catch (error) {
       alert("⚠️ ข้อผิดพลาดในการเชื่อมต่อ: " + error.message);
     } finally {
-      submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!';
+      submitBtn.disabled = false; submitBtn.innerHTML = isEditMode ? '<i class="fa-solid fa-bolt"></i> อัปเดตข้อมูล' : '<i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!';
     }
   }
 
