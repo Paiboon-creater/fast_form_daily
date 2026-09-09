@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>🎀 DAILY PROD // KITTY THEME 🐱</title>
+  <title>⚡ DAILY PROD // THE FLASH ⚡</title>
   <!-- โหลดไลบรารีสำหรับสร้าง QR Code และสแกน QR Code -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -11,31 +11,32 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap');
 
     :root {
-      --bg-kitty: #ffe4e6; 
+      /* THE FLASH THEME COLORS */
+      --bg-flash: #7f1d1d; /* สีแดงเข้ม */
       --panel-bg: #ffffff; 
-      --kitty-pink: #ff69b4; 
-      --kitty-dark-pink: #d81b60; 
-      --kitty-light-pink: #fce4ec;
-      --text-main: #4a4a4a; 
-      --text-muted: #9ca3af;
-      --input-bg: #fff0f5;
+      --flash-red: #dc2626; /* สีแดงแฟลช */
+      --flash-dark-red: #991b1b; 
+      --flash-light-red: #fee2e2;
+      --flash-gold: #f59e0b; /* สีเหลืองทองสายฟ้า */
+      --flash-light-gold: #fef3c7;
       
-      --neon-green: #d81b60; 
+      --text-main: #1f2937; 
+      --text-muted: #6b7280;
+      --input-bg: #fafafa;
+      
+      --neon-green: #10b981; 
       --neon-red: #ef4444;
       --neon-yellow: #f59e0b;
-      --neon-blue: #ec4899;
-      --border-dim: #fbcfe8;
-      --bg-dark: #fff0f5;
+      --border-dim: #e5e7eb;
     }
 
     body {
       font-family: 'Kanit', 'Sarabun', Tahoma, sans-serif;
-      background-color: var(--bg-kitty);
-      background-image: radial-gradient(#ffb6c1 1.5px, transparent 1.5px);
-      background-size: 25px 25px;
+      background: linear-gradient(135deg, #450a0a, #991b1b, #ef4444);
+      background-attachment: fixed;
       color: var(--text-main);
       margin: 0;
       padding: 10px;
@@ -49,14 +50,21 @@
       transition: padding-bottom 0.3s ease; 
     }
 
+    /* เส้น Speed Line ด้านหลัง */
+    body::before {
+      content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px);
+      z-index: -1;
+    }
+
     .terminal-container {
       width: 100%;
       max-width: 550px;
       background: var(--panel-bg);
       padding: 20px 15px;
-      border-radius: 20px;
-      border: 3px solid var(--kitty-pink);
-      box-shadow: 0 10px 30px rgba(255, 105, 180, 0.2);
+      border-radius: 12px; /* เหลี่ยมขึ้นนิดนึงให้ดูเท่ */
+      border: 3px solid var(--flash-gold);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(245, 158, 11, 0.4);
       margin-top: 5px;
       margin-bottom: 15px;
     }
@@ -65,45 +73,45 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      border-bottom: 2px dashed var(--kitty-pink);
+      gap: 15px;
+      border-bottom: 3px solid var(--flash-gold);
       padding-bottom: 12px;
       margin-bottom: 15px;
     }
 
     .jaguar-emblem {
-      width: 50px; height: 50px;
-      background: var(--kitty-light-pink); border: 2px solid var(--kitty-pink);
+      width: 55px; height: 55px;
+      background: var(--flash-red); border: 3px solid var(--flash-gold);
       border-radius: 50%; display: flex; justify-content: center; align-items: center;
-      box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
     }
-    .jaguar-emblem i { font-size: 26px; color: var(--kitty-dark-pink); }
+    .jaguar-emblem i { font-size: 30px; color: var(--flash-gold); text-shadow: 0 0 5px rgba(255,255,255,0.5);}
 
-    .app-title { font-size: 1.25rem; font-weight: 600; color: var(--kitty-dark-pink); margin: 0; text-shadow: 1px 1px 2px rgba(255, 105, 180, 0.2); }
-    .status { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 15px;}
-    .status-dot { display: inline-block; width: 10px; height: 10px; background-color: #10b981; border-radius: 50%; margin-right: 5px; }
+    .app-title { font-size: 1.4rem; font-weight: 800; font-style: italic; color: var(--flash-red); margin: 0; letter-spacing: 1px; text-transform: uppercase;}
+    .status { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 15px; font-weight: 500;}
+    .status-dot { display: inline-block; width: 10px; height: 10px; background-color: var(--flash-gold); border-radius: 50%; margin-right: 5px; box-shadow: 0 0 8px var(--flash-gold);}
 
     .top-buttons-wrapper { display: flex; gap: 10px; margin-bottom: 20px; }
     .nav-btn {
       display: flex; justify-content: center; align-items: center; gap: 8px;
-      padding: 10px 10px; font-size: 14px; border-radius: 12px; text-align: center;
-      text-decoration: none; font-weight: 600; box-sizing: border-box; transition: all 0.2s; font-family: inherit; flex: 1;
+      padding: 10px 10px; font-size: 14px; border-radius: 8px; text-align: center;
+      text-decoration: none; font-weight: 700; box-sizing: border-box; transition: all 0.2s; font-family: inherit; flex: 1; text-transform: uppercase;
     }
     .home-btn { background: #fff; color: #14b8a6; border: 2px solid #14b8a6; }
     .home-btn:active, .home-btn:hover { background: #14b8a6; color: #fff; box-shadow: 0 4px 10px rgba(20, 184, 166, 0.3); }
-    .daily-btn { background: #fff; color: var(--kitty-dark-pink); border: 2px solid var(--kitty-dark-pink); }
-    .daily-btn:active, .daily-btn:hover { background: var(--kitty-dark-pink); color: #fff; box-shadow: 0 4px 10px rgba(216, 27, 96, 0.3); }
+    .daily-btn { background: #fff; color: var(--flash-red); border: 2px solid var(--flash-red); }
+    .daily-btn:active, .daily-btn:hover { background: var(--flash-red); color: #fff; box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3); }
 
     .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--kitty-dark-pink); }
+    .form-group label { display: block; margin-bottom: 6px; font-size: 15px; font-weight: 700; color: var(--flash-dark-red); }
 
     input, select {
       width: 100%; padding: 14px; background-color: var(--input-bg); border: 2px solid var(--border-dim); 
-      color: var(--text-main); font-weight: 500; border-radius: 12px; box-sizing: border-box; 
+      color: var(--text-main); font-weight: 600; border-radius: 8px; box-sizing: border-box; 
       font-family: inherit; font-size: 17px; transition: all 0.2s;
     }
-    input::placeholder { color: #f472b6; font-size: 15px; opacity: 0.7; }
-    input:focus, select:focus { border-color: var(--kitty-pink); outline: none; box-shadow: 0 0 0 4px rgba(255, 105, 180, 0.15); background-color: #ffffff; }
+    input::placeholder { color: #9ca3af; font-size: 15px; font-weight: 400; }
+    input:focus, select:focus { border-color: var(--flash-gold); outline: none; box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2); background-color: #ffffff; }
     input[type="date"] { text-align: center; }
     input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; width: 25px; height: 25px; }
 
@@ -111,79 +119,80 @@
     .input-row input { flex: 1; }
     
     .keypad-trigger-btn {
-      background: var(--kitty-light-pink); border: 2px solid var(--kitty-pink); color: var(--kitty-dark-pink);
-      border-radius: 12px; width: 60px; display: flex; justify-content: center; align-items: center;
+      background: var(--flash-light-gold); border: 2px solid var(--flash-gold); color: var(--flash-dark-red);
+      border-radius: 8px; width: 60px; display: flex; justify-content: center; align-items: center;
       cursor: pointer; font-size: 20px; transition: all 0.2s;
     }
-    .keypad-trigger-btn:active { background: var(--kitty-pink); color: #fff; }
+    .keypad-trigger-btn:active { background: var(--flash-gold); color: #fff; }
 
     .scan-btn-subtle {
-      background: #f0fdfa; border: 2px solid #2dd4bf; color: #0d9488;
-      border-radius: 12px; width: 60px; display: flex; justify-content: center; align-items: center;
+      background: var(--flash-light-red); border: 2px solid var(--flash-red); color: var(--flash-red);
+      border-radius: 8px; width: 60px; display: flex; justify-content: center; align-items: center;
       cursor: pointer; font-size: 22px; transition: all 0.2s;
     }
-    .scan-btn-subtle:active { background: #2dd4bf; color: #fff; }
+    .scan-btn-subtle:active { background: var(--flash-red); color: #fff; }
 
     .scanner-modal {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(255, 255, 255, 0.9); z-index: 2000;
+      background: rgba(0, 0, 0, 0.8); z-index: 2000;
       justify-content: center; align-items: center; flex-direction: column; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px);
     }
     .scanner-box {
       width: 100%; max-width: 400px; background: #fff;
-      border: 3px solid var(--kitty-pink); border-radius: 20px; padding: 15px; text-align: center;
-      box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+      border: 4px solid var(--flash-gold); border-radius: 12px; padding: 15px; text-align: center;
+      box-shadow: 0 0 30px rgba(245, 158, 11, 0.5);
     }
-    .scanner-close { background: #fff; border: 2px solid var(--neon-red); color: var(--neon-red); padding: 12px; width: 100%; margin-top: 15px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 16px; }
+    .scanner-close { background: #fff; border: 2px solid var(--flash-red); color: var(--flash-red); padding: 12px; width: 100%; margin-top: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; text-transform: uppercase;}
+    .scanner-close:active { background: var(--flash-red); color: #fff; }
 
     .eff-box {
-      background: var(--kitty-light-pink); border: 2px dashed var(--kitty-pink); padding: 14px; border-radius: 12px;
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 16px; font-weight: bold; color: var(--kitty-dark-pink);
+      background: #111827; border: 2px solid var(--flash-gold); padding: 14px; border-radius: 8px;
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 16px; font-weight: bold; color: var(--flash-gold);
     }
-    .eff-value { font-size: 24px; color: var(--kitty-dark-pink); }
+    .eff-value { font-size: 24px; color: var(--flash-gold); text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);}
 
     .submit-btn {
-      width: 100%; background: #ff69b4; color: #ffffff; border: none; padding: 18px; font-size: 22px;
-      border-radius: 16px; cursor: pointer; font-weight: 600; margin-top: 20px; font-family: inherit; transition: all 0.2s; box-shadow: 0 6px 15px rgba(255, 105, 180, 0.4);
+      width: 100%; background: linear-gradient(90deg, var(--flash-dark-red), var(--flash-red)); color: #ffffff; border: 2px solid var(--flash-gold); padding: 18px; font-size: 22px;
+      border-radius: 8px; cursor: pointer; font-weight: 800; font-style: italic; margin-top: 20px; font-family: inherit; transition: all 0.2s; box-shadow: 0 6px 15px rgba(220, 38, 38, 0.4); text-transform: uppercase; letter-spacing: 1px;
     }
-    .submit-btn:hover { background: #ff1493; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 105, 180, 0.5); }
-    .submit-btn:active { transform: translateY(2px); box-shadow: 0 2px 8px rgba(255, 105, 180, 0.4); }
-    .cancel-edit-btn { width: 100%; background-color: transparent; color: #ef4444; border: 2px solid #ef4444; padding: 12px; font-size: 16px; border-radius: 12px; cursor: pointer; margin-top: 12px; display: none; font-weight: bold; }
+    .submit-btn:hover { background: linear-gradient(90deg, var(--flash-red), var(--flash-gold)); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245, 158, 11, 0.5); }
+    .submit-btn:active { transform: translateY(2px); box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4); }
+    .cancel-edit-btn { width: 100%; background-color: transparent; color: #ef4444; border: 2px solid #ef4444; padding: 12px; font-size: 16px; border-radius: 8px; cursor: pointer; margin-top: 12px; display: none; font-weight: bold; }
 
     /* ======================================= */
-    /* ส่วนตารางประวัติ 🎀 */
+    /* ส่วนตารางประวัติ ⚡ */
     /* ======================================= */
     .history-table-wrapper {
-      width: 100%; overflow-x: auto; border-radius: 12px; border: 2px solid var(--kitty-pink); margin-top: 10px;
+      width: 100%; overflow-x: auto; border-radius: 8px; border: 2px solid var(--flash-red); margin-top: 10px;
     }
-    .kitty-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: center; white-space: nowrap; }
-    .kitty-table th { background-color: var(--kitty-pink); color: white; padding: 10px 5px; font-weight: 600; }
-    .kitty-table td { padding: 8px 5px; border-bottom: 1px dashed var(--kitty-pink); }
-    .kitty-table tr:nth-child(even) { background-color: #fff0f5; }
-    .kitty-table tr:hover { background-color: #fce4ec; }
+    .flash-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: center; white-space: nowrap; }
+    .flash-table th { background-color: var(--flash-red); color: white; padding: 10px 5px; font-weight: 700; text-transform: uppercase;}
+    .flash-table td { padding: 8px 5px; border-bottom: 1px solid var(--border-dim); }
+    .flash-table tr:nth-child(even) { background-color: #f9fafb; }
+    .flash-table tr:hover { background-color: var(--flash-light-red); }
 
     .btn-print-history {
-      width: 100%; background: #14b8a6; color: white; border: none; padding: 14px; font-size: 16px;
-      border-radius: 12px; cursor: pointer; font-weight: 600; margin-top: 15px; transition: 0.2s;
-      box-shadow: 0 4px 10px rgba(20, 184, 166, 0.3);
+      width: 100%; background: #1f2937; color: var(--flash-gold); border: 2px solid var(--flash-gold); padding: 14px; font-size: 16px;
+      border-radius: 8px; cursor: pointer; font-weight: 700; margin-top: 15px; transition: 0.2s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); text-transform: uppercase;
     }
-    .btn-print-history:active { transform: translateY(2px); box-shadow: none; }
+    .btn-print-history:active { transform: translateY(2px); box-shadow: none; background: var(--flash-gold); color: #000;}
 
     /* Keypad */
     .keypad-modal {
       display: none; position: fixed; bottom: 0; left: 0; width: 100%;
-      background: #ffffff; border-top: 4px solid var(--kitty-pink);
-      padding: 20px 15px 30px 15px; box-sizing: border-box; box-shadow: 0 -10px 30px rgba(0,0,0,0.1); z-index: 1000; border-radius: 25px 25px 0 0;
+      background: #111827; border-top: 4px solid var(--flash-gold);
+      padding: 20px 15px 30px 15px; box-sizing: border-box; box-shadow: 0 -10px 30px rgba(0,0,0,0.5); z-index: 1000; border-radius: 15px 15px 0 0;
     }
-    .keypad-header { display: flex; justify-content: space-between; color: var(--kitty-dark-pink); margin-bottom: 15px; font-size: 17px; font-weight: 600; }
+    .keypad-header { display: flex; justify-content: space-between; color: var(--flash-gold); margin-bottom: 15px; font-size: 17px; font-weight: 700; text-transform: uppercase;}
     .keypad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 500px; margin: 0 auto; }
-    .key-btn { background: var(--input-bg); color: var(--kitty-dark-pink); border: 2px solid var(--border-dim); padding: 16px 0; font-size: 24px; border-radius: 14px; cursor: pointer; font-family: inherit; font-weight: 600; transition: 0.1s; }
-    .key-btn:active { background: var(--kitty-pink); color: white; }
-    .key-action { color: #ef4444; border-color: #fca5a5; font-size: 18px; background: #fef2f2;}
-    .key-special { color: #ec4899; border-color: #fbcfe8; background: #fdf2f8; }
-    .key-close { background: var(--kitty-pink); grid-column: span 4; margin-top: 5px; font-size: 18px; color: white; font-weight: 600; border: none; padding: 14px 0;}
-    .key-equals { background-color: var(--kitty-dark-pink); color: white; font-size: 28px; border: none; box-shadow: 0 4px 10px rgba(216, 27, 96, 0.3); }
-    .key-equals:active { background-color: #be185d; }
+    .key-btn { background: #1f2937; color: #fff; border: 1px solid #374151; padding: 16px 0; font-size: 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 600; transition: 0.1s; }
+    .key-btn:active { background: var(--flash-gold); color: #000; border-color: var(--flash-gold);}
+    .key-action { color: #ef4444; font-size: 18px; background: #3f0000; border-color: #7f1d1d;}
+    .key-special { color: var(--flash-gold); background: #422006; border-color: #78350f;}
+    .key-close { background: var(--flash-red); grid-column: span 4; margin-top: 5px; font-size: 18px; color: white; font-weight: 700; border: none; padding: 14px 0; text-transform: uppercase;}
+    .key-equals { background-color: var(--flash-gold); color: #000; font-size: 28px; border: none; font-weight: 800;}
+    .key-equals:active { background-color: #d97706; }
 
     /* ========================================================= */
     /* CSS พิมพ์เอกสาร A4 แนวนอน (ใบความก้าวหน้า) */
@@ -218,13 +227,13 @@
 
 <div class="terminal-container">
   <div class="app-header">
-    <div class="jaguar-emblem"><i class="fa-solid fa-cat"></i></div>
-    <div><h1 class="app-title">🎀 บันทึกยอดผลิตรายวัน</h1></div>
+    <div class="jaguar-emblem"><i class="fa-solid fa-bolt-lightning"></i></div>
+    <div><h1 class="app-title">⚡ บันทึกยอดผลิตรายวัน</h1></div>
   </div>
   <div class="status">
-    <span class="status-dot" id="statusDot"></span><span id="statusText">กำลังเชื่อมต่อระบบน่ารักๆ...</span>
+    <span class="status-dot" id="statusDot"></span><span id="statusText">กำลังเชื่อมต่อ Speed Force...</span>
   </div>
-  <div id="statusMessage" class="system-msg loading" style="color:var(--neon-yellow);">> กำลังเตรียมข้อมูล...</div>
+  <div id="statusMessage" class="system-msg loading" style="color:var(--flash-gold);">> กำลังเตรียมข้อมูล...</div>
   
   <form id="prodForm" onsubmit="handleSubmit(event)" style="display:none;">
     <div class="top-buttons-wrapper">
@@ -233,15 +242,27 @@
     </div>
 
     <div class="form-group">
-      <label>🌸 1. รหัสค้นหาใบสั่ง (5 หลัก)</label>
+      <label>🔍 1. รหัสค้นหาใบสั่ง (5 หลัก)</label>
       <div class="input-row">
-        <input type="text" id="manual_order_code" style="text-align: center; color: var(--kitty-dark-pink); font-size: 22px;" placeholder="พิมพ์รหัสที่นี่..." autocomplete="off" onfocus="this.select()" oninput="handleManualOrderInput(this)" onkeydown="handleEnter(event, 'record_date')">
+        <input type="text" id="manual_order_code" style="text-align: center; color: var(--flash-dark-red); font-size: 22px; font-weight: bold;" placeholder="พิมพ์รหัสที่นี่..." autocomplete="off" onfocus="this.select()" oninput="handleManualOrderInput(this)" onkeydown="handleEnter(event, 'record_date')">
         <button type="button" class="keypad-trigger-btn" onclick="openKeypad('manual_order_code')" tabindex="-1"><i class="fa-solid fa-calculator"></i></button>
         <button type="button" class="scan-btn-subtle" onclick="openScanner()" tabindex="-1"><i class="fa-solid fa-qrcode"></i></button>
       </div>
       <select id="id_order" onchange="handleOrderChange()" required tabindex="-1" style="display: none;"><option value="">👉 หรือแตะเลือกจากรายการ</option></select>
       <select id="id_target" onchange="onTargetSelected()" required style="margin-top: 8px; background-color: #fff;" tabindex="-1"><option value="">👉 ขั้นตอนทำงานจะขึ้นที่นี่อัตโนมัติ</option></select>
       <input type="hidden" id="id_work" value="">
+
+      <!-- กล่องแสดงรายละเอียดใบสั่งงานไว้ตรวจสอบความถูกต้อง -->
+      <div id="order_display_box" class="eff-box" style="display: none; flex-direction: column; align-items: flex-start; gap: 8px; background: #fff; border: 2px solid var(--border-dim); margin-top: 10px; padding: 12px 14px;">
+        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 14px; color: var(--text-muted);">🏷️ เลขที่ใบสั่งงาน:</span>
+          <span id="display_order_no" style="font-size: 16px; font-weight: bold; color: var(--flash-red);">-</span>
+        </div>
+        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border-dim); padding-top: 6px;">
+          <span style="font-size: 14px; color: var(--text-muted);">🛠️ ชนิดชิ้นงาน:</span>
+          <span id="display_work_code" style="font-size: 16px; font-weight: bold; color: var(--flash-red);">-</span>
+        </div>
+      </div>
     </div>
 
     <div class="form-group">
@@ -250,9 +271,9 @@
     </div>
 
     <div class="form-group">
-      <label>✨ 3. จำนวนที่ผลิตได้</label>
+      <label>⚡ 3. จำนวนที่ผลิตได้</label>
       <div class="input-row">
-        <input type="text" id="produced_amount" placeholder="พิมพ์ยอดผลิตดี..." autocomplete="off" onfocus="this.select()" onkeydown="handleEnter(event, 'nogoods_amount')" oninput="calculateEfficiency()" style="color: #059669;">
+        <input type="text" id="produced_amount" placeholder="พิมพ์ยอดผลิตดี..." autocomplete="off" onfocus="this.select()" onkeydown="handleEnter(event, 'nogoods_amount')" oninput="calculateEfficiency()" style="color: #059669; font-weight: bold;">
         <button type="button" class="keypad-trigger-btn" onclick="openKeypad('produced_amount')" tabindex="-1"><i class="fa-solid fa-calculator"></i></button>
       </div>
     </div>
@@ -260,7 +281,7 @@
     <div class="form-group">
       <label>🗑️ 4. จำนวนของเสีย (NG)</label>
       <div class="input-row">
-        <input type="text" id="nogoods_amount" placeholder="พิมพ์ยอดของเสีย (ถ้ามี)..." autocomplete="off" onfocus="this.select()" onkeydown="handleEnter(event, 'hour_work')" style="color: #ef4444;">
+        <input type="text" id="nogoods_amount" placeholder="พิมพ์ยอดของเสีย (ถ้ามี)..." autocomplete="off" onfocus="this.select()" onkeydown="handleEnter(event, 'hour_work')" style="color: #ef4444; font-weight: bold;">
         <button type="button" class="keypad-trigger-btn" onclick="openKeypad('nogoods_amount')" tabindex="-1"><i class="fa-solid fa-calculator"></i></button>
       </div>
     </div>
@@ -282,13 +303,13 @@
     </div>
 
     <div class="form-group">
-      <label>👩‍🔧 7. ชื่อพนักงาน</label>
+      <label>🏃 7. ชื่อพนักงาน</label>
       <input type="text" id="employee_search" list="employee_datalist" placeholder="พิมพ์ชื่อพนักงาน..." autocomplete="off" required onfocus="this.select()" onkeydown="handleEnterToReason(event)">
       <datalist id="employee_datalist"></datalist>
     </div>
 
     <div class="eff-box">
-      <span>> ประสิทธิภาพการทำงาน:</span><span id="effDisplay" class="eff-value" style="color: var(--text-muted);">0.00%</span>
+      <span><i class="fa-solid fa-gauge-high"></i> ประสิทธิภาพ (EFF):</span><span id="effDisplay" class="eff-value" style="color: var(--text-muted);">0.00%</span>
     </div>
 
     <div class="form-group" id="reasonGroup" style="display: none;">
@@ -302,17 +323,16 @@
       <datalist id="remark_datalist"></datalist>
     </div>
 
-    <!-- เปลี่ยนไอคอนปุ่มบันทึกเป็น Save Disk แล้วครับ -->
-    <button type="submit" class="submit-btn" id="submitBtn"><i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลเลย!</button>
+    <button type="submit" class="submit-btn" id="submitBtn"><i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!</button>
     <button type="button" class="cancel-edit-btn" id="cancelEditBtn" onclick="cancelEditMode()">[X] ยกเลิกการแก้ไข</button>
   </form>
 </div>
 
 <!-- ส่วนแสดงประวัติข้อมูลด้านล่าง -->
 <div class="terminal-container" id="historyContainer" style="display: none;">
-  <h3 style="color: var(--kitty-dark-pink); font-size: 1.1rem; text-align: center; margin: 0 0 10px 0;">📝 ประวัติการบันทึกล่าสุด</h3>
+  <h3 style="color: var(--flash-red); font-size: 1.1rem; text-align: center; margin: 0 0 10px 0; font-weight: 800; font-style: italic;">⚡ ประวัติการบันทึกล่าสุด</h3>
   <div class="history-table-wrapper">
-    <table class="kitty-table">
+    <table class="flash-table">
       <thead>
         <tr>
           <th width="15%">วันที่</th>
@@ -335,12 +355,16 @@
 
 <!-- QR SCANNER MODAL -->
 <div id="scannerModal" class="scanner-modal" style="display:none;">
-  <div class="scanner-box"><h3 style="color:var(--kitty-dark-pink); margin-top:0;">📷 สแกนคิวอาร์โค้ด</h3><div id="reader" style="width:100%;"></div><button type="button" class="scanner-close" onclick="closeScanner()">ปิดกล้อง</button></div>
+  <div class="scanner-box">
+    <h3 style="color:var(--flash-red); margin-top:0; font-style: italic; font-weight: 800;"><i class="fa-solid fa-expand"></i> สแกนคิวอาร์โค้ด</h3>
+    <div id="reader" style="width:100%;"></div>
+    <button type="button" class="scanner-close" onclick="closeScanner()">ปิดกล้อง</button>
+  </div>
 </div>
 
 <!-- แป้นพิมพ์ตัวเลข -->
 <div id="numericKeypad" class="keypad-modal">
-  <div class="keypad-header"><span id="keypadTitle">🎀 พิมพ์ค่า: </span><span onclick="closeKeypad()" style="cursor:pointer; color: #ef4444;">[X] ปิด</span></div>
+  <div class="keypad-header"><span id="keypadTitle"><i class="fa-solid fa-keyboard"></i> พิมพ์ค่า: </span><span onclick="closeKeypad()" style="cursor:pointer; color: #ef4444;">[X] ปิด</span></div>
   <div class="keypad-grid">
     <button type="button" class="key-btn" onclick="pressKey('7')">7</button><button type="button" class="key-btn" onclick="pressKey('8')">8</button><button type="button" class="key-btn" onclick="pressKey('9')">9</button><button type="button" class="key-btn key-special key-math" onclick="pressKey('+')">+</button>
     <button type="button" class="key-btn" onclick="pressKey('4')">4</button><button type="button" class="key-btn" onclick="pressKey('5')">5</button><button type="button" class="key-btn" onclick="pressKey('6')">6</button><button type="button" class="key-btn key-special key-math" onclick="pressKey('-')">-</button>
@@ -395,7 +419,7 @@
 
       document.getElementById('statusMessage').style.display = 'none';
       document.getElementById('prodForm').style.display = 'block';
-      document.getElementById('statusText').innerText = "ระบบพร้อมใช้งานแล้วค่ะ 🌸";
+      document.getElementById('statusText').innerText = "ระบบพร้อมใช้งานแล้วครับ ⚡";
 
       loadLastSessionData();
 
@@ -441,7 +465,7 @@
     if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
     html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } },
       (decodedText) => { handleScannedResult(decodedText); closeScanner(); }, (errorMessage) => {}
-    ).catch(err => { alert("ไม่สามารถเปิดกล้องได้ค่ะ: " + err); closeScanner(); });
+    ).catch(err => { alert("ไม่สามารถเปิดกล้องได้ครับ: " + err); closeScanner(); });
   }
 
   function closeScanner() {
@@ -458,11 +482,11 @@
           if (foundOrd) {
             document.getElementById('id_order').value = foundOrd.id_order; handleOrderChange();
             if (targetId) { setTimeout(() => { document.getElementById('id_target').value = targetId; onTargetSelected(); }, 200); }
-            alert("✅ สแกนสำเร็จแล้วค่ะ!"); return;
+            alert("⚡ สแกนสำเร็จแล้วครับ!"); return;
           }
         }
       }
-      alert("⚠️ รูปแบบคิวอาร์โค้ดไม่ถูกต้องนะคะ");
+      alert("⚠️ รูปแบบคิวอาร์โค้ดไม่ถูกต้องนะครับ");
     } catch (e) { alert("⚠️ เกิดข้อผิดพลาดในการอ่านข้อมูลคิวอาร์โค้ด"); }
   }
 
@@ -477,18 +501,33 @@
     const workHidden = document.getElementById('id_work');
     const manualInput = document.getElementById('manual_order_code');
 
+    const displayBox = document.getElementById('order_display_box');
+    const dispOrderNo = document.getElementById('display_order_no');
+    const dispWorkCode = document.getElementById('display_work_code');
+
     targetSelect.innerHTML = '<option value="">👉 กรุณาเลือกขั้นตอนทำงาน</option>'; workHidden.value = '';
     if (document.activeElement.id === 'id_order') { manualInput.value = ''; }
     
     document.getElementById('effDisplay').innerText = "0.00%"; document.getElementById('effDisplay').style.color = "var(--text-muted)";
     document.getElementById('reasonGroup').style.display = 'none'; document.getElementById('id_reason').value = ''; document.getElementById('id_reason').removeAttribute('required');
     document.getElementById('historyContainer').style.display = 'none';
+    displayBox.style.display = 'none';
 
     if (!selectedOrderId) { return; }
 
     const selectedOrder = globalData.orders.find(o => String(o.id_order) === String(selectedOrderId));
     if (!selectedOrder || !selectedOrder.id_work) { targetSelect.innerHTML = '<option value="">-- ไม่พบการตั้งค่าชิ้นงาน --</option>'; return; }
     workHidden.value = selectedOrder.id_work; 
+
+    // แสดงข้อมูล Order และ Work Item ไว้สำหรับตรวจทานความถูกต้อง
+    let wCode = "-";
+    if (globalData.workItems && globalData.workItems.length > 0) {
+      const foundW = globalData.workItems.find(w => String(w.id_work) === String(selectedOrder.id_work));
+      if (foundW) wCode = foundW.work_code;
+    }
+    dispOrderNo.innerText = selectedOrder.order_no || '-';
+    dispWorkCode.innerText = wCode;
+    displayBox.style.display = 'flex';
 
     const filteredTargets = globalData.targets.filter(t => String(t.id_work) === String(selectedOrder.id_work));
     if (filteredTargets.length > 0) {
@@ -503,7 +542,6 @@
     } else { targetSelect.innerHTML = '<option value="">-- ไม่พบเป้าหมาย --</option>'; }
   }
 
-  // ฟังก์ชันนี้จะถูกเรียกเมื่อผู้ใช้เลือก ขั้นตอนการทำงาน ด้วยตัวเอง หรือ ค้นหาเจอ
   function onTargetSelected() {
     calculateEfficiency();
     fetchRecentHistory(); // ดึงประวัติเฉพาะเมื่อเลือก Order + Target สมบูรณ์
@@ -556,7 +594,6 @@
     tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">กำลังโหลดประวัติ...</td></tr>';
 
     try {
-      // เอา order=created_at.desc ออกเพื่อป้องกันข้อผิดพลาดกรณีไม่มีคอลัมน์นี้
       const res = await fetch(`${SUPABASE_URL}/daily_production?id_order=eq.${orderId}&id_target=eq.${targetId}&order=record_date.desc&limit=10`, { headers });
       if(!res.ok) throw new Error();
       const logs = await res.json();
@@ -619,15 +656,16 @@
     isEditMode = false; originalRecordKey = null; document.getElementById('prodForm').reset();
     let today = new Date(); document.getElementById('record_date').value = today.toISOString().split('T')[0];
     document.getElementById('id_target').innerHTML = '<option value="">👉 รอเลือกรหัสใบสั่งงานก่อน</option>'; document.getElementById('id_work').value = ''; document.getElementById('employee_search').value = ''; 
-    document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลเลย!'; document.getElementById('cancelEditBtn').style.display = 'none';
+    document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!'; document.getElementById('cancelEditBtn').style.display = 'none';
     document.getElementById('reasonGroup').style.display = 'none'; document.getElementById('effDisplay').innerText = "0.00%"; document.getElementById('effDisplay').style.color = "var(--text-muted)";
     document.getElementById('historyContainer').style.display = 'none';
+    document.getElementById('order_display_box').style.display = 'none'; // ซ่อนกล่องตรวจสอบรหัส
   }
 
   function openKeypad(inputId) {
     activeInputId = inputId; let labelText = document.querySelector(`label[for="${inputId}"]`); let title = labelText ? labelText.innerText : "";
     if (inputId === 'hour_work') title = 'ชั่วโมงทำงาน'; else if (inputId === 'produced_amount') title = 'จำนวนผลิต'; else if (inputId === 'nogoods_amount') title = 'จำนวนของเสีย'; else if (inputId === 'manual_order_code') title = 'รหัสใบสั่งงาน (5 หลัก)';
-    document.getElementById('keypadTitle').innerText = "🎀 พิมพ์ค่า: " + title;
+    document.getElementById('keypadTitle').innerHTML = "<i class='fa-solid fa-keyboard'></i> พิมพ์ค่า: " + title;
     let isCode = (inputId === 'manual_order_code'); document.querySelectorAll('.key-math').forEach(btn => { btn.style.visibility = isCode ? 'hidden' : 'visible'; });
     document.getElementById('numericKeypad').style.display = 'block'; document.body.style.paddingBottom = "450px";
     setTimeout(() => { document.getElementById(inputId).scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 150);
@@ -652,7 +690,7 @@
   async function handleSubmit(e) {
     e.preventDefault();
     const producedValStr = document.getElementById('produced_amount').value.trim();
-    if (producedValStr === '') { alert("🎀 กรุณาระบุ 'จำนวนที่ผลิตได้' ก่อนกดบันทึกนะคะ!"); return; }
+    if (producedValStr === '') { alert("⚡ กรุณาระบุ 'จำนวนที่ผลิตได้' ก่อนกดบันทึกนะครับ!"); return; }
 
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.disabled = true; submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...';
@@ -664,8 +702,8 @@
     const employeeVal = empObj ? empObj.id_name : null;
 
     if (!employeeVal) {
-      alert("⚠️ กรุณาระบุชื่อพนักงานให้ถูกต้องด้วยนะคะ");
-      submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลเลย!'; return;
+      alert("⚠️ กรุณาระบุชื่อพนักงานให้ถูกต้องด้วยนะครับ");
+      submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!'; return;
     }
 
     const payload = {
@@ -681,8 +719,8 @@
         const dupCheck = await fetch(`${SUPABASE_URL}/daily_production?record_date=eq.${payload.record_date}&id_order=eq.${payload.id_order}&id_target=eq.${payload.id_target}&id_name=eq.${payload.id_name}`, { headers });
         const dupData = await dupCheck.json();
         if (dupData && dupData.length > 0) {
-          if (!confirm("⚠️ พบการบันทึกข้อมูลของพนักงานคนนี้ในวันนี้แล้ว\nต้องการ 'บันทึกทับ' ข้อมูลเดิมหรือไม่คะ?")) {
-            submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลเลย!'; return;
+          if (!confirm("⚠️ พบการบันทึกข้อมูลของพนักงานคนนี้ในวันนี้แล้ว\nต้องการ 'บันทึกทับ' ข้อมูลเดิมหรือไม่ครับ?")) {
+            submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!'; return;
           }
           isEditMode = true; originalRecordKey = dupData[0];
         }
@@ -717,7 +755,7 @@
     } catch (error) {
       alert("⚠️ ข้อผิดพลาดในการเชื่อมต่อ: " + error.message);
     } finally {
-      submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลเลย!';
+      submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!';
     }
   }
 
@@ -728,8 +766,8 @@
     const selectedOrderId = document.getElementById('id_order').value;
     const selectedTargetId = document.getElementById('id_target').value;
 
-    if (!selectedOrderId) { alert("กรุณาเลือกใบสั่งงานก่อนค่ะ"); return; }
-    if (!selectedTargetId) { alert("กรุณาเลือกขั้นตอนการทำงานให้เรียบร้อยก่อนค่ะ"); return; }
+    if (!selectedOrderId) { alert("กรุณาเลือกใบสั่งงานก่อนครับ"); return; }
+    if (!selectedTargetId) { alert("กรุณาเลือกขั้นตอนการทำงานให้เรียบร้อยก่อนครับ"); return; }
 
     const orderObj = globalData.orders.find(o => String(o.id_order) === String(selectedOrderId));
     if (!orderObj) { alert("ไม่พบข้อมูลใบสั่งงานนี้ในระบบ"); return; }
