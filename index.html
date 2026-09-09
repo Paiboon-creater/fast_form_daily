@@ -15,12 +15,12 @@
 
     :root {
       /* THE FLASH THEME COLORS */
-      --bg-flash: #7f1d1d; /* สีแดงเข้ม */
+      --bg-flash: #7f1d1d; 
       --panel-bg: #ffffff; 
-      --flash-red: #dc2626; /* สีแดงแฟลช */
+      --flash-red: #dc2626; 
       --flash-dark-red: #991b1b; 
       --flash-light-red: #fee2e2;
-      --flash-gold: #f59e0b; /* สีเหลืองทองสายฟ้า */
+      --flash-gold: #f59e0b; 
       --flash-light-gold: #fef3c7;
       
       --text-main: #1f2937; 
@@ -62,7 +62,7 @@
       max-width: 550px;
       background: var(--panel-bg);
       padding: 20px 15px;
-      border-radius: 12px; /* เหลี่ยมขึ้นนิดนึงให้ดูเท่ */
+      border-radius: 12px;
       border: 3px solid var(--flash-gold);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(245, 158, 11, 0.4);
       margin-top: 5px;
@@ -195,31 +195,108 @@
     .key-equals:active { background-color: #d97706; }
 
     /* ========================================================= */
-    /* CSS พิมพ์เอกสาร A4 แนวนอน (ใบความก้าวหน้า) */
+    /* CSS พิมพ์เอกสาร A4 แนวตั้งเต็มหน้า (ใบความก้าวหน้า) */
     /* ========================================================= */
     #printArea { display: none; }
     @media print {
       body * { visibility: hidden; }
       #printArea, #printArea * { visibility: visible; color: #000 !important; }
-      #printArea { display: flex !important; position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
-      @page { size: A4 landscape; margin: 0; }
+      #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: #fff; }
       
-      .print-sheet-container { width: 297mm; height: 202mm; padding: 2mm 3mm; box-sizing: border-box; background: white; display: flex; justify-content: space-between; page-break-after: avoid; page-break-inside: avoid; color: #000; font-family: 'Sarabun', sans-serif; overflow: hidden; }
-      .print-card { width: 48.6%; height: 100%; border: 1.5px solid #000; padding: 2mm 2.5mm; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; background: #fff; }
-      .print-header-wrapper { margin-top: 10mm; }
-      .print-header-top { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #000; padding-bottom: 3px; margin-bottom: 3px; }
-      .print-title-area h3 { margin: 0 0 2px 0; font-size: 15px; text-align: center; font-weight: bold; }
-      .print-meta-row { font-size: 12px; margin-bottom: 4px; display: flex; align-items: flex-end; gap: 4px; font-weight: bold; }
+      /* ตั้งค่าหน้ากระดาษ A4 แนวตั้ง (Portrait) */
+      @page { size: A4 portrait; margin: 8mm; }
+      
+      .print-sheet-container { 
+        width: 100%; 
+        background: white; 
+        color: #000; 
+        font-family: 'Sarabun', 'Kanit', Tahoma, sans-serif; 
+      }
+      .print-card { 
+        width: 100%; 
+        border: 2px solid #000; 
+        padding: 5mm; 
+        box-sizing: border-box; 
+        background: #fff; 
+      }
+      .print-header-top { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: flex-start; 
+        border-bottom: 3px double #000; 
+        padding-bottom: 8px; 
+        margin-bottom: 12px; 
+      }
+      .print-title-area h3 { 
+        margin: 0 0 12px 0; 
+        font-size: 20px; 
+        text-align: center; 
+        font-weight: bold; 
+        text-decoration: underline; 
+      }
+      .print-meta-row { 
+        font-size: 15px; 
+        margin-bottom: 8px; 
+        display: flex; 
+        align-items: flex-end; 
+        gap: 8px; 
+        font-weight: bold; 
+      }
       .print-label { white-space: nowrap; margin-bottom: -1px; }
-      .print-value { border-bottom: 1.5px dotted #000; padding-left: 5px; min-height: 15px; white-space: nowrap; }
-      .print-qr-box { text-align: center; }
-      .print-qr-box canvas, .print-qr-box img { width: 58px !important; height: 58px !important; }
-      .print-qr-box span { display: block; font-size: 8px; margin-top: 1px; font-weight: bold; }
-      .print-code-text { font-size: 14px; font-weight: bold; letter-spacing: 2px; margin-top: 1px; background: #eee; border: 1px solid #000; padding: 2px 4px; }
-      .print-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 3px; table-layout: fixed; }
-      .print-table th, .print-table td { border: 1px solid #000; padding: 2px 3px; text-align: center; height: 18px; word-wrap: break-word; }
-      .print-table th { background-color: #e0e0e0 !important; font-size: 11px; font-weight: bold; -webkit-print-color-adjust: exact; }
-      .print-footer { display: flex; justify-content: space-between; font-size: 11px; margin-top: 2px; border-top: 1px solid #000; padding-top: 2px; font-weight: bold; }
+      .print-value { 
+        border-bottom: 1.5px dotted #000; 
+        padding-left: 10px; 
+        min-height: 20px; 
+        flex: 1; 
+      }
+      .print-qr-box { 
+        text-align: center; 
+        border: 2px solid #000; 
+        padding: 8px; 
+        border-radius: 8px; 
+      }
+      .print-qr-box canvas, .print-qr-box img { width: 85px !important; height: 85px !important; margin: 0 auto; }
+      .print-qr-box span { display: block; font-size: 12px; margin-top: 4px; font-weight: bold; }
+      .print-code-text { 
+        font-size: 18px; 
+        font-weight: bold; 
+        letter-spacing: 2px; 
+        margin-top: 6px; 
+        background: #eee; 
+        border: 1px solid #000; 
+        padding: 2px 6px; 
+      }
+      
+      .print-table { 
+        width: 100%; 
+        border-collapse: collapse; 
+        font-size: 13px; 
+        table-layout: fixed; 
+      }
+      .print-table th, .print-table td { 
+        border: 1px solid #000; 
+        padding: 4px 6px; 
+        text-align: center; 
+        word-wrap: break-word; 
+      }
+      .print-table th { 
+        background-color: #e5e7eb !important; 
+        font-size: 13px; 
+        font-weight: bold; 
+        -webkit-print-color-adjust: exact; 
+        color-adjust: exact;
+      }
+      .print-table tbody tr { height: 26px; } /* ขยายความสูงให้เหมาะสมแนวตั้ง */
+      
+      .print-footer { 
+        display: flex; 
+        justify-content: space-between; 
+        font-size: 13px; 
+        margin-top: 15px; 
+        border-top: 2px solid #000; 
+        padding-top: 6px; 
+        font-weight: bold; 
+      }
     }
   </style>
 </head>
@@ -544,7 +621,7 @@
 
   function onTargetSelected() {
     calculateEfficiency();
-    fetchRecentHistory(); // ดึงประวัติเฉพาะเมื่อเลือก Order + Target สมบูรณ์
+    fetchRecentHistory(); 
   }
 
   function calculateEfficiency() {
@@ -627,7 +704,6 @@
       tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#ef4444;">ดึงข้อมูลล้มเหลว</td></tr>';
     }
   }
-  // ===============================================
 
   function loadLastSessionData() {
     const lastDate = localStorage.getItem('last_record_date');
@@ -644,7 +720,7 @@
       document.getElementById('id_order').value = lastOrderId; handleOrderChange();
       if (lastTargetId) { 
         document.getElementById('id_target').value = lastTargetId; 
-        onTargetSelected(); // ดึงประวัติของเซสชันล่าสุด
+        onTargetSelected(); 
       }
     }
     if (lastEmployeeId) { const emp = globalData.employees.find(e => String(e.id_name) === String(lastEmployeeId)); if (emp) { document.getElementById('employee_search').value = emp.name; } }
@@ -659,7 +735,7 @@
     document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!'; document.getElementById('cancelEditBtn').style.display = 'none';
     document.getElementById('reasonGroup').style.display = 'none'; document.getElementById('effDisplay').innerText = "0.00%"; document.getElementById('effDisplay').style.color = "var(--text-muted)";
     document.getElementById('historyContainer').style.display = 'none';
-    document.getElementById('order_display_box').style.display = 'none'; // ซ่อนกล่องตรวจสอบรหัส
+    document.getElementById('order_display_box').style.display = 'none'; 
   }
 
   function openKeypad(inputId) {
@@ -744,7 +820,6 @@
         
         isEditMode = false; originalRecordKey = null;
 
-        // อัปเดตตารางประวัติทันที
         fetchRecentHistory();
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -760,7 +835,7 @@
   }
 
   // ========================================================
-  // ฟังก์ชันสำหรับพิมพ์ใบมิเตอร์ (F-PR-005-00) พร้อมประวัติ
+  // ฟังก์ชันสำหรับพิมพ์ใบมิเตอร์ เต็มหน้า A4 แนวตั้ง (Portrait)
   // ========================================================
   async function printProgressSheet(withData) {
     const selectedOrderId = document.getElementById('id_order').value;
@@ -809,7 +884,8 @@
     const baseUrl = window.location.href.split('?')[0];
     const currentUrl = `${baseUrl}?order_id=${encodeURIComponent(orderObj.id_order)}&target_id=${encodeURIComponent(selectedTargetId)}`;
 
-    let tableRowsHtml = ''; let runningTotal = 0; const maxRows = 22;
+    let tableRowsHtml = ''; let runningTotal = 0; 
+    const maxRows = 35; // เพิ่มบรรทัดให้เต็ม A4 แนวตั้ง
 
     for(let i = 0; i < maxRows; i++) {
       if (i < logs.length) {
@@ -823,8 +899,8 @@
         tableRowsHtml += `<tr>
           <td>${dateFormatted}</td><td></td><td>${produced.toLocaleString()}</td>
           <td style="font-weight: bold;">${runningTotal.toLocaleString()}</td>
-          <td>${ngAmt > 0 ? ngAmt.toLocaleString() : ''}</td><td style="font-size: 10px;">${hWork}</td>
-          <td style="text-align: left; padding-left: 4px; font-size: 10px;">${empText}</td>
+          <td>${ngAmt > 0 ? ngAmt.toLocaleString() : ''}</td><td style="font-size: 12px;">${hWork}</td>
+          <td style="text-align: left; padding-left: 6px; font-size: 12px;">${empText}</td>
           <td>${log.remark ? log.remark : ''}</td>
         </tr>`;
       } else { tableRowsHtml += `<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`; }
@@ -832,37 +908,37 @@
 
     const singleCardHtml = `
       <div class="print-card">
-        <div class="print-header-wrapper">
-          <div class="print-header-top">
-            <div style="flex-grow: 1; overflow: hidden;">
-              <div class="print-title-area"><h3>ใบความก้าวหน้าของการผลิต</h3></div>
-              <div class="print-meta-row"><span class="print-label">ใบสั่งงานเลขที่:</span><span class="print-value" style="flex: 1.4; white-space: nowrap;">${orderNo}</span><span class="print-label" style="margin-left: 12px;">ขั้นตอนงาน:</span><span class="print-value" style="flex: 1.2; white-space: nowrap;">${stepNameText}</span></div>
-              <div class="print-meta-row"><span class="print-label">ชนิดงาน:</span> <span class="print-value" style="white-space: nowrap; flex: 1;">${workCodeText}</span></div>
-              <div class="print-meta-row"><span class="print-label">จำนวนชิ้นงานสั่งผลิต:</span> <span class="print-value" style="flex: 1;">${quantity}</span></div>
-              <div class="print-meta-row"><span class="print-label">วันที่เริ่ม:</span> <span class="print-value" style="flex: 1;">${stepStartDateStr}</span><span class="print-label" style="margin-left: 10px;">วันที่เสร็จ:</span> <span class="print-value" style="flex: 1;">${stepEndDateStr}</span></div>
-            </div>
-            <div class="print-qr-box">
-              <div class="qrcode-target" data-url="${currentUrl}"></div><span>สแกน / คีย์รหัส</span>
-              <div class="print-code-text">[ ${printCode} ]</div>
-            </div>
+        <div class="print-header-top">
+          <div style="flex-grow: 1; overflow: hidden; padding-right: 15px;">
+            <div class="print-title-area"><h3>ใบความก้าวหน้าของการผลิต</h3></div>
+            <div class="print-meta-row"><span class="print-label">ใบสั่งงานเลขที่:</span><span class="print-value" style="flex: 1.4;">${orderNo}</span><span class="print-label" style="margin-left: 15px;">ขั้นตอนงาน:</span><span class="print-value" style="flex: 1.2;">${stepNameText}</span></div>
+            <div class="print-meta-row"><span class="print-label">ชนิดงาน:</span> <span class="print-value">${workCodeText}</span></div>
+            <div class="print-meta-row"><span class="print-label">จำนวนชิ้นงานสั่งผลิต:</span> <span class="print-value">${quantity}</span></div>
+            <div class="print-meta-row"><span class="print-label">วันที่เริ่ม:</span> <span class="print-value">${stepStartDateStr}</span><span class="print-label" style="margin-left: 15px;">วันที่เสร็จ:</span> <span class="print-value">${stepEndDateStr}</span></div>
           </div>
-          <table class="print-table">
-            <thead>
-              <tr><th width="10%">วันที่</th><th width="14%" style="font-size: 9px;">ตัวเลขตอนเลิกงาน</th><th width="14%">ผลิตได้/วัน</th><th width="14%">สะสม</th><th width="8%">เสีย</th><th width="10%">ชั่วโมง</th><th width="16%">ชื่อคนทำ</th><th width="14%">หมายเหตุ</th></tr>
-            </thead>
-            <tbody>${tableRowsHtml}</tbody>
-          </table>
+          <div class="print-qr-box">
+            <div class="qrcode-target" data-url="${currentUrl}"></div><span>สแกน / คีย์รหัส</span>
+            <div class="print-code-text">[ ${printCode} ]</div>
+          </div>
         </div>
-        <div class="print-footer"><span>F-PR-005-00</span><span>DAILY PRODUCTION TRACKER</span></div>
+        <table class="print-table">
+          <thead>
+            <tr><th width="10%">วันที่</th><th width="13%">ตัวเลขเลิกงาน</th><th width="13%">ผลิตได้/วัน</th><th width="13%">สะสม</th><th width="8%">เสีย</th><th width="10%">ชั่วโมง</th><th width="18%">ชื่อคนทำ</th><th width="15%">หมายเหตุ</th></tr>
+          </thead>
+          <tbody>${tableRowsHtml}</tbody>
+        </table>
+        <div class="print-footer"><span>F-PR-005-00</span><span>DAILY PRODUCTION TRACKER (A4 PORTRAIT)</span></div>
       </div>
     `;
 
-    document.getElementById('printArea').innerHTML = `<div class="print-sheet-container">${singleCardHtml}${singleCardHtml}</div>`;
+    // ใส่การ์ดเดียวให้เต็มหน้า
+    document.getElementById('printArea').innerHTML = `<div class="print-sheet-container">${singleCardHtml}</div>`;
+    
     document.querySelectorAll('.qrcode-target').forEach(el => {
-      new QRCode(el, { text: el.getAttribute('data-url'), width: 58, height: 58, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
+      new QRCode(el, { text: el.getAttribute('data-url'), width: 85, height: 85, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
     });
 
-    setTimeout(() => { window.print(); }, 300);
+    setTimeout(() => { window.print(); }, 400);
   }
 </script>
 </body>
