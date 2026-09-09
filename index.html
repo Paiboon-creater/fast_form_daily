@@ -163,9 +163,11 @@
     /* ======================================= */
     .history-table-wrapper {
       width: 100%; overflow-x: auto; border-radius: 8px; border: 2px solid var(--flash-red); margin-top: 10px;
+      max-height: 400px; /* เพิ่มความสูงสูงสุดให้ตารางประวัติเผื่อข้อมูลเยอะจะได้เลื่อนดูได้ */
+      overflow-y: auto;
     }
     .flash-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: center; white-space: nowrap; }
-    .flash-table th { background-color: var(--flash-red); color: white; padding: 10px 5px; font-weight: 700; text-transform: uppercase;}
+    .flash-table th { background-color: var(--flash-red); color: white; padding: 10px 5px; font-weight: 700; text-transform: uppercase; position: sticky; top: 0; z-index: 1;}
     .flash-table td { padding: 8px 5px; border-bottom: 1px solid var(--border-dim); }
     .flash-table tr:nth-child(even) { background-color: #f9fafb; }
     .flash-table tr:hover { background-color: var(--flash-light-red); }
@@ -572,7 +574,8 @@
     tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">กำลังโหลดประวัติ...</td></tr>';
 
     try {
-      const res = await fetch(`${SUPABASE_URL}/daily_production?id_order=eq.${orderId}&id_target=eq.${targetId}&order=record_date.desc&limit=10`, { headers });
+      // แก้ไข: ดึงข้อมูลทั้งหมดโดยไม่จำกัด (เอา &limit=10 ออก) และเรียงตามวันที่เก่าไปใหม่ (.asc)
+      const res = await fetch(`${SUPABASE_URL}/daily_production?id_order=eq.${orderId}&id_target=eq.${targetId}&order=record_date.asc`, { headers });
       if(!res.ok) throw new Error();
       const logs = await res.json();
 
@@ -683,7 +686,6 @@
     };
 
     try {
-      // เอาการเช็คซ้ำออกทั้งหมด เพื่อให้ Insert ทันที
       const response = await fetch(`${SUPABASE_URL}/daily_production`, { method: "POST", headers: headers, body: JSON.stringify(payload) });
 
       if (response.ok) {
