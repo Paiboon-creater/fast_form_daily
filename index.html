@@ -203,101 +203,26 @@
       #printArea, #printArea * { visibility: visible; color: #000 !important; }
       #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: #fff; }
       
-      /* ตั้งค่าหน้ากระดาษ A4 แนวตั้ง (Portrait) */
       @page { size: A4 portrait; margin: 8mm; }
       
-      .print-sheet-container { 
-        width: 100%; 
-        background: white; 
-        color: #000; 
-        font-family: 'Sarabun', 'Kanit', Tahoma, sans-serif; 
-      }
-      .print-card { 
-        width: 100%; 
-        border: 2px solid #000; 
-        padding: 5mm; 
-        box-sizing: border-box; 
-        background: #fff; 
-      }
-      .print-header-top { 
-        display: flex; 
-        justify-content: space-between; 
-        align-items: flex-start; 
-        border-bottom: 3px double #000; 
-        padding-bottom: 8px; 
-        margin-bottom: 12px; 
-      }
-      .print-title-area h3 { 
-        margin: 0 0 12px 0; 
-        font-size: 20px; 
-        text-align: center; 
-        font-weight: bold; 
-        text-decoration: underline; 
-      }
-      .print-meta-row { 
-        font-size: 15px; 
-        margin-bottom: 8px; 
-        display: flex; 
-        align-items: flex-end; 
-        gap: 8px; 
-        font-weight: bold; 
-      }
+      .print-sheet-container { width: 100%; background: white; color: #000; font-family: 'Sarabun', 'Kanit', Tahoma, sans-serif; }
+      .print-card { width: 100%; border: 2px solid #000; padding: 5mm; box-sizing: border-box; background: #fff; }
+      .print-header-top { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px double #000; padding-bottom: 8px; margin-bottom: 12px; }
+      .print-title-area h3 { margin: 0 0 12px 0; font-size: 20px; text-align: center; font-weight: bold; text-decoration: underline; }
+      .print-meta-row { font-size: 15px; margin-bottom: 8px; display: flex; align-items: flex-end; gap: 8px; font-weight: bold; }
       .print-label { white-space: nowrap; margin-bottom: -1px; }
-      .print-value { 
-        border-bottom: 1.5px dotted #000; 
-        padding-left: 10px; 
-        min-height: 20px; 
-        flex: 1; 
-      }
-      .print-qr-box { 
-        text-align: center; 
-        border: 2px solid #000; 
-        padding: 8px; 
-        border-radius: 8px; 
-      }
+      .print-value { border-bottom: 1.5px dotted #000; padding-left: 10px; min-height: 20px; flex: 1; }
+      .print-qr-box { text-align: center; border: 2px solid #000; padding: 8px; border-radius: 8px; }
       .print-qr-box canvas, .print-qr-box img { width: 85px !important; height: 85px !important; margin: 0 auto; }
       .print-qr-box span { display: block; font-size: 12px; margin-top: 4px; font-weight: bold; }
-      .print-code-text { 
-        font-size: 18px; 
-        font-weight: bold; 
-        letter-spacing: 2px; 
-        margin-top: 6px; 
-        background: #eee; 
-        border: 1px solid #000; 
-        padding: 2px 6px; 
-      }
+      .print-code-text { font-size: 18px; font-weight: bold; letter-spacing: 2px; margin-top: 6px; background: #eee; border: 1px solid #000; padding: 2px 6px; }
       
-      .print-table { 
-        width: 100%; 
-        border-collapse: collapse; 
-        font-size: 13px; 
-        table-layout: fixed; 
-      }
-      .print-table th, .print-table td { 
-        border: 1px solid #000; 
-        padding: 4px 6px; 
-        text-align: center; 
-        word-wrap: break-word; 
-      }
-      .print-table th { 
-        background-color: #e5e7eb !important; 
-        font-size: 13px; 
-        font-weight: bold; 
-        -webkit-print-color-adjust: exact; 
-        color-adjust: exact;
-      }
-      /* ปรับความสูงบรรทัดตารางลดลงนิดนึงเพื่อไม่ให้ทะลุหน้า */
+      .print-table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+      .print-table th, .print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; word-wrap: break-word; }
+      .print-table th { background-color: #e5e7eb !important; font-size: 13px; font-weight: bold; -webkit-print-color-adjust: exact; color-adjust: exact;}
       .print-table tbody tr { height: 25px; } 
       
-      .print-footer { 
-        display: flex; 
-        justify-content: space-between; 
-        font-size: 13px; 
-        margin-top: 15px; 
-        border-top: 2px solid #000; 
-        padding-top: 6px; 
-        font-weight: bold; 
-      }
+      .print-footer { display: flex; justify-content: space-between; font-size: 13px; margin-top: 15px; border-top: 2px solid #000; padding-top: 6px; font-weight: bold; }
     }
   </style>
 </head>
@@ -320,27 +245,20 @@
     </div>
 
     <div class="form-group">
-      <label>🔍 1. รหัสค้นหาใบสั่ง (5 หลัก)</label>
+      <label>🔍 1. รหัสสั่งงาน (พิมพ์ 5 หลัก หรือเลือกจากรายการ)</label>
       <div class="input-row">
-        <input type="text" id="manual_order_code" style="text-align: center; color: var(--flash-dark-red); font-size: 22px; font-weight: bold;" placeholder="พิมพ์รหัสที่นี่..." autocomplete="off" onfocus="this.select()" oninput="handleManualOrderInput(this)" onkeydown="handleEnter(event, 'record_date')">
+        <input type="text" id="manual_order_code" style="text-align: center; color: var(--flash-dark-red); font-size: 22px; font-weight: bold;" placeholder="พิมพ์รหัส 5 หลัก..." autocomplete="off" onfocus="this.select()" oninput="handleManualOrderInput(this)" onkeydown="handleEnter(event, 'record_date')">
         <button type="button" class="keypad-trigger-btn" onclick="openKeypad('manual_order_code')" tabindex="-1"><i class="fa-solid fa-calculator"></i></button>
         <button type="button" class="scan-btn-subtle" onclick="openScanner()" tabindex="-1"><i class="fa-solid fa-qrcode"></i></button>
       </div>
-      <select id="id_order" onchange="handleOrderChange()" required tabindex="-1" style="display: none;"><option value="">👉 หรือแตะเลือกจากรายการ</option></select>
-      <select id="id_target" onchange="onTargetSelected()" required style="margin-top: 8px; background-color: #fff;" tabindex="-1"><option value="">👉 ขั้นตอนทำงานจะขึ้นที่นี่อัตโนมัติ</option></select>
+      <!-- เปิดให้ Select แสดงผลเสมอ เพื่อให้เลือกได้เอง -->
+      <select id="id_order" onchange="handleOrderChange()" required style="margin-top: 8px; background-color: #fff;">
+        <option value="">👉 หรือแตะเลือก "เลขที่ใบสั่งงาน"</option>
+      </select>
+      <select id="id_target" onchange="onTargetSelected()" required style="margin-top: 8px; background-color: #fff;">
+        <option value="">👉 ขั้นตอนทำงานจะขึ้นที่นี่อัตโนมัติ</option>
+      </select>
       <input type="hidden" id="id_work" value="">
-
-      <!-- กล่องแสดงรายละเอียดใบสั่งงานไว้ตรวจสอบความถูกต้อง -->
-      <div id="order_display_box" class="eff-box" style="display: none; flex-direction: column; align-items: flex-start; gap: 8px; background: #fff; border: 2px solid var(--border-dim); margin-top: 10px; padding: 12px 14px;">
-        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 14px; color: var(--text-muted);">🏷️ เลขที่ใบสั่งงาน:</span>
-          <span id="display_order_no" style="font-size: 16px; font-weight: bold; color: var(--flash-red);">-</span>
-        </div>
-        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border-dim); padding-top: 6px;">
-          <span style="font-size: 14px; color: var(--text-muted);">🛠️ ชนิดชิ้นงาน:</span>
-          <span id="display_work_code" style="font-size: 16px; font-weight: bold; color: var(--flash-red);">-</span>
-        </div>
-      </div>
     </div>
 
     <div class="form-group">
@@ -579,33 +497,20 @@
     const workHidden = document.getElementById('id_work');
     const manualInput = document.getElementById('manual_order_code');
 
-    const displayBox = document.getElementById('order_display_box');
-    const dispOrderNo = document.getElementById('display_order_no');
-    const dispWorkCode = document.getElementById('display_work_code');
-
     targetSelect.innerHTML = '<option value="">👉 กรุณาเลือกขั้นตอนทำงาน</option>'; workHidden.value = '';
+    
+    // ถ้ายูสเซอร์เปลี่ยน Dropdown ใบสั่งเอง ให้เคลียร์ช่องกรอกรหัส 5 หลัก
     if (document.activeElement.id === 'id_order') { manualInput.value = ''; }
     
     document.getElementById('effDisplay').innerText = "0.00%"; document.getElementById('effDisplay').style.color = "var(--text-muted)";
     document.getElementById('reasonGroup').style.display = 'none'; document.getElementById('id_reason').value = ''; document.getElementById('id_reason').removeAttribute('required');
     document.getElementById('historyContainer').style.display = 'none';
-    displayBox.style.display = 'none';
 
     if (!selectedOrderId) { return; }
 
     const selectedOrder = globalData.orders.find(o => String(o.id_order) === String(selectedOrderId));
     if (!selectedOrder || !selectedOrder.id_work) { targetSelect.innerHTML = '<option value="">-- ไม่พบการตั้งค่าชิ้นงาน --</option>'; return; }
     workHidden.value = selectedOrder.id_work; 
-
-    // แสดงข้อมูล Order และ Work Item ไว้สำหรับตรวจทานความถูกต้อง
-    let wCode = "-";
-    if (globalData.workItems && globalData.workItems.length > 0) {
-      const foundW = globalData.workItems.find(w => String(w.id_work) === String(selectedOrder.id_work));
-      if (foundW) wCode = foundW.work_code;
-    }
-    dispOrderNo.innerText = selectedOrder.order_no || '-';
-    dispWorkCode.innerText = wCode;
-    displayBox.style.display = 'flex';
 
     const filteredTargets = globalData.targets.filter(t => String(t.id_work) === String(selectedOrder.id_work));
     if (filteredTargets.length > 0) {
@@ -629,6 +534,7 @@
     const ordId = document.getElementById('id_order').value;
     const targetId = document.getElementById('id_target').value;
 
+    // ถ้ายูสเซอร์เลือก Dropdown จนครบ ระบบจะไปดึงรหัส 5 หลักมาโชว์ให้อัตโนมัติด้วย
     if (ordId && targetId) {
       const shortcutObj = globalData.shortcutMap.find(s => String(s.id_order) === String(ordId) && String(s.id_target) === String(targetId));
       if (shortcutObj) { document.getElementById('manual_order_code').value = shortcutObj.code; }
@@ -659,7 +565,6 @@
     }
   }
 
-  // ====== โหลดข้อมูลประวัติล่าสุด ==================
   async function fetchRecentHistory() {
     const orderId = document.getElementById('id_order').value;
     const targetId = document.getElementById('id_target').value;
@@ -732,11 +637,10 @@
   function cancelEditMode() {
     isEditMode = false; originalRecordKey = null; document.getElementById('prodForm').reset();
     let today = new Date(); document.getElementById('record_date').value = today.toISOString().split('T')[0];
-    document.getElementById('id_target').innerHTML = '<option value="">👉 รอเลือกรหัสใบสั่งงานก่อน</option>'; document.getElementById('id_work').value = ''; document.getElementById('employee_search').value = ''; 
+    document.getElementById('id_target').innerHTML = '<option value="">👉 ขั้นตอนทำงานจะขึ้นที่นี่อัตโนมัติ</option>'; document.getElementById('id_work').value = ''; document.getElementById('employee_search').value = ''; 
     document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!'; document.getElementById('cancelEditBtn').style.display = 'none';
     document.getElementById('reasonGroup').style.display = 'none'; document.getElementById('effDisplay').innerText = "0.00%"; document.getElementById('effDisplay').style.color = "var(--text-muted)";
     document.getElementById('historyContainer').style.display = 'none';
-    document.getElementById('order_display_box').style.display = 'none'; 
   }
 
   function openKeypad(inputId) {
@@ -774,6 +678,7 @@
 
     const orderVal = document.getElementById('id_order').value;
     const targetVal = document.getElementById('id_target').value;
+    const workPeriodVal = document.getElementById('work_period').value;
     const empSearchVal = document.getElementById('employee_search').value;
     const empObj = globalData.employees.find(e => e.name === empSearchVal);
     const employeeVal = empObj ? empObj.id_name : null;
@@ -786,17 +691,18 @@
     const payload = {
       record_date: document.getElementById('record_date').value, id_order: parseInt(orderVal) || null,
       id_work: parseInt(document.getElementById('id_work').value) || null, id_name: parseInt(employeeVal) || null, id_target: parseInt(targetVal) || null,
-      hour_work: parseFloat(document.getElementById('hour_work').value) || 0, work_period: document.getElementById('work_period').value,
+      hour_work: parseFloat(document.getElementById('hour_work').value) || 0, work_period: workPeriodVal,
       produced_amount: parseInt(producedValStr) || 0, nogoods_amount: parseInt(document.getElementById('nogoods_amount').value) || 0,
       id_reason: parseInt(document.getElementById('id_reason').value) || null, remark: document.getElementById('remark').value.trim() || null
     };
 
     try {
       if (!isEditMode) {
-        const dupCheck = await fetch(`${SUPABASE_URL}/daily_production?record_date=eq.${payload.record_date}&id_order=eq.${payload.id_order}&id_target=eq.${payload.id_target}&id_name=eq.${payload.id_name}`, { headers });
+        // เพิ่ม &work_period เข้าไปในเงื่อนไขการเช็คข้อมูลซ้ำด้วย 
+        const dupCheck = await fetch(`${SUPABASE_URL}/daily_production?record_date=eq.${payload.record_date}&id_order=eq.${payload.id_order}&id_target=eq.${payload.id_target}&id_name=eq.${payload.id_name}&work_period=eq.${payload.work_period}`, { headers });
         const dupData = await dupCheck.json();
         if (dupData && dupData.length > 0) {
-          if (!confirm("⚠️ พบการบันทึกข้อมูลของพนักงานคนนี้ในวันนี้แล้ว\nต้องการ 'บันทึกทับ' ข้อมูลเดิมหรือไม่ครับ?")) {
+          if (!confirm("⚠️ พบการบันทึกข้อมูลของพนักงานคนนี้ (กะเวลาเดียวกัน) ในวันนี้แล้ว\nต้องการ 'บันทึกทับ' ข้อมูลเดิมหรือไม่ครับ?")) {
             submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!'; return;
           }
           isEditMode = true; originalRecordKey = dupData[0];
@@ -805,7 +711,8 @@
 
       let response;
       if (isEditMode) {
-        const queryStr = `record_date=eq.${originalRecordKey.record_date}&id_order=eq.${originalRecordKey.id_order}&id_target=eq.${originalRecordKey.id_target}&id_name=eq.${originalRecordKey.id_name}`;
+        // อัปเดตเงื่อนไขตอน Patch ให้ครบรวมถึง work_period
+        const queryStr = `record_date=eq.${originalRecordKey.record_date}&id_order=eq.${originalRecordKey.id_order}&id_target=eq.${originalRecordKey.id_target}&id_name=eq.${originalRecordKey.id_name}&work_period=eq.${originalRecordKey.work_period}`;
         response = await fetch(`${SUPABASE_URL}/daily_production?${queryStr}`, { method: "PATCH", headers: headers, body: JSON.stringify(payload) });
       } else {
         response = await fetch(`${SUPABASE_URL}/daily_production`, { method: "POST", headers: headers, body: JSON.stringify(payload) });
