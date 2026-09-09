@@ -286,7 +286,8 @@
         -webkit-print-color-adjust: exact; 
         color-adjust: exact;
       }
-      .print-table tbody tr { height: 26px; } /* ขยายความสูงให้เหมาะสมแนวตั้ง */
+      /* ปรับความสูงบรรทัดตารางลดลงนิดนึงเพื่อไม่ให้ทะลุหน้า */
+      .print-table tbody tr { height: 25px; } 
       
       .print-footer { 
         display: flex; 
@@ -885,7 +886,9 @@
     const currentUrl = `${baseUrl}?order_id=${encodeURIComponent(orderObj.id_order)}&target_id=${encodeURIComponent(selectedTargetId)}`;
 
     let tableRowsHtml = ''; let runningTotal = 0; 
-    const maxRows = 35; // เพิ่มบรรทัดให้เต็ม A4 แนวตั้ง
+    
+    // ปรับลดบรรทัดลงให้เหลือ 28 บรรทัด เพื่อไม่ให้ล้นไปหน้าสอง
+    const maxRows = 28; 
 
     for(let i = 0; i < maxRows; i++) {
       if (i < logs.length) {
