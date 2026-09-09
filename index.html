@@ -163,7 +163,7 @@
     /* ======================================= */
     .history-table-wrapper {
       width: 100%; overflow-x: auto; border-radius: 8px; border: 2px solid var(--flash-red); margin-top: 10px;
-      max-height: 400px; /* เพิ่มความสูงสูงสุดให้ตารางประวัติเผื่อข้อมูลเยอะจะได้เลื่อนดูได้ */
+      max-height: 400px;
       overflow-y: auto;
     }
     .flash-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: center; white-space: nowrap; }
@@ -178,6 +178,20 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); text-transform: uppercase;
     }
     .btn-print-history:active { transform: translateY(2px); box-shadow: none; background: var(--flash-gold); color: #000;}
+
+    /* กล่องสรุปยอด */
+    .summary-box-container {
+      display: flex; gap: 8px; margin-bottom: 15px;
+    }
+    .sum-box {
+      flex: 1; background: #fff; border: 2px solid var(--border-dim); border-radius: 8px; 
+      padding: 10px 5px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+    .sum-box.green { border-color: #10b981; }
+    .sum-box.orange { border-color: var(--flash-gold); }
+    .sum-box.red { border-color: var(--flash-red); }
+    .sum-label { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 2px;}
+    .sum-val { font-size: 18px; font-weight: 800; color: #1f2937; }
 
     /* Keypad */
     .keypad-modal {
@@ -326,6 +340,23 @@
 <!-- ส่วนแสดงประวัติข้อมูลด้านล่าง -->
 <div class="terminal-container" id="historyContainer" style="display: none;">
   <h3 style="color: var(--flash-red); font-size: 1.1rem; text-align: center; margin: 0 0 10px 0; font-weight: 800; font-style: italic;">⚡ ประวัติการบันทึกล่าสุด</h3>
+  
+  <!-- กล่องแสดงสรุปข้อมูล (ยอดรวม, คงเหลือ, วันครบกำหนด) -->
+  <div class="summary-box-container">
+    <div class="sum-box green">
+      <div class="sum-label" style="color: #10b981;">ยอดรวมสะสม</div>
+      <div id="sumProduced" class="sum-val">0</div>
+    </div>
+    <div class="sum-box orange">
+      <div class="sum-label" style="color: var(--flash-gold);">ยอดคงเหลือ</div>
+      <div id="sumRemaining" class="sum-val">0</div>
+    </div>
+    <div class="sum-box red">
+      <div class="sum-label" style="color: var(--flash-red);">สถานะเวลา</div>
+      <div id="dueDateStatus" class="sum-val" style="font-size: 14px; margin-top: 4px;">-</div>
+    </div>
+  </div>
+
   <div class="history-table-wrapper">
     <table class="flash-table">
       <thead>
@@ -574,18 +605,28 @@
     tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">กำลังโหลดประวัติ...</td></tr>';
 
     try {
-      // แก้ไข: ดึงข้อมูลทั้งหมดโดยไม่จำกัด (เอา &limit=10 ออก) และเรียงตามวันที่เก่าไปใหม่ (.asc)
+      // ดึงประวัติแบบไม่จำกัดจำนวน และเรียงจากวันที่น้อย (เก่า) ไปมาก (ใหม่)
       const res = await fetch(`${SUPABASE_URL}/daily_production?id_order=eq.${orderId}&id_target=eq.${targetId}&order=record_date.asc`, { headers });
       if(!res.ok) throw new Error();
       const logs = await res.json();
 
       if(logs.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#9ca3af;">ยังไม่มีประวัติการบันทึก</td></tr>';
+        document.getElementById('sumProduced').innerText = "0";
+        document.getElementById('sumRemaining').innerText = "0";
+        document.getElementById('dueDateStatus').innerText = "-";
         return;
       }
 
+      // ดึงข้อมูลจำนวนเต็มของ Order และคำนวณยอดรวม/ยอดคงเหลือ
+      const orderObj = globalData.orders.find(o => String(o.id_order) === String(orderId));
+      let orderQty = (orderObj && orderObj.quantity) ? parseInt(orderObj.quantity) : 0;
+      let totalProduced = 0;
+
       let html = '';
       logs.forEach(log => {
+        totalProduced += (log.produced_amount || 0);
+
         let d = new Date(log.record_date);
         let dStr = `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}`;
         let emp = globalData.employees.find(e => String(e.id_name) === String(log.id_name));
@@ -604,6 +645,44 @@
         </tr>`;
       });
       tbody.innerHTML = html;
+
+      // อัปเดต Summary Box
+      let remaining = orderQty - totalProduced;
+      document.getElementById('sumProduced').innerText = totalProduced.toLocaleString();
+      document.getElementById('sumRemaining').innerText = remaining.toLocaleString();
+
+      // ตรวจสอบวันกำหนดส่ง
+      let endDateStr = null;
+      const targetObj = globalData.targets.find(t => String(t.id_target) === String(targetId));
+      if (targetObj && targetObj.id_step) {
+        const orderStepObj = globalData.orderSteps.find(os => String(os.id_order) === String(orderId) && String(os.id_step) === String(targetObj.id_step));
+        if (orderStepObj && orderStepObj.end_date) {
+          endDateStr = orderStepObj.end_date;
+        }
+      }
+
+      let statusEl = document.getElementById('dueDateStatus');
+      if (endDateStr) {
+        let today = new Date(); today.setHours(0,0,0,0);
+        let endDate = new Date(endDateStr); endDate.setHours(0,0,0,0);
+        
+        if (today > endDate) {
+          statusEl.innerText = "เลยกำหนด!";
+          statusEl.style.color = "#ef4444";
+        } else if (today.getTime() === endDate.getTime()) {
+          statusEl.innerText = "ครบกำหนดวันนี้";
+          statusEl.style.color = "#f59e0b";
+        } else {
+          let diffTime = Math.abs(endDate - today);
+          let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          statusEl.innerText = `เหลือ ${diffDays} วัน`;
+          statusEl.style.color = "#10b981";
+        }
+      } else {
+        statusEl.innerText = "ไม่ระบุ";
+        statusEl.style.color = "var(--text-muted)";
+      }
+
     } catch(e) {
       tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#ef4444;">ดึงข้อมูลล้มเหลว</td></tr>';
     }
