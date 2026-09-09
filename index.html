@@ -157,7 +157,6 @@
     }
     .submit-btn:hover { background: linear-gradient(90deg, var(--flash-red), var(--flash-gold)); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245, 158, 11, 0.5); }
     .submit-btn:active { transform: translateY(2px); box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4); }
-    .cancel-edit-btn { width: 100%; background-color: transparent; color: #ef4444; border: 2px solid #ef4444; padding: 12px; font-size: 16px; border-radius: 8px; cursor: pointer; margin-top: 12px; display: none; font-weight: bold; }
 
     /* ======================================= */
     /* ส่วนตารางประวัติ ⚡ */
@@ -251,7 +250,6 @@
         <button type="button" class="keypad-trigger-btn" onclick="openKeypad('manual_order_code')" tabindex="-1"><i class="fa-solid fa-calculator"></i></button>
         <button type="button" class="scan-btn-subtle" onclick="openScanner()" tabindex="-1"><i class="fa-solid fa-qrcode"></i></button>
       </div>
-      <!-- เปิดให้ Select แสดงผลเสมอ เพื่อให้เลือกได้เอง -->
       <select id="id_order" onchange="handleOrderChange()" required style="margin-top: 8px; background-color: #fff;">
         <option value="">👉 หรือแตะเลือก "เลขที่ใบสั่งงาน"</option>
       </select>
@@ -320,7 +318,6 @@
     </div>
 
     <button type="submit" class="submit-btn" id="submitBtn"><i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!</button>
-    <button type="button" class="cancel-edit-btn" id="cancelEditBtn" onclick="cancelEditMode()">[X] ยกเลิกการแก้ไข</button>
   </form>
 </div>
 
@@ -379,7 +376,7 @@
   const headers = { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY, "Content-Type": "application/json", "Prefer": "return=representation" };
 
   let globalData = { orders: [], employees: [], targets: [], reasons: [], workItems: [], steps: [], orderSteps: [], shortcutMap: [], remarks: [] };
-  let activeInputId = null, isEditMode = false, originalRecordKey = null, html5QrCode = null;
+  let activeInputId = null, html5QrCode = null;
 
   function handleEnter(e, nextId) {
     if (e.key === 'Enter') { e.preventDefault(); let nextEl = document.getElementById(nextId); if (nextEl) { nextEl.focus(); if(typeof nextEl.select === 'function') nextEl.select(); } }
@@ -447,7 +444,7 @@
         document.getElementById('id_order').value = foundShortcut.id_order; handleOrderChange();
         setTimeout(() => { 
           document.getElementById('id_target').value = foundShortcut.id_target; 
-          onTargetSelected(); // ดึงประวัติตอนค้นหาเจอ
+          onTargetSelected();
         }, 150);
       } else {
         const foundOrd = globalData.orders.find(o => String(o.order_no || '').endsWith(val));
@@ -499,7 +496,6 @@
 
     targetSelect.innerHTML = '<option value="">👉 กรุณาเลือกขั้นตอนทำงาน</option>'; workHidden.value = '';
     
-    // ถ้ายูสเซอร์เปลี่ยน Dropdown ใบสั่งเอง ให้เคลียร์ช่องกรอกรหัส 5 หลัก
     if (document.activeElement.id === 'id_order') { manualInput.value = ''; }
     
     document.getElementById('effDisplay').innerText = "0.00%"; document.getElementById('effDisplay').style.color = "var(--text-muted)";
@@ -534,7 +530,6 @@
     const ordId = document.getElementById('id_order').value;
     const targetId = document.getElementById('id_target').value;
 
-    // ถ้ายูสเซอร์เลือก Dropdown จนครบ ระบบจะไปดึงรหัส 5 หลักมาโชว์ให้อัตโนมัติด้วย
     if (ordId && targetId) {
       const shortcutObj = globalData.shortcutMap.find(s => String(s.id_order) === String(ordId) && String(s.id_target) === String(targetId));
       if (shortcutObj) { document.getElementById('manual_order_code').value = shortcutObj.code; }
@@ -634,15 +629,6 @@
     if (lastHourWork) { document.getElementById('hour_work').value = lastHourWork; }
   }
 
-  function cancelEditMode() {
-    isEditMode = false; originalRecordKey = null; document.getElementById('prodForm').reset();
-    let today = new Date(); document.getElementById('record_date').value = today.toISOString().split('T')[0];
-    document.getElementById('id_target').innerHTML = '<option value="">👉 ขั้นตอนทำงานจะขึ้นที่นี่อัตโนมัติ</option>'; document.getElementById('id_work').value = ''; document.getElementById('employee_search').value = ''; 
-    document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!'; document.getElementById('cancelEditBtn').style.display = 'none';
-    document.getElementById('reasonGroup').style.display = 'none'; document.getElementById('effDisplay').innerText = "0.00%"; document.getElementById('effDisplay').style.color = "var(--text-muted)";
-    document.getElementById('historyContainer').style.display = 'none';
-  }
-
   function openKeypad(inputId) {
     activeInputId = inputId; let labelText = document.querySelector(`label[for="${inputId}"]`); let title = labelText ? labelText.innerText : "";
     if (inputId === 'hour_work') title = 'ชั่วโมงทำงาน'; else if (inputId === 'produced_amount') title = 'จำนวนผลิต'; else if (inputId === 'nogoods_amount') title = 'จำนวนของเสีย'; else if (inputId === 'manual_order_code') title = 'รหัสใบสั่งงาน (5 หลัก)';
@@ -697,26 +683,8 @@
     };
 
     try {
-      if (!isEditMode) {
-        // เพิ่ม &work_period เข้าไปในเงื่อนไขการเช็คข้อมูลซ้ำด้วย 
-        const dupCheck = await fetch(`${SUPABASE_URL}/daily_production?record_date=eq.${payload.record_date}&id_order=eq.${payload.id_order}&id_target=eq.${payload.id_target}&id_name=eq.${payload.id_name}&work_period=eq.${payload.work_period}`, { headers });
-        const dupData = await dupCheck.json();
-        if (dupData && dupData.length > 0) {
-          if (!confirm("⚠️ พบการบันทึกข้อมูลของพนักงานคนนี้ (กะเวลาเดียวกัน) ในวันนี้แล้ว\nต้องการ 'บันทึกทับ' ข้อมูลเดิมหรือไม่ครับ?")) {
-            submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> บันทึกข้อมูลด้วยความเร็วแสง!'; return;
-          }
-          isEditMode = true; originalRecordKey = dupData[0];
-        }
-      }
-
-      let response;
-      if (isEditMode) {
-        // อัปเดตเงื่อนไขตอน Patch ให้ครบรวมถึง work_period
-        const queryStr = `record_date=eq.${originalRecordKey.record_date}&id_order=eq.${originalRecordKey.id_order}&id_target=eq.${originalRecordKey.id_target}&id_name=eq.${originalRecordKey.id_name}&work_period=eq.${originalRecordKey.work_period}`;
-        response = await fetch(`${SUPABASE_URL}/daily_production?${queryStr}`, { method: "PATCH", headers: headers, body: JSON.stringify(payload) });
-      } else {
-        response = await fetch(`${SUPABASE_URL}/daily_production`, { method: "POST", headers: headers, body: JSON.stringify(payload) });
-      }
+      // เอาการเช็คซ้ำออกทั้งหมด เพื่อให้ Insert ทันที
+      const response = await fetch(`${SUPABASE_URL}/daily_production`, { method: "POST", headers: headers, body: JSON.stringify(payload) });
 
       if (response.ok) {
         localStorage.setItem('last_record_date', payload.record_date); localStorage.setItem('last_order_id', orderVal); localStorage.setItem('last_target_id', targetVal);
@@ -726,8 +694,6 @@
         document.getElementById('id_reason').value = ''; document.getElementById('remark').value = '';
         document.getElementById('reasonGroup').style.display = 'none'; document.getElementById('effDisplay').innerText = "0.00%";
         
-        isEditMode = false; originalRecordKey = null;
-
         fetchRecentHistory();
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -794,7 +760,6 @@
 
     let tableRowsHtml = ''; let runningTotal = 0; 
     
-    // ปรับลดบรรทัดลงให้เหลือ 28 บรรทัด เพื่อไม่ให้ล้นไปหน้าสอง
     const maxRows = 28; 
 
     for(let i = 0; i < maxRows; i++) {
@@ -841,7 +806,6 @@
       </div>
     `;
 
-    // ใส่การ์ดเดียวให้เต็มหน้า
     document.getElementById('printArea').innerHTML = `<div class="print-sheet-container">${singleCardHtml}</div>`;
     
     document.querySelectorAll('.qrcode-target').forEach(el => {
