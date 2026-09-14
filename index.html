@@ -465,9 +465,30 @@
       document.getElementById('prodForm').style.display = 'block';
       document.getElementById('statusText').innerText = "ระบบพร้อมใช้งานแล้วครับ ⚡";
 
-      loadLastSessionData();
+      // ⚡ รองรับการรับค่ารหัส 5 หลักผ่าน URL Parameter (?code5=XXXXX หรือ ?order_id=...&target_id=...)
+      const urlParams = new URLSearchParams(window.location.search);
+      const code5Param = urlParams.get('code5');
+      const orderIdParam = urlParams.get('order_id');
+      const targetIdParam = urlParams.get('target_id');
 
-      setTimeout(() => { let codeInput = document.getElementById('manual_order_code'); codeInput.focus(); codeInput.select(); }, 300);
+      if (code5Param) {
+        let codeInput = document.getElementById('manual_order_code');
+        codeInput.value = code5Param;
+        handleManualOrderInput(codeInput);
+      } else if (orderIdParam) {
+        document.getElementById('id_order').value = orderIdParam;
+        handleOrderChange();
+        if (targetIdParam) {
+          setTimeout(() => {
+            document.getElementById('id_target').value = targetIdParam;
+            onTargetSelected();
+          }, 150);
+        }
+      } else {
+        loadLastSessionData();
+      }
+
+      setTimeout(() => { let codeInput = document.getElementById('manual_order_code'); if(!codeInput.value) { codeInput.focus(); codeInput.select(); } }, 300);
     } catch (error) {
       console.error(error); document.getElementById('statusMessage').innerText = "> ระบบขัดข้อง: " + error.message; document.getElementById('statusMessage').className = "system-msg error"; document.getElementById('statusText').innerText = "ออฟไลน์";
     }
@@ -520,7 +541,12 @@
   function handleScannedResult(scannedText) {
     try {
       if (scannedText.includes('http://') || scannedText.includes('https://')) {
-        let url = new URL(scannedText); let orderId = url.searchParams.get('order_id'); let targetId = url.searchParams.get('target_id');
+        let url = new URL(scannedText); let orderId = url.searchParams.get('order_id'); let targetId = url.searchParams.get('target_id'); let code5 = url.searchParams.get('code5');
+        if (code5) {
+          document.getElementById('manual_order_code').value = code5;
+          handleManualOrderInput(document.getElementById('manual_order_code'));
+          alert("⚡ สแกนรหัสสำเร็จแล้วครับ!"); return;
+        }
         if (orderId) {
           const foundOrd = globalData.orders.find(o => String(o.id_order) === String(orderId));
           if (foundOrd) {
@@ -529,6 +555,10 @@
             alert("⚡ สแกนสำเร็จแล้วครับ!"); return;
           }
         }
+      } else if (scannedText.length === 5) {
+        document.getElementById('manual_order_code').value = scannedText;
+        handleManualOrderInput(document.getElementById('manual_order_code'));
+        alert("⚡ สแกนรหัสสำเร็จแล้วครับ!"); return;
       }
       alert("⚠️ รูปแบบคิวอาร์โค้ดไม่ถูกต้องนะครับ");
     } catch (e) { alert("⚠️ เกิดข้อผิดพลาดในการอ่านข้อมูลคิวอาร์โค้ด"); }
@@ -651,8 +681,7 @@
         const targetObj = globalData.targets.find(t => String(t.id_target) === String(targetId));
         if(targetObj && targetObj.target_amount && log.hour_work) { effPct = ((log.produced_amount||0) / (targetObj.target_amount * log.hour_work)) * 100; }
         
-        // ส่งข้อมูลทั้ง Object เป็นพารามิเตอร์เพื่อให้ใช้ลบหรือแก้ไขได้ถูกต้อง
-        let logJsonStr = JSON.stringify(log).replace(/'/g, "\\'");
+        let logJsonStr = JSON.stringify(log).replace(/'/g, "\\\'");
 
         html += `<tr>
           <td>${dStr}</td>
@@ -711,9 +740,6 @@
     }
   }
 
-  // ============================================
-  // ฟังก์ชันสำหรับการแก้ไข (E) และลบ (D)
-  // ============================================
   function promptDelete(logData) {
     const pwd = prompt("ตรวจสอบความปลอดภัย: ใส่รหัสผ่านเพื่อลบข้อมูล");
     if (pwd === "ๅ") {
@@ -758,7 +784,6 @@
     document.getElementById('id_order').value = logData.id_order || '';
     handleOrderChange();
     
-    // ตั้งค่า Time out นิดนึงเพื่อรอให้รายการขั้นตอนถูกสร้าง
     setTimeout(() => {
       document.getElementById('id_target').value = logData.id_target || '';
       const empEdit = globalData.employees.find(e => String(e.id_name) === String(logData.id_name));
@@ -890,7 +915,7 @@
 
         if (isEditMode) {
           cancelEditMode();
-          fetchRecentHistory(); // โหลดประวัติใหม่หลังอัปเดต
+          fetchRecentHistory(); 
         } else {
           document.getElementById('produced_amount').value = ''; document.getElementById('nogoods_amount').value = '';
           document.getElementById('id_reason').value = ''; document.getElementById('remark').value = '';
@@ -910,9 +935,6 @@
     }
   }
 
-  // ========================================================
-  // ฟังก์ชันสำหรับพิมพ์ใบมิเตอร์ เต็มหน้า A4 แนวตั้ง (Portrait)
-  // ========================================================
   async function printProgressSheet(withData) {
     const selectedOrderId = document.getElementById('id_order').value;
     const selectedTargetId = document.getElementById('id_target').value;
@@ -958,7 +980,7 @@
     }
     
     const baseUrl = window.location.href.split('?')[0];
-    const currentUrl = `${baseUrl}?order_id=${encodeURIComponent(orderObj.id_order)}&target_id=${encodeURIComponent(selectedTargetId)}`;
+    const currentUrl = `${baseUrl}?code5=${encodeURIComponent(printCode)}`;
 
     let tableRowsHtml = ''; let runningTotal = 0; 
     
