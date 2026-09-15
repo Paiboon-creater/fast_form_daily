@@ -91,16 +91,18 @@
     .status { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 15px; font-weight: 500;}
     .status-dot { display: inline-block; width: 10px; height: 10px; background-color: var(--flash-gold); border-radius: 50%; margin-right: 5px; box-shadow: 0 0 8px var(--flash-gold);}
 
-    .top-buttons-wrapper { display: flex; gap: 10px; margin-bottom: 20px; }
+    .top-buttons-wrapper { display: flex; gap: 8px; margin-bottom: 20px; }
     .nav-btn {
-      display: flex; justify-content: center; align-items: center; gap: 8px;
-      padding: 10px 10px; font-size: 14px; border-radius: 8px; text-align: center;
+      display: flex; justify-content: center; align-items: center; gap: 6px;
+      padding: 10px 6px; font-size: 13px; border-radius: 8px; text-align: center;
       text-decoration: none; font-weight: 700; box-sizing: border-box; transition: all 0.2s; font-family: inherit; flex: 1; text-transform: uppercase;
     }
     .home-btn { background: #fff; color: #14b8a6; border: 2px solid #14b8a6; }
     .home-btn:active, .home-btn:hover { background: #14b8a6; color: #fff; box-shadow: 0 4px 10px rgba(20, 184, 166, 0.3); }
     .daily-btn { background: #fff; color: var(--flash-red); border: 2px solid var(--flash-red); }
     .daily-btn:active, .daily-btn:hover { background: var(--flash-red); color: #fff; box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3); }
+    .group-btn { background: #fff; color: #d97706; border: 2px solid var(--flash-gold); }
+    .group-btn:active, .group-btn:hover { background: var(--flash-gold); color: #fff; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3); }
 
     .form-group { margin-bottom: 15px; }
     .form-group label { display: block; margin-bottom: 6px; font-size: 15px; font-weight: 700; color: var(--flash-dark-red); }
@@ -269,8 +271,9 @@
   
   <form id="prodForm" onsubmit="handleSubmit(event)" style="display:none;">
     <div class="top-buttons-wrapper">
-      <a href="https://paiboon-creater.github.io/Data_Information_Jaguar_productions/" class="nav-btn home-btn"><i class="fa-solid fa-house"></i> Home App</a>
-      <a href="https://paiboon-creater.github.io/daily-production/" class="nav-btn daily-btn"><i class="fa-solid fa-table-list"></i> ตารางหลัก</a>
+      <a href="https://paiboon-creater.github.io/Data_Information_Jaguar_productions/" class="nav-btn home-btn"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="https://paiboon-creater.github.io/daily-production/" class="nav-btn daily-btn"><i class="fa-solid fa-table-list"></i> ตาราง</a>
+      <a href="https://paiboon-creater.github.io/work_group/" class="nav-btn group-btn"><i class="fa-solid fa-users-gear"></i> งานกลุ่ม</a>
     </div>
 
     <div class="form-group">
@@ -465,7 +468,6 @@
       document.getElementById('prodForm').style.display = 'block';
       document.getElementById('statusText').innerText = "ระบบพร้อมใช้งานแล้วครับ ⚡";
 
-      // ⚡ รองรับการรับค่ารหัส 5 หลักผ่าน URL Parameter (?code5=XXXXX หรือ ?order_id=...&target_id=...)
       const urlParams = new URLSearchParams(window.location.search);
       const code5Param = urlParams.get('code5');
       const orderIdParam = urlParams.get('order_id');
