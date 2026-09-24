@@ -283,9 +283,10 @@
         <button type="button" class="keypad-trigger-btn" onclick="openKeypad('manual_order_code')" tabindex="-1"><i class="fa-solid fa-calculator"></i></button>
         <button type="button" class="scan-btn-subtle" onclick="openScanner()" tabindex="-1"><i class="fa-solid fa-qrcode"></i></button>
       </div>
-      <select id="id_order" onchange="handleOrderChange()" required style="margin-top: 8px; background-color: #fff;">
-        <option value="">👉 หรือแตะเลือก "เลขที่ใบสั่งงาน"</option>
-      </select>
+      <input type="text" id="order_search_display" list="order_datalist" placeholder="👉 พิมพ์ค้นหา หรือเลือกเลขที่ใบสั่งงาน..." autocomplete="off" onchange="syncOrderSearch()" onfocus="this.select()" required style="margin-top: 8px; background-color: #fff;">
+      <datalist id="order_datalist"></datalist>
+      <input type="hidden" id="id_order" value="">
+
       <select id="id_target" onchange="onTargetSelected()" required style="margin-top: 8px; background-color: #fff;">
         <option value="">👉 ขั้นตอนทำงานจะขึ้นที่นี่อัตโนมัติ</option>
       </select>
@@ -458,7 +459,15 @@
       if (remarksRes.ok) { let rmks = await remarksRes.json(); globalData.remarks = [...new Set(rmks.map(r => r.remark).filter(Boolean))]; }
 
       generateShortcutMap();
-      populateDropdown('id_order', globalData.orders, 'id_order', 'order_no'); 
+
+      // สร้างรายการ Datalist สำหรับค้นหาเลขที่ใบสั่งงาน
+      const orderDatalist = document.getElementById('order_datalist');
+      globalData.orders.forEach(o => {
+        let opt = document.createElement('option');
+        opt.value = o.order_no || `ID: ${o.id_order}`;
+        orderDatalist.appendChild(opt);
+      });
+
       populateDropdown('id_reason', globalData.reasons, 'id_reason', 'reason_detail');
       
       const empDatalist = document.getElementById('employee_datalist'); globalData.employees.forEach(emp => { let opt = document.createElement('option'); opt.value = emp.name; empDatalist.appendChild(opt); });
@@ -527,6 +536,18 @@
     } else if (val === "") { document.getElementById('id_order').value = ""; handleOrderChange(); }
   }
 
+  function syncOrderSearch() {
+    let displayVal = document.getElementById('order_search_display').value.trim();
+    let foundOrd = globalData.orders.find(o => o.order_no === displayVal);
+    
+    if (foundOrd) {
+      document.getElementById('id_order').value = foundOrd.id_order;
+    } else {
+      document.getElementById('id_order').value = '';
+    }
+    handleOrderChange();
+  }
+
   function openScanner() {
     document.getElementById('scannerModal').style.display = 'flex';
     if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
@@ -576,10 +597,18 @@
     const targetSelect = document.getElementById('id_target');
     const workHidden = document.getElementById('id_work');
     const manualInput = document.getElementById('manual_order_code');
+    const displayInput = document.getElementById('order_search_display');
 
     targetSelect.innerHTML = '<option value="">👉 กรุณาเลือกขั้นตอนทำงาน</option>'; workHidden.value = '';
     
-    if (document.activeElement.id === 'id_order') { manualInput.value = ''; }
+    if (selectedOrderId) {
+      const foundOrd = globalData.orders.find(o => String(o.id_order) === String(selectedOrderId));
+      if (foundOrd && displayInput) displayInput.value = foundOrd.order_no;
+    } else {
+      if (displayInput) displayInput.value = '';
+    }
+
+    if (document.activeElement.id === 'order_search_display') { manualInput.value = ''; }
     
     document.getElementById('effDisplay').innerText = "0.00%"; document.getElementById('effDisplay').style.color = "var(--text-muted)";
     document.getElementById('reasonGroup').style.display = 'none'; document.getElementById('id_reason').value = ''; document.getElementById('id_reason').removeAttribute('required');
