@@ -283,7 +283,6 @@
         <button type="button" class="keypad-trigger-btn" onclick="openKeypad('manual_order_code')" tabindex="-1"><i class="fa-solid fa-calculator"></i></button>
         <button type="button" class="scan-btn-subtle" onclick="openScanner()" tabindex="-1"><i class="fa-solid fa-qrcode"></i></button>
       </div>
-      <!-- แก้ไข oninput เพื่อให้ตอบสนองทันทีตอนกดเลือกรายการจากมือถือ/เบราว์เซอร์ -->
       <input type="text" id="order_search_display" list="order_datalist" placeholder="👉 พิมพ์ค้นหา หรือเลือกเลขที่ใบสั่งงาน..." autocomplete="off" oninput="syncOrderSearch()" onchange="syncOrderSearch()" onfocus="this.select()" required style="margin-top: 8px; background-color: #fff;">
       <datalist id="order_datalist"></datalist>
       <input type="hidden" id="id_order" value="">
@@ -341,8 +340,9 @@
       <span><i class="fa-solid fa-gauge-high"></i> ประสิทธิภาพ (EFF):</span><span id="effDisplay" class="eff-value" style="color: var(--text-muted);">0.00%</span>
     </div>
 
+    <!-- แก้ไขเปลี่ยนข้อความ "บังคับเลือก" เป็น "ไม่บังคับ" -->
     <div class="form-group" id="reasonGroup" style="display: none;">
-      <label style="color: #ef4444;">⚠️ 8. สาเหตุที่ยอดตก (บังคับเลือก)</label>
+      <label style="color: #ef4444;">⚠️ 8. สาเหตุที่ยอดตก (ไม่บังคับ)</label>
       <select id="id_reason" onkeydown="handleEnter(event, 'remark')"><option value="">👉 แตะเลือกสาเหตุ</option></select>
     </div>
 
@@ -461,7 +461,6 @@
 
       generateShortcutMap();
 
-      // สร้างรายการ Datalist สำหรับค้นหาเลขที่ใบสั่งงาน (แก้ไขเพิ่ม .trim() ป้องกันสเปซเกินจากฐานข้อมูล)
       const orderDatalist = document.getElementById('order_datalist');
       globalData.orders.forEach(o => {
         let opt = document.createElement('option');
@@ -537,10 +536,8 @@
     } else if (val === "") { document.getElementById('id_order').value = ""; handleOrderChange(); }
   }
 
-  // ฟังก์ชันนี้ได้รับการอัปเดตให้รองรับการค้นหาที่แม่นยำขึ้น ตัดช่องว่างทิ้ง
   function syncOrderSearch() {
     let displayVal = document.getElementById('order_search_display').value.trim();
-    // ตัดช่องว่างจากฐานข้อมูลด้วย ป้องกัน error ซ่อนตัวสเปซ
     let foundOrd = globalData.orders.find(o => (o.order_no || '').trim() === displayVal || `ID: ${o.id_order}` === displayVal);
     
     if (foundOrd) {
@@ -614,6 +611,7 @@
     if (document.activeElement.id === 'order_search_display') { manualInput.value = ''; }
     
     document.getElementById('effDisplay').innerText = "0.00%"; document.getElementById('effDisplay').style.color = "var(--text-muted)";
+    // ลบการกำหนดค่า required จากฟังก์ชันเริ่มต้น
     document.getElementById('reasonGroup').style.display = 'none'; document.getElementById('id_reason').value = ''; document.getElementById('id_reason').removeAttribute('required');
     document.getElementById('historyContainer').style.display = 'none';
 
@@ -668,10 +666,11 @@
     const efficiency = totalTarget > 0 ? (producedAmt / totalTarget) * 100 : 0;
     effDisplayEl.innerText = efficiency.toFixed(2) + "%";
 
+    // แก้ไข: ปลดล็อกการบังคับกรอกสาเหตุ โดยเอา removeAttribute('required') ไปใส่ไว้ทั้งคู่
     if (efficiency >= 85) {
       effDisplayEl.style.color = "#10b981"; reasonGroup.style.display = 'none'; reasonSelect.value = ''; reasonSelect.removeAttribute('required');
     } else {
-      effDisplayEl.style.color = "#ef4444"; reasonGroup.style.display = 'block'; reasonSelect.setAttribute('required', 'true');
+      effDisplayEl.style.color = "#ef4444"; reasonGroup.style.display = 'block'; reasonSelect.removeAttribute('required'); 
     }
   }
 
