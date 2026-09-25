@@ -283,7 +283,8 @@
         <button type="button" class="keypad-trigger-btn" onclick="openKeypad('manual_order_code')" tabindex="-1"><i class="fa-solid fa-calculator"></i></button>
         <button type="button" class="scan-btn-subtle" onclick="openScanner()" tabindex="-1"><i class="fa-solid fa-qrcode"></i></button>
       </div>
-      <input type="text" id="order_search_display" list="order_datalist" placeholder="👉 พิมพ์ค้นหา หรือเลือกเลขที่ใบสั่งงาน..." autocomplete="off" onchange="syncOrderSearch()" onfocus="this.select()" required style="margin-top: 8px; background-color: #fff;">
+      <!-- แก้ไข oninput เพื่อให้ตอบสนองทันทีตอนกดเลือกรายการจากมือถือ/เบราว์เซอร์ -->
+      <input type="text" id="order_search_display" list="order_datalist" placeholder="👉 พิมพ์ค้นหา หรือเลือกเลขที่ใบสั่งงาน..." autocomplete="off" oninput="syncOrderSearch()" onchange="syncOrderSearch()" onfocus="this.select()" required style="margin-top: 8px; background-color: #fff;">
       <datalist id="order_datalist"></datalist>
       <input type="hidden" id="id_order" value="">
 
@@ -460,11 +461,11 @@
 
       generateShortcutMap();
 
-      // สร้างรายการ Datalist สำหรับค้นหาเลขที่ใบสั่งงาน
+      // สร้างรายการ Datalist สำหรับค้นหาเลขที่ใบสั่งงาน (แก้ไขเพิ่ม .trim() ป้องกันสเปซเกินจากฐานข้อมูล)
       const orderDatalist = document.getElementById('order_datalist');
       globalData.orders.forEach(o => {
         let opt = document.createElement('option');
-        opt.value = o.order_no || `ID: ${o.id_order}`;
+        opt.value = (o.order_no || `ID: ${o.id_order}`).trim();
         orderDatalist.appendChild(opt);
       });
 
@@ -536,9 +537,11 @@
     } else if (val === "") { document.getElementById('id_order').value = ""; handleOrderChange(); }
   }
 
+  // ฟังก์ชันนี้ได้รับการอัปเดตให้รองรับการค้นหาที่แม่นยำขึ้น ตัดช่องว่างทิ้ง
   function syncOrderSearch() {
     let displayVal = document.getElementById('order_search_display').value.trim();
-    let foundOrd = globalData.orders.find(o => o.order_no === displayVal);
+    // ตัดช่องว่างจากฐานข้อมูลด้วย ป้องกัน error ซ่อนตัวสเปซ
+    let foundOrd = globalData.orders.find(o => (o.order_no || '').trim() === displayVal || `ID: ${o.id_order}` === displayVal);
     
     if (foundOrd) {
       document.getElementById('id_order').value = foundOrd.id_order;
@@ -603,9 +606,9 @@
     
     if (selectedOrderId) {
       const foundOrd = globalData.orders.find(o => String(o.id_order) === String(selectedOrderId));
-      if (foundOrd && displayInput) displayInput.value = foundOrd.order_no;
+      if (foundOrd && displayInput) displayInput.value = (foundOrd.order_no || '').trim();
     } else {
-      if (displayInput) displayInput.value = '';
+      if (displayInput && document.activeElement.id !== 'order_search_display') displayInput.value = '';
     }
 
     if (document.activeElement.id === 'order_search_display') { manualInput.value = ''; }
